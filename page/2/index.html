@@ -1,0 +1,1358 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第一个番茄</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="各种学">
+<meta property="og:type" content="website">
+<meta property="og:title" content="第一个番茄">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="第一个番茄">
+<meta property="og:description" content="各种学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第一个番茄">
+<meta name="twitter:description" content="各种学">
+  
+    <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">第一个番茄</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">starting now....</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="yoursite.com">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main">
+  
+    <article id="post-Strut2配置" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/02/Strut2配置/" class="article-date">
+  <time datetime="2016-08-02T14:30:50.000Z" itemprop="datePublished">2016-08-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/02/Strut2配置/">Strut2配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>真是服了我自己了。。。配这个配了那么长时间。。。吐血了.参考<a href="http://blog.csdn.net/gameloft9/article/details/52062643" target="_blank" rel="external">http://blog.csdn.net/gameloft9/article/details/52062643</a></p>
+</blockquote>
+<p>1.创建JavaWeb项目<br>2.把Struts包导入WEB-INF/lib目录下，直接粘贴就可以。<br>不要把所有引用都加入，最基础的包主要有asm-3.3.jar、asm-commons-3.3.jar、asm-tree3.3.jar.commons-fileup.commons-io.commons-lang3.commons-logging.freemarker.javassist.log4j-api.log4j-core.ognl.struts2-core。<br>3.配置web.xml<br>配置一个filter，引用的类是Struts的核心类org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter。注意这个类在不同版本不同，当前这个是2.5版本的。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
+<span class="tag">&lt;<span class="title">web-app</span> <span class="attribute">version</span>=<span class="value">"2.5"</span> <span class="attribute">xmlns</span>=<span class="value">"http://java.sun.com/xml/ns/javaee"</span>  
+    <span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>  
+    <span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://java.sun.com/xml/ns/javaee     
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"</span>&gt;</span>  
+ <span class="tag">&lt;<span class="title">display-name</span>&gt;</span><span class="tag">&lt;/<span class="title">display-name</span>&gt;</span>  
+
+<span class="comment">&lt;!-- Struts2配置 --&gt;</span>  
+    <span class="tag">&lt;<span class="title">filter</span>&gt;</span>  
+    <span class="comment">&lt;!-- 配置核心过滤器 --&gt;</span>  
+    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>struts2<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>  
+    <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">filter</span>&gt;</span>  
+<span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>  
+    <span class="comment">&lt;!-- 拦截所有请求 --&gt;</span>  
+    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>struts2<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>  
+    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">web-app</span>&gt;</span>  
+</code></pre><p>4.编写网页页面</p>
+<pre><code>    <span class="tag">&lt;<span class="title">%@</span> <span class="attribute">page</span> <span class="attribute">language</span>=<span class="value">"java"</span> <span class="attribute">import</span>=<span class="value">"java.util.*"</span> <span class="attribute">pageEncoding</span>=<span class="value">"UTF-8"</span><span class="value">%</span>&gt;</span>    
+<span class="doctype">&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;</span>    
+<span class="tag">&lt;<span class="title">%@</span> <span class="attribute">taglib</span> <span class="attribute">prefix</span>=<span class="value">"s"</span> <span class="attribute">uri</span>=<span class="value">"/struts-tags"</span> %&gt;</span>    
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>    
+<span class="tag">&lt;<span class="title">head</span>&gt;</span>        
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="title">title</span>&gt;</span>        
+    <span class="tag">&lt;/<span class="title">head</span>&gt;</span>    
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span>    
+    <span class="tag">&lt;<span class="title">h2</span>&gt;</span><span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"message"</span> /&gt;</span><span class="tag">&lt;/<span class="title">h2</span>&gt;</span>    
+    <span class="tag">&lt;/<span class="title">body</span>&gt;</span>    
+    <span class="tag">&lt;/<span class="title">html</span>&gt;</span> 
+</code></pre><p>5.编写Action类<br>在src下简历，处理请求的类必须实现Action或继承actionsupport</p>
+<pre><code><span class="keyword">package</span> main;    
+<span class="keyword">import</span> com.opensymphony.xwork2.Action;  
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldAction</span> <span class="keyword">implements</span> <span class="title">Action</span>   
+</span>{    
+    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String MESSAGE = <span class="string">"Hello World!This my first struts2 project!"</span>;     
+    <span class="keyword">private</span> String message;    
+
+<span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span>    
+</span>{    
+    <span class="keyword">return</span> message;    
+}    
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMessage</span><span class="params">(String message)</span>    
+</span>{    
+    <span class="keyword">this</span>.message = message;    
+}    
+
+<span class="comment">/* 
+ * 实现Action接口中的execute方法，在该方法中处理请求 
+ * */</span>  
+<span class="function"><span class="keyword">public</span> String <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> Exception    
+</span>{    
+    setMessage(MESSAGE);    
+    <span class="keyword">return</span> SUCCESS;    
+}    
+}    
+</code></pre><p>6.配置Struts映射<br>在src目录中新建struts.xml文件</p>
+<pre><code>      <span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>    
+    <span class="doctype">&lt;!DOCTYPE struts PUBLIC    
+          "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"    
+  "http://struts.apache.org/dtds/struts-2.3.dtd"&gt;</span>  
+
+<span class="tag">&lt;<span class="title">struts</span>&gt;</span>  
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"struts2"</span> <span class="attribute">extends</span>=<span class="value">"struts-default"</span>&gt;</span>  
+    <span class="comment">&lt;!-- 请求-Action映射 --&gt;</span>  
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"HelloWorld"</span> <span class="attribute">class</span>=<span class="value">"main.HelloWorldAction"</span>&gt;</span>  
+        <span class="comment">&lt;!-- 返回结果 --&gt;</span>  
+        <span class="tag">&lt;<span class="title">result</span> <span class="attribute">name</span>=<span class="value">"success"</span>&gt;</span>/HelloWorld.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>  
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">struts</span>&gt;</span>    
+</code></pre><p>如果报错：java.util.concurrent.ExecutionException: org.apache.catalina.LifecycleException: Failed to start com，可能是因为jar包引用有冲突。<br>如果报错ERROR [org.apache.struts2.dispatcher.Dispatcher] - Dispatcher initialization failed 可能是某个文件位置不对，在console里认真查看。<br>如果真的确定没有任何错误还报错，把Tomcat容器删掉后再重建，应该可以解决<br>如果console没有报错，打开后显示There is no Action mapped for namespace [/] and action name [Login] associated with context path [/eprint]，一定要一定要确保*.jsp在webcontent下，而不是web-inf下。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjv56vxf5001mq8vlpwtxo4u5" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSH/">SSH</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-剑指offer(一)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/15/剑指offer(一)/" class="article-date">
+  <time datetime="2016-07-15T15:30:43.000Z" itemprop="datePublished">2016-07-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/15/剑指offer(一)/">剑指offer(一)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.查找二维数组 两种方法<br>第一种方法是用分组后用二分查找，复杂度是nlogn<br>第二种方法是从矩阵的左下或右上开始找，若小于被查数，向上（左）。大于向下（右）</p>
+<ol>
+<li>字符串替换<br>从后往前替换</li>
+</ol>
+<p>4.用两个栈实现队列<br>用一个栈作为接受队列，另一个作为弹出队列。</p>
+<p>5.旋转数组的最小元素<br>二分法</p>
+<p>6。斐波那契数列<br>7.跳台阶<br>一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。<br>实际上是一个斐波那契数列<br>8.变态跳台阶<br>一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法。<br>动态规划<br>f(n) = 2f(n-1)<br>9.矩形覆盖<br>我们可以用2<em>1的小矩形横着或者竖着去覆盖更大的矩形。请问用n个2</em>1的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？<br>实际上还是斐波那契，第一步选择横方向或者竖方向,就决定了是n-1还是n-2，递归<br>10 二进制中1的个数<br>输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示。<br>巧解：如果一个整数不为0，那么这个整数至少有一位是1。如果我们把这个整数减1，那么原来处在整数最右边的1就会变为0，原来在1后面的所有的0都会变成1(如果最右边的1后面还有0的话)。其余所有位将不会受到影响。<br>举个例子：一个二进制数1100，从右边数起第三位是处于最右边的一个1。减去1后，第三位变成0，它后面的两位0变成了1，而前面的1保持不变，因此得到的结果是1011.我们发现减1的结果是把最右边的一个1开始的所有位都取反了。这个时候如果我们再把原来的整数和减去1之后的结果做与运算，从原来整数最右边一个1那一位开始所有位都会变成0。如1100&amp;1011=1000.也就是说，把一个整数减去1，再和原整数做与运算，会把该整数最右边一个1变成0.那么一个整数的二进制有多少个1，就可以进行多少次这样的操作。</p>
+<p>知识点：<br>构造单例模式：注意线程安全，分饿汉，懒汉两种。<a href="http://blog.csdn.net/tolcf/article/details/49312191" target="_blank" rel="external">http://blog.csdn.net/tolcf/article/details/49312191</a><br>StringBuffer和String：<a href="http://blog.csdn.net/jason0539/article/details/20899087" target="_blank" rel="external">http://blog.csdn.net/jason0539/article/details/20899087</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjv56vxej000wq8vlp75lvbwk" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JVM(一)Java内存区域" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/01/JVM(一)Java内存区域/" class="article-date">
+  <time datetime="2016-07-01T13:29:15.000Z" itemprop="datePublished">2016-07-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/01/JVM(一)Java内存区域/">JVM(一)Java内存区域</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/img/jvm.png" alt="fs"></p>
+<ol>
+<li>Java内存区域<br>1）    程序计数器(Program Counter Register)<br>一块较小的内存空间，它是当前线程所执行的字节码的行号指示器，字节码解释器工作时通过改变该计数器的值来选择下一条需要执行的字节码指令，分支、跳转、循环等基础功能都要依赖它来实现。<br>每条线程都有一个独立的的程序计数器，各线程间的计数器互不影响，因此该区域是线程私有的。<br>当线程在执行一个Java方法时，该计数器记录的是正在执行的虚拟机字节码指令的地址，当线程执行的是Native方法（调用本地操作系统方法）时，该计数器的值为空。另外，该内存区域是唯一一个在Java虚拟机规范中没有规定任何OOM（内存溢出：OutOfMemoryError）情况的区域。</li>
+</ol>
+<p>2）    Java虚拟机栈(Jvm Stacks)<br>也是线程私有的，生命周期和线程相同。虚拟机栈描述的是Java方法执行的内存模型：每个方法被执行的时候都会同时创建一个栈帧，它是用于支持虚拟机进行方法调用和方法执行的数据结构。对于执行引擎来讲，活动线程中，只有栈顶的栈帧是有效的，称为当前栈帧，这个栈帧所关联的方法称为当前方法，执行引擎所运行的所有字节码指令都只针对当前栈帧进行操作。栈帧用于存储局部变量表、操作数栈、动态链接、方法返回地址和一些额外的附加信息。在编译程序代码时，栈帧中需要多大的局部变量表、多深的操作数栈都已经完全确定了，并且写入了方法表的Code属性之中。因此，一个栈帧需要分配多少内存，不会受到程序运行期变量数据的影响，而仅仅取决于具体的虚拟机实现。<br>在Java虚拟机规范中，对这个区域规定了两种异常情况：</p>
+<pre><code><span class="number">1</span>、如果线程请求的栈深度大于虚拟机所允许的深度，将抛出StackOverflowError异常。
+
+<span class="number">2</span>、如果虚拟机在动态扩展栈时无法申请到足够的内存空间，则抛出OutOfMemoryError异常。
+</code></pre><p>3）    本地方法栈(Native Method Stacks)<br>与虚拟机栈所发挥的作用相似，虚拟机栈执行Java方法，而本地方法栈则为虚拟机使用到的Native方法服务。在HotSpot虚拟机中二者合二为一。异常和虚拟机栈一样。<br>4）    Java堆(Java Heap)<br>线程共享的一块区域，在虚拟机启动时创建。唯一目的就是存放对象实例。几乎所有的对象和数组都在这里分配内存。是垃圾收集器的主要区域，又称GC堆。<br>可分为新生代和老年代。可以不需要物理连续的内存，逻辑连续即可。<br>异常主要是OOM，在堆中无法完成内存实例分配。<br>5）    方法区(Method Area)<br>也是内存共享的区域，存储已被虚拟机加载的类信息、常量、静态变量、即使编译器编译后的代码等数据。异常主要是OOM。<br>6）    运行常量池(Runtime Constant Pool)<br>方法区的一部分，用于存放编译期生成的各种字面量和符号引用。Java语言在运行时也可产生常量，具有动态性。比如String.intern方法。<br>7）    直接内存(Direct Memory)<br>直接内存并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域，它直接从操作系统中分配，因此不受Java堆大小的限制，但是会受到本机总内存的大小及处理器寻址空间的限制，因此它也可能导致OutOfMemoryError异常出现。</p>
+<ol>
+<li>内存溢出异常<br>Java堆溢出：有OOM。方法：不断new新对象，然后在List中保存引用。<br>虚拟机栈和本地方法栈：单线程下，无论是栈帧太大还是虚拟机容量太小，仅产生StackOverFlow异常。方法：不断递归调用<br>多线程下，可产生OOM。方法：无限循环创建线程，每个线程不能停止<br>方法区和运行时常量池溢出：有OOM。方法：前者生成大量动态类，后者无限调用String.intern方法</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjv56vxfh0021q8vlpxuoms16" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-页面替换算法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/12/页面替换算法/" class="article-date">
+  <time datetime="2016-06-12T13:57:21.000Z" itemprop="datePublished">2016-06-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/12/页面替换算法/">页面替换算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>FIFO是先进先出算法<br>LRU是最近最久未使用算法<br>算法思想是建立page类来模拟内存，page.id记录页面序号，page.count记录使用情况。<br>FIFO中，countOldPoint用来记录应该被替换的内存位置，每发生替换一次就移动，其实就是循环队列的队首。<br>LRU中，每经过一次动作（搜索、插入、替换），就把所有count刷新一次。每替换一次，就把count置0.</p>
+<pre><code>    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">test</span> {
+
+<span class="keyword">private</span> <span class="keyword">static</span> final <span class="keyword">int</span> PRO_MEMORY = <span class="number">3</span>;<span class="comment">//内存块数</span>
+<span class="keyword">private</span> <span class="keyword">static</span> Page[] pages = <span class="keyword">new</span> Page[PRO_MEMORY];<span class="comment">//</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> capacity;<span class="comment">//当前内存的占用数</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> countOldPoint;<span class="comment">//记录最久的页面</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> lackTime;<span class="comment">//缺页次数</span>
+<span class="keyword">private</span> <span class="keyword">static</span> List&lt;Integer&gt; userPageList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();
+
+<span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">init</span>(<span class="params"></span>)</span>{ <span class="comment">//初始化</span>
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++){
+        pages[i] = <span class="keyword">new</span> Page();
+
+    }
+    System.<span class="keyword">out</span>.println(<span class="string">"init"</span>);
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">input</span>(<span class="params"></span>)</span>{<span class="comment">//输入顺序</span>
+    System.<span class="keyword">out</span>.println(<span class="string">"请输入顺序："</span>);
+    Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scanner(System.<span class="keyword">in</span>);
+    String input  = <span class="keyword">in</span>.nextLine();
+    String[] inputList = input.split(<span class="string">"\\s"</span>);
+    <span class="keyword">for</span>(String num : inputList){
+        userPageList.add(Integer.valueOf(num));
+    }
+    <span class="keyword">in</span>.close();
+
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span>(<span class="params"></span>)</span>{
+    System.<span class="keyword">out</span>.println(<span class="string">"内存中剩下的页面是："</span>);
+    <span class="keyword">for</span>(Page page : pages){
+        System.<span class="keyword">out</span>.println(page.getId() + <span class="string">" "</span>);
+    }
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">FIFO</span>(<span class="params"></span>)</span>{
+    Iterator&lt;Integer&gt; iterator = userPageList.iterator();
+    <span class="keyword">while</span>(iterator.hasNext()){
+        countOldPoint = countOldPoint % PRO_MEMORY;
+        <span class="keyword">int</span> inPageId = iterator.next();
+        <span class="keyword">if</span>(search1(inPageId)){
+            System.<span class="keyword">out</span>.println(<span class="string">"当前页面"</span>+inPageId+<span class="string">"已在内存中，不用替换"</span>);
+        } <span class="keyword">else</span> {
+            <span class="keyword">if</span>(capacity &lt; PRO_MEMORY ){
+                pages[capacity].setId(inPageId);
+                System.<span class="keyword">out</span>.println(inPageId + <span class="string">"正在放入内存"</span>);
+                capacity++;
+                lackTime++;
+            } <span class="keyword">else</span> {
+                replace1(inPageId);
+                lackTime++;
+                countOldPoint++;
+            }
+            display();
+        }
+    }
+    System.<span class="keyword">out</span>.println(<span class="string">"缺页次数为："</span> + lackTime +<span class="string">" , "</span>+ <span class="string">"缺页率为："</span> + (<span class="keyword">float</span>)lackTime/userPageList.size());
+
+}
+
+<span class="function"><span class="keyword">public</span>  boolean <span class="title">search1</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{<span class="comment">//查找页面是否存在</span>
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++){
+        <span class="keyword">if</span>(pages[i].getId() == pageId){
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        } 
+    }
+    <span class="keyword">return</span> <span class="keyword">false</span>;
+
+}
+
+<span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">replace1</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{<span class="comment">//FIFO中使用的替换算法，即用当前页面替换最久的页面</span>
+    <span class="keyword">int</span> outPageId = -<span class="number">1</span>;
+    outPageId = pages[countOldPoint].getId();
+    pages[countOldPoint].setId(pageId);
+    System.<span class="keyword">out</span>.println(<span class="string">"页号"</span> + pageId + <span class="string">"换入，页号"</span> + outPageId +<span class="string">"换出"</span>);
+}
+
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LRU</span>(<span class="params"></span>)</span>{
+    Iterator&lt;Integer&gt; iterator = userPageList.iterator();
+    <span class="keyword">while</span>(iterator.hasNext()){
+        <span class="keyword">int</span> inPageId = iterator.next();
+        <span class="keyword">if</span>(search2(inPageId)){
+            System.<span class="keyword">out</span>.println(inPageId + <span class="string">"已在内存中，不用替换"</span>);
+        } <span class="keyword">else</span>{
+            <span class="keyword">if</span>(capacity &lt; PRO_MEMORY){
+                pages[capacity].setId(inPageId);
+                System.<span class="keyword">out</span>.println(inPageId + <span class="string">"正在放入内存"</span>);
+                reSet(capacity);
+                capacity++;
+                timeRefresh();
+                lackTime++;
+            } <span class="keyword">else</span>{
+                replace2(inPageId);
+                timeRefresh();
+                lackTime++;
+            }
+        }
+        display();
+    }
+    System.<span class="keyword">out</span>.println(<span class="string">"缺页次数为："</span> + lackTime +<span class="string">" , "</span>+ <span class="string">"缺页率为："</span> + (<span class="keyword">float</span>)lackTime/userPageList.size());
+
+}
+
+<span class="function"><span class="keyword">public</span> boolean <span class="title">search2</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++) {
+        <span class="keyword">if</span>(pageId == pages[i].getId()){
+            timeRefresh();
+            reSet(i);
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+
+    }
+    <span class="keyword">return</span> <span class="keyword">false</span>;
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reSet</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{
+    pages[pageId].setCount(<span class="number">0</span>);
+
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">timeRefresh</span>(<span class="params"></span>)</span>{
+    <span class="keyword">for</span>(Page page: pages){
+        page.countInc();
+    }
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">replace2</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{
+    <span class="comment">//换出count最大的页面</span>
+    <span class="keyword">int</span> outPageId = -<span class="number">1</span>;<span class="comment">//换出的页面</span>
+    <span class="keyword">int</span> pId = <span class="number">0</span>;<span class="comment">//记录下标</span>
+    <span class="keyword">int</span> max = <span class="number">0</span>;
+    <span class="keyword">int</span> countOfpage;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++) {
+
+     countOfpage = pages[i].getCount();
+        <span class="keyword">if</span>(max &lt; countOfpage){
+            max = countOfpage;
+            pId = i;
+            outPageId = pages[i].getId();
+        }
+
+    }
+    reSet(pId);
+    pages[pId].setId(pageId);
+    System.<span class="keyword">out</span>.println(<span class="string">"页号"</span> + pageId + <span class="string">"换入，页号"</span> + outPageId +<span class="string">"换出"</span>);
+
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>)</span>{
+    System.<span class="keyword">out</span>.println(<span class="string">"请选择1、FIFO，2、LRU"</span>);
+    Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scanner(System.<span class="keyword">in</span>);
+    <span class="keyword">int</span> choose = <span class="keyword">in</span>.nextInt();
+
+
+    <span class="keyword">if</span>(choose == <span class="number">1</span>){
+        test t = <span class="keyword">new</span> test();
+        t.init();
+        t.input();
+        t.FIFO();
+
+    } <span class="function"><span class="keyword">else</span> <span class="title">if</span>(<span class="params">choose == <span class="number">2</span></span>)</span>{
+        test t = <span class="keyword">new</span> test();
+        t.init();
+        t.input();
+        t.LRU();
+    }
+
+
+}
+
+<span class="keyword">class</span> <span class="title">Page</span>{
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> <span class="keyword">int</span> count;<span class="comment">//模拟用于记录的寄存器</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span>(<span class="params"></span>) </span>{
+        <span class="keyword">return</span> id;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span>(<span class="params"><span class="keyword">int</span> id</span>) </span>{
+        <span class="keyword">this</span>.id = id;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span>(<span class="params"></span>) </span>{
+        <span class="keyword">return</span> count;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCount</span>(<span class="params"><span class="keyword">int</span> count</span>) </span>{
+        <span class="keyword">this</span>.count = count;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">countInc</span>(<span class="params"></span>)</span>{
+        count++;
+    }
+
+}
+
+
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjv56vxdw0004q8vlhpj4ez43" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/操作系统/">操作系统</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-大数据集下的内部排序与外部排序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/05/大数据集下的内部排序与外部排序/" class="article-date">
+  <time datetime="2016-06-05T14:44:45.000Z" itemprop="datePublished">2016-06-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/05/大数据集下的内部排序与外部排序/">大数据集下的内部排序与外部排序</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>专业选修作业，大数据集是指100万以上的排序</p>
+</blockquote>
+<h2 id="大数据集生成">大数据集生成</h2><ol>
+<li>Java中生成随机数非常简单，只需要调用java.util.Random就可以了。<br> <code>protected int next(int bits)</code><br>　　生成下一个伪随机数。</li>
+</ol>
+<p>　　<code>boolean nextBoolean()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、均匀分布的 boolean 值。</p>
+<p>　　<code>void nextBytes(byte[] bytes)</code><br>　　生成随机字节并将其置于用户提供的字节数组中。</p>
+<p>　　<code>double nextDouble()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、在 0.0 和 1.0之间均匀分布的 double 值。</p>
+<p>　　<code>float nextFloat()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、在 0.0 和 1.0 之间均匀分布的 float 值。</p>
+<p>　　<code>double nextGaussian()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、呈高斯(“正常地”)分布的 double 值，其平均值是 0.0，标准偏差是 1.0。</p>
+<p>　　<code>int nextInt()</code><br>　　返回下一个伪随机数，它是此随机数生成器的序列中均匀分布的 int 值。</p>
+<p>　　<code>int nextInt(int n)</code><br>　　返回一个伪随机数，它是从此随机数生成器的序列中取出的、在 0(包括)和指定值(不包括)之间均匀分布的 int值。</p>
+<p>　　<code>long nextLong()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、均匀分布的 long 值。</p>
+<p>　　<code>void setSeed(long seed)</code><br>　　使用单个 long 种子设置此随机数生成器的种子。</p>
+<ol>
+<li>带种子与不带种子的区别<br> Random类使用的根本是策略分带种子和不带种子的Random的实例。<br>　　通俗说，两者的区别是：带种子的，每次运行生成的结果都是一样的。<br>　　不带种子的，每次运行生成的都是随机的，没有规律可言。</li>
+</ol>
+<h2 id="内排">内排</h2><p>这种情况下和普通的排序没有区别，主要注意数据的io就行了。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Test2 {
+    final <span class="keyword">static</span> <span class="keyword">int</span> MAX = <span class="number">100000000</span>;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] theArray = <span class="keyword">new</span> <span class="keyword">int</span>[MAX];
+
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] S, <span class="keyword">int</span> p, <span class="keyword">int</span> r)</span></span>{
+    <span class="keyword">int</span> i = p-<span class="number">1</span>;
+    <span class="keyword">int</span> j;
+    <span class="keyword">int</span> x = S[r];
+    <span class="keyword">for</span> ( j = p; j &lt; r; j++) {
+        <span class="keyword">if</span>(S[j] &lt;= x){
+            i++;
+            <span class="keyword">int</span> temp;
+            temp = S[j];  <span class="comment">//交换</span>
+            S[j] = S[i];
+            S[i] = temp;
+            }
+    }
+    <span class="keyword">int</span> temp;
+    temp = S[r];
+    S[r] = S[i+<span class="number">1</span>];
+    S[i+<span class="number">1</span>] = temp;
+    <span class="keyword">return</span> i+<span class="number">1</span>;                
+}
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] S, <span class="keyword">int</span> p, <span class="keyword">int</span> r)</span></span>{
+    <span class="keyword">int</span> q;
+    <span class="keyword">if</span>(p &lt; r){
+        q = partition(S, p, r);
+        quickSort(S, p, q-<span class="number">1</span>);
+        quickSort(S, q+<span class="number">1</span>, r); 
+    }
+}
+
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{
+    <span class="keyword">long</span> start = System.currentTimeMillis();
+
+    File file = <span class="keyword">new</span> File(<span class="string">"D:/yiyi.txt"</span>);
+    FileReader fr;
+    <span class="keyword">try</span> {
+        fr = <span class="keyword">new</span> FileReader(file);
+        BufferedReader reader = <span class="keyword">new</span> BufferedReader(fr);
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; theArray.length; i++){
+            theArray[i] = Integer.parseInt(reader.readLine());
+        }
+        System.out.println(<span class="string">"读取成功"</span>);
+        reader.close();
+        fr.close();
+    } <span class="keyword">catch</span> (FileNotFoundException e) {
+        <span class="comment">// TODO Auto-generated catch block</span>
+        e.printStackTrace();
+    } <span class="keyword">catch</span> (NumberFormatException e) {
+        <span class="comment">// TODO Auto-generated catch block</span>
+        e.printStackTrace();
+    } <span class="keyword">catch</span> (IOException e) {
+        <span class="comment">// TODO Auto-generated catch block</span>
+        e.printStackTrace();
+    }
+
+<span class="comment">//        Arrays.sort(theArray);</span>
+
+    quickSort(theArray,<span class="number">0</span>, MAX -<span class="number">1</span>);
+
+<span class="comment">//        for(int i = 0; i &lt; theArray.length; i++){</span>
+<span class="comment">//            System.out.println(theArray[i]);</span>
+<span class="comment">//        }</span>
+
+    <span class="keyword">long</span> end = System.currentTimeMillis();
+    System.out.println(<span class="string">"耗时："</span> + (end - start) + <span class="string">"ms"</span>);
+}
+}
+</code></pre><h2 id="外排">外排</h2><p>如果数据量超过了内存，利用硬盘等外存，可使用外排来排序。理论上，只要时间和空间允许，可以排任意的数量。但受制于外存的读写速度，速度大多都非常慢。<br>外排的思路是把数据分为n份，每份用内排排序后，再两两归并，得到最终的结果。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Test3 {
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> BUFFER_SIZE = <span class="number">10000000</span>;<span class="comment">//每个内排的排序个数</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) <span class="keyword">throws</span> NumberFormatException, IOException{
+    <span class="keyword">long</span> start = System.currentTimeMillis();
+    <span class="keyword">File</span> original = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="string">"D:/yiyi.txt"</span>);
+    mergeEE(split(original));
+    System.out.<span class="keyword">println</span>(<span class="string">"ok"</span>);
+    <span class="keyword">long</span> end = System.currentTimeMillis();
+    System.out.<span class="keyword">println</span>(<span class="string">"耗时："</span> + (end - start) + <span class="string">"ms"</span>);
+
+}
+<span class="comment">/*
+ * 
+ * 把大文件分为多个小文件
+ * 
+ * */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> ArrayList&lt;<span class="keyword">File</span>&gt; split(<span class="keyword">File</span> <span class="keyword">file</span>) <span class="keyword">throws</span> NumberFormatException, IOException{
+    ArrayList&lt;<span class="keyword">File</span>&gt; files = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">File</span>&gt;();
+    <span class="keyword">int</span>[] buffer = <span class="keyword">new</span> <span class="keyword">int</span>[BUFFER_SIZE];
+    FileReader fr = <span class="keyword">new</span> FileReader(<span class="keyword">file</span>);
+    BufferedReader br = <span class="keyword">new</span> BufferedReader(fr);
+    <span class="keyword">boolean</span> isFinished = <span class="keyword">false</span>;
+    <span class="keyword">while</span>(!isFinished){
+        <span class="keyword">int</span> index = buffer.length;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; buffer.length; i++){
+            String temp = br.readLine();
+            <span class="keyword">if</span>(temp != <span class="keyword">null</span>){
+                buffer[i] = Integer.parseInt(temp);
+            } <span class="keyword">else</span> {
+                isFinished = <span class="keyword">true</span>;
+                index = i;
+            }
+            }
+            Arrays.<span class="keyword">sort</span>(buffer, <span class="number">0</span>, index);
+            <span class="keyword">File</span> out = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="string">"D:/ttttt/set"</span> + <span class="keyword">new</span> Random().nextInt() + <span class="string">".txt"</span>);
+            FileWriter fw = <span class="keyword">new</span> FileWriter(out);
+            BufferedWriter bw = <span class="keyword">new</span> BufferedWriter(fw);
+            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; index; j++) {
+                bw.<span class="keyword">write</span>(String.valueOf(buffer[j]) + System.getProperty(<span class="string">"line.separator"</span>)); 
+            }
+            bw.close();
+            fw.close();
+            files.add(out);
+
+
+    }
+    br.close();
+    fr.close();
+    <span class="keyword">return</span> files;
+
+}
+<span class="comment">/*
+ * 递归合并所有已排好序的小文件
+ * 
+ * */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">File</span> mergeAll(ArrayList&lt;<span class="keyword">File</span>&gt; list) <span class="keyword">throws</span> IOException{
+    <span class="keyword">if</span>(list.<span class="keyword">size</span>() == <span class="number">1</span>){
+        <span class="keyword">return</span> list.get(<span class="number">0</span>);
+    }
+    ArrayList&lt;<span class="keyword">File</span>&gt; inter = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">File</span>&gt;();
+    <span class="keyword">for</span>(Iterator&lt;<span class="keyword">File</span>&gt; it = list.iterator(); it.hasNext();){
+        <span class="keyword">File</span> one = it.<span class="keyword">next</span>();
+        <span class="keyword">if</span>(it.hasNext()){
+            <span class="keyword">File</span> two =  it.<span class="keyword">next</span>();
+            inter.add(merge(one,two));
+
+        }<span class="keyword">else</span> {
+            <span class="keyword">return</span> one;
+        }
+    }
+    <span class="keyword">return</span> mergeAll(inter);
+}
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> mergeEE(ArrayList&lt;<span class="keyword">File</span>&gt; list) <span class="keyword">throws</span> IOException{
+    <span class="keyword">if</span>(list.<span class="keyword">size</span>() == <span class="number">1</span>){
+        <span class="keyword">return</span>;
+        }
+
+    ArrayList&lt;<span class="keyword">File</span>&gt; inter = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">File</span>&gt;();
+    <span class="keyword">for</span>(Iterator&lt;<span class="keyword">File</span>&gt; it = list.iterator(); it.hasNext();){
+        <span class="keyword">File</span> one = it.<span class="keyword">next</span>();
+        <span class="keyword">if</span>(it.hasNext()){
+            <span class="keyword">File</span> two =  it.<span class="keyword">next</span>();
+            inter.add(merge(one,two));
+
+        } <span class="keyword">else</span> {
+            inter.add(one);
+    }
+    mergeEE(inter);
+    }
+
+}
+
+<span class="comment">/*
+ * 合并两个已排好序的小文件
+ * 
+ * */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">File</span> merge(<span class="keyword">File</span> one, <span class="keyword">File</span> two) <span class="keyword">throws</span> IOException{<span class="comment">//归并两个已排好序的文件</span>
+    FileReader fr1 = <span class="keyword">new</span> FileReader(one);
+    FileReader fr2 = <span class="keyword">new</span> FileReader(two);
+    BufferedReader br1 = <span class="keyword">new</span> BufferedReader(fr1);
+    BufferedReader br2 = <span class="keyword">new</span> BufferedReader(fr2);
+
+    <span class="comment">//File output = new File("D:/ttttt/output.txt");</span>
+    <span class="keyword">File</span> output = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="string">"D:/ttttt/merge"</span> + <span class="keyword">new</span> Random().nextInt() + <span class="string">".txt"</span>);
+    FileWriter fw = <span class="keyword">new</span> FileWriter(output);
+    BufferedWriter bw = <span class="keyword">new</span> BufferedWriter(fw);
+    String s1 = br1.readLine();
+    String s2 = br2.readLine();    
+    <span class="keyword">boolean</span> finish = <span class="keyword">false</span>;
+
+    <span class="keyword">while</span>(!finish){
+
+        <span class="keyword">if</span>((s1 != <span class="keyword">null</span>) &amp;&amp; (s2 != <span class="keyword">null</span>)){ 
+            <span class="keyword">if</span>(Integer.parseInt(s1) &lt; Integer.parseInt(s2)){
+                bw.<span class="keyword">write</span>(s1 + System.getProperty(<span class="string">"line.separator"</span>));
+                s1 = br1.readLine();
+            } <span class="keyword">else</span> {
+                bw.<span class="keyword">write</span>(s2 + System.getProperty(<span class="string">"line.separator"</span>));
+                s2 = br2.readLine();
+            }
+        } <span class="keyword">else</span> <span class="keyword">if</span>((s1 == <span class="keyword">null</span>) &amp;&amp; (s2 != <span class="keyword">null</span>)) {
+            bw.<span class="keyword">write</span>(s2 + System.getProperty(<span class="string">"line.separator"</span>));
+            s2 = br2.readLine();
+        } <span class="keyword">else</span> <span class="keyword">if</span>((s1 != <span class="keyword">null</span>) &amp;&amp; (s2 == <span class="keyword">null</span>)){
+            bw.<span class="keyword">write</span>(s1 + System.getProperty(<span class="string">"line.separator"</span>));
+            s1 = br1.readLine();
+        } <span class="keyword">else</span> {
+            finish = <span class="keyword">true</span>;
+        }
+
+    }
+    bw.close();
+    fw.close();
+    br2.close();
+    br1.close();
+    fr1.close();
+    fr2.close();
+
+
+    <span class="keyword">return</span> output;
+
+}
+
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjv56vxec000lq8vlgmi3a6fb" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-进程相关实验" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/26/进程相关实验/" class="article-date">
+  <time datetime="2016-05-26T14:54:22.000Z" itemprop="datePublished">2016-05-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/26/进程相关实验/">进程相关实验</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>Cygwin简介及基础命令</li>
+</ol>
+<blockquote>
+<p>Cygwin是一个在windows平台上运行的类UNIX模拟环境，是cygnus solutions公司开发的自由软件它对于学习UNIX/Linux操作环境，或者从UNIX到Windows的应用程序移植，或者进行某些特殊的开发工作，尤其是使用GNU工具集在Windows上进行嵌入式系统开发，非常有用。随着嵌入式系统开发在国内日渐流行，越来越多的开发者对Cygwin产生了兴趣。                             —-百度百科</p>
+</blockquote>
+<p>本来就想学些linux,原来以为cygwin比较麻烦，结果。。。</p>
+<p>安装的是老师提供的版本，注意选择gcc 和 vi（如果需要，实际上非常难用），装完后就可以使用了，基本功能和linux差不多</p>
+<p>基本指令有：来自<a href="http://blog.163.com/stm32f103vct6@126/blog/static/166743479201211592813232/" target="_blank" rel="external">这里</a><br>pwd 显示当前的路径<br>cygpath -dm “<code>pwd</code>“ 显示当前的完整路径（即windows格式的路径）<br>cd 改变当前路径，无参数时进入对应用户的home目录<br>ls 列出当前目录下的文件。此命令有N多参数，比如ls -al<br>ps 列出当前系统进程<br>kill 杀死某个进程<br>mkdir 建立目录<br>rmdir 删除目录<br>rm 删除文件<br>mv 文件改名或目录改名<br>man 联机帮助<br>less 显示文件的最末几行</p>
+<p>———————————————————————<br>ls #以默认方式显示当前目录文件列表<br>ls –a #显示所有文件包括隐藏文件<br>ls –l #显示文件属性，包括大小，日期，符号连接，是否可读写及是否可执行<br>ls –color=never *.so &gt; obj #不显示文字颜色,将所有so文件记录到obj文件中</p>
+<p>———————————————————————</p>
+<p>cd dir #切换到当前目录下的dir目录<br>cd .. #切换到到上一级目录<br>cd ../.. #切换到上二级目录<br>cd ~ #切换到用户目录，比如是root用户，则切换到/root下</p>
+<p>———————————————————————<br>rm file #删除某一个文件<br>rm -fr dir #删除当前目录下叫dir的整个目录</p>
+<p>———————————————————————<br>cp source target #将文件source 复制为 target<br>cp /root/source . #将/root下的文件source复制到当前目录<br>cp –av soure_dir target_dir #将整个目录复制，两目录完全一样<br>cp –fr source_dir target_dir #将整个目录复制，并且是以非链接方式复制，当source目录带有符号链接时，两个目录不相同</p>
+<ol>
+<li><p>fork()命令<br>fork()命令调用方法是 pid_t fork(void); 需要头文件#include <unistd.h>。<br>调用成功后，会在子进程中返回0，在父进程中返回子进程的pid，所以一次可以判定是在子进程还是在父进程中。<br>比如:</unistd.h></p>
+<pre><code><span class="keyword">if</span>((fork()==<span class="number">0</span>){
+<span class="comment">//此处是子进程</span>
+} <span class="keyword">else</span> {
+<span class="comment">//此处是父进程</span>
+
+}
+</code></pre><p>调用不成功返回-1.</p>
+</li>
+</ol>
+<h4 id="先创建子进程，再创建孙子进程">先创建子进程，再创建孙子进程</h4><pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+    <span class="keyword">int</span> p1,p2;
+    <span class="keyword">while</span>((p1 = fork()) == -<span class="number">1</span>);<span class="comment">//创建子进程</span>
+     <span class="keyword">if</span>(p1 == <span class="number">0</span>){ <span class="comment">//pid等于0表示在子进程中                </span>
+        <span class="keyword">while</span>((p2 = fork()) == -<span class="number">1</span>);<span class="comment">//子进程中创建孙子进程        </span>
+        <span class="keyword">if</span>(p2 == <span class="number">0</span>){
+        <span class="built_in">printf</span>(<span class="string">"This is grandson. pid is %d. \n"</span>, getpid());
+        } <span class="keyword">else</span>{
+            <span class="built_in">printf</span>(<span class="string">"This is son. pid is %d. my son pid is %d"</span>, getpid(),p2);
+        }        
+
+     }  <span class="keyword">else</span> {<span class="comment">//pid 大于0，即此为父进程                 </span>
+            <span class="built_in">printf</span>(<span class="string">"this is father. pid is %d. my son pid is %d.\n"</span>,getpid(),p1);    
+     }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><h4 id="创建两个并列的子进程">创建两个并列的子进程</h4><pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+         <span class="keyword">int</span> p1,p2;
+    <span class="keyword">int</span> i;
+    <span class="keyword">while</span>((p1 = fork()) == -<span class="number">1</span>);
+    <span class="keyword">if</span>(p1 == <span class="number">0</span>){ <span class="comment">//pid等于0表示在子进程中</span>
+        <span class="built_in">printf</span>(<span class="string">"This is son1. pid is %d\n"</span>, getpid());
+   } <span class="keyword">else</span> {<span class="comment">//pid 大于0，即此为父进程</span>
+        <span class="keyword">while</span> ((p2 = fork()) == -<span class="number">1</span>);
+        <span class="keyword">if</span>(p2 == <span class="number">0</span>){
+        <span class="built_in">printf</span>(<span class="string">"This is son2. pid is %d\n"</span>, getpid());
+        } <span class="keyword">else</span> {
+            <span class="built_in">printf</span>(<span class="string">"this is father. pid is %d. my son1 pid is %d. my son2 pid is %d\n"</span>,getpid(),p1,p2);
+        }    
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><ol>
+<li><p>exec函数族<br>执行exec函数族中的函数后，启动一个新程序，替换当前进程，获得当前进程的pid。<br>在exec函数族中,<br>有后缀p时，函数可以利用DOS的PATH变量查找子程序文件。假如你希望执行命令 <code>/bin/cat /etc/passwd /etc/group,</code><br>有后缀l时，希望接收以逗号分隔的参数列表，列表以NULL指针作为结束标志<code>execl(&quot;/bin/cat&quot;,&quot;/etc/passed&quot;,&quot;/etc/group&quot;,NULL);</code><br>有后缀v时，希望接收到一个以NULL结尾的字符串数组的指针<code>char* argv[]={&quot;/bin/cat&quot;,&quot;/etc/passed&quot;,&quot;/etc/group&quot;,NULL}execv( &quot;/bin/cat&quot;, argv );</code><br> 有后缀e时，函数传递指定参数envp，允许改变子进程的环境，无后缀e时，子进程使用当前程序的环境。envp也是一个以NULL结尾的字符串数组指针</p>
+<p>本实验中，用了excel函数<code>execl(&quot;/bin/cat&quot;,argv[0],argv[1],NULL);</code><br>第一个参数表示新程序的路径，后面便是传的参数，分别对应<code>argv[0]</code>,<code>argv[1]</code>……等</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span>
+
+ <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>{
+<span class="keyword">char</span> p1[<span class="number">10</span>];
+<span class="keyword">char</span> p2[<span class="number">10</span>];
+<span class="keyword">char</span> p3[<span class="number">10</span>];
+<span class="keyword">char</span> command[<span class="number">10</span>];
+<span class="built_in">printf</span>(<span class="string">"the progress pid is %d\n"</span>, getpid());
+<span class="built_in">printf</span>(<span class="string">"please choose command(max,min,average):\n"</span>);
+
+<span class="built_in">scanf</span>(<span class="string">"%s"</span>,command);
+<span class="keyword">if</span>(!<span class="built_in">strcmp</span>(command, <span class="string">"min"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input two numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s"</span>, p1, p2);
+
+    <span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./min.exe"</span>,<span class="string">"min"</span>,p1,p2,<span class="literal">NULL</span>);
+}
+
+} <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(command, <span class="string">"max"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input two numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s"</span>,p1,p2);
+
+<span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./max.exe"</span>,<span class="string">"max"</span>,p1,p2,<span class="literal">NULL</span>);
+}
+} <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(command, <span class="string">"average"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input three numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s%s"</span>,p1,p2,p3);
+
+<span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal">NULL</span>);
+}
+} <span class="keyword">else</span> {
+<span class="built_in">printf</span>(<span class="string">"wrong command!\n"</span>);
+}
+<span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjv56vxe1000aq8vld5daqh0e" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/操作系统/">操作系统</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-阿里实习面试" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/19/阿里实习面试/" class="article-date">
+  <time datetime="2016-05-19T13:39:30.000Z" itemprop="datePublished">2016-05-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/19/阿里实习面试/">阿里实习面试</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>阿里的面试不出意料的挂了，确实还有很大差距。HR人很好，聊了聊学习的各方面问题，感觉受益匪浅。</p>
+</blockquote>
+<p>先自我介绍，然后问Java的学习方法和路线。我说我是自学的Java，时间也不长，又做了一段时间Android，本意是表示这方面很弱。结果他就疯狂的问Java的底层实现，算法什么的一点都没问。。。郁闷。。。<br>接下来是技术问题：<br>1.容器的分类；HashMap的底层数据结构是怎样的；如何扩容；存储过程是怎样的；并发下选哪个容器；都是线程安全的HashTable和CurrentHashMap的区别；CurrentHashMap如何实现并发安全；<br>2.数据库索引的数据结构。B+树<br>3.反射的概念，除了new以外如何获得一个对象</p>
+<p>面到这已经面不下去了，然后就随便聊了聊。<br>1.国内很多高校研究生课程是与现实脱节的，去一二线互联网公司得到的的历练是比读研要多的。这点我比较认同，这个行业的变化非常大，一两年就已经翻天覆地了。<br>2.基础很重要。因为很多一线互联网公司包括阿里的工作都是没有先例的，所有框架、工具都是自己做的。只会用各种框架是不够的，必须要知道基础原理，才能把学到的东西迁移到工作上。这一点做的不够。<br>3.语言都是相通的。追逐热点之前先把基础学好，可以事半功倍。还提到面试的岗位和以后实际工作可能有很大不同。<br>4.广度和深度同时兼顾。</p>
+<p>推荐的学习方法：看源码，看GitHub上的源码。<br>找实习基本上就结束了，秋招再来过。继续努力吧少年。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjv56vxdz0007q8vlg8lhww95" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-动态规划" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/16/动态规划/" class="article-date">
+  <time datetime="2016-05-16T12:15:28.000Z" itemprop="datePublished">2016-05-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/16/动态规划/">动态规划</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>感觉老是不能理解动态规划，放上来整理一下思路</p>
+</blockquote>
+<h1 id="1-01背包问题">1.01背包问题</h1><blockquote>
+<p>网上最好的解答是<a href="http://blog.csdn.net/mu399/article/details/7722810" target="_blank" rel="external">http://blog.csdn.net/mu399/article/details/7722810</a></p>
+</blockquote>
+<p>01背包的状态转换方程 f[i,j] = Max{ f[i-1,j-Wi]+Pi( j &gt;= Wi ),  f[i-1,j] }</p>
+<p>f[i,j]表示在前i件物品中选择若干件放在承重为j的背包中，可以取得的最大价值。</p>
+<p> f[i-1,j-Wi]+Pi可以理解为加入第i个物品<br> f[i-1,j]则表示不加入此物品，保持原样</p>
+<p> 代码<br>         public class question1 {<br>            public static void main(String[] args){<br>                int[][] f = new int[6][11];<br>                int[] v = {0,6,3,5,4,6};<br>                int[] w = {0,2,2,6,5,4};<br>                for(int i = 1; i &lt; 6; i++){<br>                    for (int j = 1; j &lt; 11; j++){<br>                        if(w[i] &gt; j){<br>                            f[i][j] = f[i-1][j];<br>                        } else<br>                            f[i][j] = Math.max(f[i-1][j], f[i-1][j - w[i]] + v[i]);<br>                    }<br>                }<br>                for(int i = 1; i &lt; 6; i++){<br>                for (int j = 1; j &lt; 11; j++){<br>                        System.out.print(f[i][j]);<br>                        }<br>                    System.out.print(‘\n’);<br>                    }<br>            }</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjv56vxeg000sq8vloyp3g2on" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-天气预报App中的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/01/天气预报App中的问题/" class="article-date">
+  <time datetime="2016-05-01T15:09:32.000Z" itemprop="datePublished">2016-05-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/01/天气预报App中的问题/">天气预报App中的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>graivty 和 layout_gravity</li>
+</ol>
+<p>android:gravity：设置的是控件自身上面的内容位置</p>
+<p>android:layout_gravity：设置控件本身相对于父控件的显示位置。</p>
+<ol>
+<li><p>ADT中显示中文乱码问题<br>在gradle中添加android {compileOptions.encoding = “GBK” }</p>
+</li>
+<li><p>关于天气预报的接口<br>天气</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjv56vxea000jq8vlk1fd6jls" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-华为实习生笔试题（大连）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/24/华为实习生笔试题（大连）/" class="article-date">
+  <time datetime="2016-04-24T14:17:52.000Z" itemprop="datePublished">2016-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/24/华为实习生笔试题（大连）/">华为实习生笔试题（大连）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>华为笔试题，虽然比较水，然而自己更水= =。</p>
+<p>##　第一题</p>
+</blockquote>
+<p>删除字符串中重复的字符，并按从小到大进行排序<br>描述: 输入一个字符串，删除字符串中重复的字符，并按ASCII码从小到大进行排序。</p>
+<p>运行时间限制: 无限制<br>内存限制: 无限制<br>输入: 输入一个字符串</p>
+<p>输出: 删除字符串中重复的字符，并按ASCII码从小到大进行排序。</p>
+<p>样例输入: 1233AABC4<br>样例输出: 1234ABC </p>
+<p>思路一：空间换时间,桶排序，因为ascII码一共不到300位，越长的字符串用这种方法我觉得是越快的<br>    public static void main(String[] args){<br>        Scanner in = new Scanner(System.in);</p>
+<pre><code><span class="built_in">String</span> origin = <span class="keyword">in</span>.nextLine()<span class="comment">;</span>
+<span class="keyword">in</span>.close()<span class="comment">;</span>
+char[] <span class="keyword">next</span> = origin.toCharArray()<span class="comment">;</span>
+boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="comment">;</span>
+<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span><span class="comment">; i &lt; next.length; i++){</span>
+    asc2[(<span class="built_in">int</span>)<span class="keyword">next</span>[i]] = <span class="literal">true</span><span class="comment">;</span>
+}
+
+<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span><span class="comment">; i &lt; asc2.length; i++){</span>
+    <span class="keyword">if</span>(asc2[i] == <span class="literal">true</span>){
+        System.out.print((char)i)<span class="comment">;</span>
+    }
+}
+</code></pre><h2 id="第二题">第二题</h2><p>洞穴逃生<br>描述: 精灵王子爱好冒险，在一次探险历程中，他进入了一个神秘的山洞。在洞穴深处，精灵王子不小心触动了洞穴内暗藏的机关，整个洞穴将很快塌陷，精灵王子必须尽快逃离洞穴。精灵王子的跑步速度为17m/s，以这样的速度可能是无法逃出洞穴的。庆幸的是精灵王子拥有闪烁法术，可在1s内移动60m，不过每次使用闪烁法术都会消耗魔法值10点。精灵王子的魔法值恢复的速度为4点/s，只有处在原地休息状态时才能恢复。</p>
+<p>现在已知精灵王子的魔法初值M，他所在洞穴中的位置与洞穴出口之间的距离S，距离洞穴塌陷的时间T。你的任务是写一个程序帮助精灵王子计算如何在最短的时间内逃离洞穴。若能逃出，输出”Yes”，并输出逃出所用的最短时间；若不能逃出，则输出”No”，同时输出精灵王子在剩下的时间内能走的最远距离。注意字母大小写。注意:精灵王子跑步、闪烁或休息活动均以秒(s)为单位。且每次活动的持续时间为整数秒。距离的单位为米(m)。</p>
+<p>注：M、S、T均是大于等于0的整数。由输入保证取值合法性，考生不用检查。</p>
+<p>提醒：</p>
+<p>如果输入的S为0，则说明本身已经在出口，输出应为：Yes 0</p>
+<p>如果输入的T为0（且S不为0），则说明已经没有时间了，输出应为：No 0</p>
+<p>运行时间限制: 无限制<br>内存限制: 无限制<br>输入: 输入格式:<br>M<br>S<br>T</p>
+<p>输出: 输出格式：<br>Yes 逃出洞穴所用的最短时间<br>或<br>No 在洞穴塌陷前能逃跑的最远距离</p>
+<p>样例输入: 10</p>
+<p>50</p>
+<p>5<br>样例输出: Yes 1</p>
+<p>解：应该是动态规划，过段时间研究。</p>
+<h2 id="第三题">第三题</h2><p>中文整数读法的拼音转换数字<br>描述: 根据输入的中文整数读法的拼音，输出对应的整数。例如，输入字符串“YiBaiLingYi”（一百零一），则输出整数101 。数字与拼音的对应表如下：</p>
+<p> 一 二 三  四 五  六 七 八 九  十   百  千   万  亿<br> Yi Er San Si Wu Liu Qi Ba Jiu Shi Bai Qian Wan Yii</p>
+<p>注意：为了与“一”区别，亿的拼音改为“Yii”，其余为标准汉语拼音（首字母大写）</p>
+<p>运行时间限制: 无限制<br>内存限制: 无限制<br>输入: 输入为一个字符串（C/C++为以0结尾的ASCII字符串），表示一个小于十亿的整数（不含负值）的中文拼音。<br>例如“YiBaiLingYi”表示“一百零一”。可以假定输入的字符串总是合法的（不存在空值、空串、非法字符、不符合规则的输入等情况）。</p>
+<p>输出: 输出对应的整数。</p>
+<p>样例输入: YiBaiLingYi<br>样例输出: 101 </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjv56vxef000qq8vlpuk3sjar" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/实习/">实习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    </nav>
+  
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/05/01/new-start-1/">new start</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/25/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/08/测试/">测试</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/人人2017/">人人2017</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://xiguabaobao.com" target="_blank">主题作者</a>
+          </li>
+        
+          <li>
+            <a href="http://reqianduan.com" target="_blank">热前端</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 wwy<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>
+  function SetShareData(cmd, config) {
+    if (shareDataTitle && shareDataUrl) {
+      config.bdText = shareDataTitle;
+      config.bdUrl = shareDataUrl;
+    }
+    return config;
+  }
+  window._bd_share_config={
+    "common":{onBeforeClick: SetShareData},
+    "share":{"bdCustomStyle":"/css/bdshare.css"}
+  };
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+</div>
+</body>
+</html>

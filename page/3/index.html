@@ -1,0 +1,1054 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第一个番茄</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="各种学">
+<meta property="og:type" content="website">
+<meta property="og:title" content="第一个番茄">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
+<meta property="og:site_name" content="第一个番茄">
+<meta property="og:description" content="各种学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第一个番茄">
+<meta name="twitter:description" content="各种学">
+  
+    <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">第一个番茄</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">starting now....</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="yoursite.com">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main">
+  
+    <article id="post-一个月总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/10/一个月总结/" class="article-date">
+  <time datetime="2016-04-10T14:51:04.000Z" itemprop="datePublished">2016-04-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/10/一个月总结/">一个月总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>开学一个月，节奏还是挺快的，有点压力。面完腾讯面试，感觉自己差距还很大，继续努力吧。</p>
+<p>Android  基础基本差不多了，接下来就是做些实际的项目<br>托福  还有两个星期<br>实习  托福完后的重点</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/04/10/一个月总结/" data-id="cjv56vxeo0012q8vl3v8d9ygt" class="article-share-link" data-share="baidu" data-title="一个月总结">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/something/">something</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-腾讯实习笔试" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/04/腾讯实习笔试/" class="article-date">
+  <time datetime="2016-04-04T15:18:24.000Z" itemprop="datePublished">2016-04-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/04/腾讯实习笔试/">腾讯实习笔试</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="第二题">第二题</h2><blockquote>
+<p>题目大意是把一个句子的单词颠倒输出。I come from China. 变成 China. From come I    </p>
+</blockquote>
+<ol>
+<li><p>非常low的方法</p>
+<pre><code>import java.util.Scanner;
+
+<span class="keyword">public</span> <span class="keyword">class</span> Tencent {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span> <span class="params">(String[] args)</span></span>{
+        Scanner in = <span class="keyword">new</span> Scanner(System.in);
+        String origin = in.nextLine();
+        in.close();
+        boolean ifCapital = <span class="literal">false</span>;
+        <span class="keyword">char</span>[] <span class="built_in">array</span> = origin.toCharArray();
+                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="built_in">array</span>.length - <span class="number">1</span>; i &gt;=<span class="number">0</span>; i--){
+            <span class="keyword">if</span>(<span class="built_in">array</span>[i] == <span class="string">' '</span>){
+                <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j &lt; <span class="built_in">array</span>.length; j++){
+                    <span class="keyword">if</span>(ifCapital == <span class="literal">true</span> &amp;&amp; <span class="built_in">array</span>[j] &lt;= <span class="number">122</span> &amp;&amp; <span class="built_in">array</span>[j] &gt;= <span class="number">97</span>){
+                        <span class="built_in">array</span>[j] = (<span class="keyword">char</span>) (<span class="built_in">array</span>[j] - (<span class="string">'a'</span> - <span class="string">'A'</span>));
+                        <span class="keyword">if</span>(<span class="built_in">array</span>[j] != <span class="string">' '</span>){
+                            System.out.print(<span class="built_in">array</span>[j]);
+                        }
+
+                        ifCapital = <span class="literal">false</span>;
+                    }<span class="keyword">else</span>{
+                        <span class="keyword">if</span>(<span class="built_in">array</span>[j] != <span class="string">' '</span>){
+                            System.out.print(<span class="built_in">array</span>[j]);
+                        }
+
+                    }
+                        <span class="keyword">if</span>(<span class="built_in">array</span>[j] == <span class="string">'.'</span>){
+                            ifCapital = <span class="literal">true</span>;
+                    }
+                    <span class="built_in">array</span>[j] = <span class="string">' '</span>;
+                }
+                System.out.print(<span class="string">' '</span>);
+
+            }
+
+        }
+        System.out.print(<span class="built_in">array</span>);
+
+    }
+
+}    
+</code></pre></li>
+<li><p>变态的split<br>String.split 可以把字符串按特定字符分隔成字符串数组。<br>public class Tecent2 {<br> public static void main(String[] args){</p>
+<pre><code>//ArrayList&lt;<span class="typename">String</span>&gt; list = <span class="keyword">new</span> ArrayList&lt;<span class="typename">String</span>&gt;();
+Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scanner(System.<span class="keyword">in</span>);
+<span class="typename">String</span> origin = <span class="keyword">in</span>.nextLine();
+<span class="keyword">in</span>.close();
+<span class="typename">String</span>[] s = origin.split(<span class="string">" "</span>);
+<span class="keyword">for</span>(int i = s.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i<span class="comment">--){</span>
+    System.<span class="keyword">out</span>.print(s[i]);
+}
+</code></pre><p> }</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/04/04/腾讯实习笔试/" data-id="cjv56vxe3000cq8vl9m7fkibd" class="article-share-link" data-share="baidu" data-title="腾讯实习笔试">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/实习/">实习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android笔记-网络" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/29/Android笔记-网络/" class="article-date">
+  <time datetime="2016-03-29T14:31:12.000Z" itemprop="datePublished">2016-03-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/29/Android笔记-网络/">Android笔记-网络</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.Http协议<br>http（超文本传输协议）是一个基于请求与响应模式的、无状态的、应用层的协议，常基于TCP的连接方式</p>
+<p>2 使用HttpClient</p>
+<blockquote>
+<p>HttpClient是Apache提供的http网络访问接口。但在6.0里被禁用了，5.0也不被推荐使用了。<br>以下是一个demo：</p>
+</blockquote>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">NetworkThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span>{</span>
+public void run(){
+    <span class="type">HttpClient</span> httpClient = <span class="keyword">new</span> <span class="type">DefaultHttpClient</span>();
+    <span class="type">HttpGet</span> httpGet = <span class="keyword">new</span> <span class="type">HttpGet</span>(<span class="string">"http://www.baidu.com"</span>);
+    <span class="keyword">try</span> {
+        <span class="type">HttpResponse</span> httpResponse = httpClient.execute(httpGet);
+
+        int code = httpResponse.getStatusLine().getStatusCode();
+
+        <span class="keyword">if</span>(code == <span class="number">200</span>) {
+            <span class="type">HttpEntity</span> entity = httpResponse.getEntity();
+            <span class="type">InputStream</span> inputStream = entity.getContent();
+            <span class="type">BufferedReader</span> bf = <span class="keyword">new</span> <span class="type">BufferedReader</span>(<span class="keyword">new</span> <span class="type">InputStreamReader</span>(inputStream));
+            <span class="type">String</span> line = bf.readLine();
+            <span class="type">Log</span>.d(<span class="string">"HTTP"</span>,<span class="string">"服务器"</span>+line);
+            <span class="type">Message</span> msg = <span class="keyword">new</span> <span class="type">Message</span>();
+            msg.obj = line;
+            handler.sendMessage(msg);
+        }
+
+
+    } <span class="keyword">catch</span> (<span class="type">IOException</span> e) {
+        e.printStackTrace();
+    }
+}
+</code></pre><p>3.使用HttpURLConnetion（推荐）<br>调用HttpURLConnection类的openConnect方法，然后设置各种性质即可。比如设置请求随时用的方法、设置连接超时等等。服务器返回的是输入流，需要用BufferReader读取。</p>
+<pre><code>     <span class="keyword">private</span> <span class="keyword">void</span> sendRequestWithHttpURLConnection(){
+    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() {
+        @Override
+        <span class="keyword">public</span> <span class="keyword">void</span> run() {
+            HttpURLConnection connection = <span class="keyword">null</span>;
+            <span class="keyword">try</span> {
+                URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod(<span class="string">"GET"</span>);
+                connection.setConnectTimeout(<span class="number">8000</span>);
+                connection.setReadTimeout(<span class="number">8000</span>);
+
+                InputStream in = connection.getInputStream();
+                <span class="keyword">BufferedReader</span> reader = <span class="keyword">new</span> <span class="keyword">BufferedReader</span>(<span class="keyword">new</span> InputStreamReader(in));
+                StringBuilder response = <span class="keyword">new</span> StringBuilder();
+                <span class="keyword">String</span> <span class="built_in">line</span>;
+                <span class="keyword">while</span> ((<span class="built_in">line</span> = reader.readLine()) != <span class="keyword">null</span>){
+                    response.<span class="built_in">append</span>(<span class="built_in">line</span>);
+                }
+
+                Message msg = <span class="keyword">new</span> Message();
+                msg.what = SHOW_RESPONSE;
+                msg.obj = response.toString();
+                handler.sendMessage(msg);
+            } <span class="keyword">catch</span> (MalformedURLException e) {
+                e.printStackTrace();
+            } <span class="keyword">catch</span> (IOException e) {
+                e.printStackTrace();
+            }<span class="keyword">finally</span> {
+                <span class="keyword">if</span> (connection != <span class="keyword">null</span>){
+                    connection.disconnect();
+                }
+            }
+
+        }
+    }).start();
+
+
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/29/Android笔记-网络/" data-id="cjv56vxfp0026q8vlkcqwsveu" class="article-share-link" data-share="baidu" data-title="Android笔记-网络">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android笔记-异步消息处理机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/24/Android笔记-异步消息处理机制/" class="article-date">
+  <time datetime="2016-03-24T12:08:10.000Z" itemprop="datePublished">2016-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/24/Android笔记-异步消息处理机制/">Android笔记-异步消息处理机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Android的异步消息处理机制，即handler、looper和messagequeue三者的关系。</p>
+</blockquote>
+<h2 id="1-线程">1.线程</h2><p>关于线程的两种实现方式、生命周期等等，这些java中的知识就不赘述了。<br>Android中的线程分为MainThread（主线程）和WorkerThread（子线程）。只有MainThread可以刷新UI（除progressbar.setProgress），用WorkerThread进行UI操作可能导致程序崩溃。</p>
+<h2 id="2-异步消息处理">2.异步消息处理</h2><p>以上的问题的解决办法，具体来说就是：建立一个子类继承handler，然后在主线创建handler实例。然后在子线程创建Message实例（handler.obtainMessage()），用handler.sendmessage()把message送出到Messagequeue，最后Looper把Message取出，再用handler对象中的handleMessage方法处理消息。<br>图图图</p>
+<h2 id="3-实现原理">3.实现原理</h2><ol>
+<li><p>实现这个机制主要利用了java的ThreadLocal<br><code>static final ThreadLocal&lt;Looper&gt; sThreadLocal = new ThreadLocal&lt;Looper&gt;();</code><br><code>sThreadLocal.set(new Looper(quitAllowed));</code><br>。使一个线程只有一个looper对象与之对应<br>ThreadLocal的set()把线程对象作为键，生成键值对。</p>
+</li>
+<li><p>Handler构造方法中 <code>mLooper = Looper.myLooper();</code>。这样，Looper、Thread、Handler就对应起来。一个Handler，一个loop，一个messagequeue。</p>
+</li>
+<li><p>Loop.loop()<br> public static void loop() {</p>
+<pre><code><span class="keyword">final</span> Looper me = myLooper();
+<span class="keyword">if</span> (me == <span class="keyword">null</span>) {
+    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"No Looper; Looper.prepare() wasn't called on this thread."</span>);
+}
+<span class="keyword">final</span> MessageQueue queue = me.mQueue;
+
+<span class="comment">// Make sure the identity of this thread is that of the local process,</span>
+<span class="comment">// and keep track of what that identity token actually is.</span>
+Binder.clearCallingIdentity();
+<span class="keyword">final</span> <span class="keyword">long</span> ident = Binder.clearCallingIdentity();
+
+<span class="keyword">for</span> (;;) {
+    Message msg = queue.<span class="keyword">next</span>(); <span class="comment">// might block</span>
+    <span class="keyword">if</span> (msg == <span class="keyword">null</span>) {
+        <span class="comment">// No message indicates that the message queue is quitting.</span>
+        <span class="keyword">return</span>;
+    }
+
+    <span class="comment">// This must be in a local variable, in case a UI event sets the logger</span>
+    Printer logging = me.mLogging;
+    <span class="keyword">if</span> (logging != <span class="keyword">null</span>) {
+        logging.<span class="keyword">println</span>(<span class="string">"&gt;&gt;&gt;&gt;&gt; Dispatching to "</span> + msg.target + <span class="string">" "</span> +
+                msg.callback + <span class="string">": "</span> + msg.what);
+    }
+
+    msg.target.dispatchMessage(msg);
+
+    <span class="keyword">if</span> (logging != <span class="keyword">null</span>) {
+        logging.<span class="keyword">println</span>(<span class="string">"&lt;&lt;&lt;&lt;&lt; Finished to "</span> + msg.target + <span class="string">" "</span> + msg.callback);
+    }
+
+    <span class="comment">// Make sure that during the course of dispatching the</span>
+    <span class="comment">// identity of the thread wasn't corrupted.</span>
+    <span class="keyword">final</span> <span class="keyword">long</span> newIdent = Binder.clearCallingIdentity();
+    <span class="keyword">if</span> (ident != newIdent) {
+        Log.wtf(TAG, <span class="string">"Thread identity changed from 0x"</span>
+                + <span class="keyword">Long</span>.toHexString(ident) + <span class="string">" to 0x"</span>
+                + <span class="keyword">Long</span>.toHexString(newIdent) + <span class="string">" while dispatching to "</span>
+                + msg.target.getClass().getName() + <span class="string">" "</span>
+                + msg.callback + <span class="string">" what="</span> + msg.what);
+    }
+
+    msg.recycleUnchecked();
+}
+</code></pre><p> }</p>
+</li>
+</ol>
+<p>不断地调用的MessageQueue的next()方法,它的简单逻辑就是如果当前MessageQueue中存在mMessages(即待处理消息)，就将这个消息出队，然后让下一条消息成为mMessages，否则就进入一个阻塞状态，一直等到有新的消息入队。msg.target指的是Handler，然后用dispatchMessage方法</p>
+<ol>
+<li> public void dispatchMessage(Message msg) {<br> if (msg.callback != null) {  <pre><code>handleCallback<span class="list">(<span class="keyword">msg</span>)</span><span class="comment">;  </span>
+</code></pre> } else {  <pre><code><span class="keyword">if</span> (mCallback != <span class="literal">null</span>) {  
+    <span class="keyword">if</span> (mCallback.handleMessage(msg)) {  
+        <span class="keyword">return</span>;  
+    }  
+}  
+handleMessage(msg);  
+</code></pre> }<br>}  </li>
+</ol>
+<p>最终调用handleMessage来实现功能。</p>
+<h2 id="4-_Handler-post(Runnable_r)方法">4. Handler.post(Runnable r)方法</h2><p>dispatchMessage中，若callback不为null，则handleCallback<br>     private static void handleCallback(Message message) {<br>        message.callback.run();<br>    }</p>
+<p>直接运行这个Runnable。不会新开线程，直接运行在主线程中.实现了把整段代码传进主线程中的功能。</p>
+<h2 id="5-loopPrepare()">5.loopPrepare()</h2><p>在创建实例之前必须要有loopPrepare()方法。主线程里在初始化时已经调用</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/24/Android笔记-异步消息处理机制/" data-id="cjv56vxfs002aq8vlttq8vsvw" class="article-share-link" data-share="baidu" data-title="Android笔记-异步消息处理机制">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Oracle数据库安装中的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/16/Oracle数据库安装中的坑/" class="article-date">
+  <time datetime="2016-03-16T14:02:53.000Z" itemprop="datePublished">2016-03-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/16/Oracle数据库安装中的坑/">Oracle数据库安装中的坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>安装中遇到了几个坑，万一被人看到了呢</p>
+</blockquote>
+<p>1.系统的默认共享一定要打开。不然会出现INS-30131错误。可以参考<a href="blog.csdn.net/holandstone/article/details/14165377">这个</a>打开</p>
+<blockquote>
+<p>先在控制面板的“服务”，看SERVER服务是否启动，如果没有启动，则将设置为自动或者手动，然后再选择启动。<br>开启系统的默认共享的方法<br>1.检查AutoShareServer和AutoShareWks注册表值是否为0。<br>2.找到注册表中的HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanServer\Parameters。<br>3.将下面子项中的AutoShareServer和AutoShareWks DWORD值改为1。<br>4.重启。通常Win2003、Win2000\XP会在启动时自动创建。<br>5.启动后，可以通过运行CMD命令进入命令行模式，再运行net share，再共享列表中会看到Admin$、C$\IPC$等默认共享。</p>
+</blockquote>
+<p>2.解压文件两个要分开解压。。。不要懒。不然会遇到无法找到文件的错误</p>
+<p>3.安装的最后几步有个用户管理，最好点进去看看默认的账户和密码。不然只能看<a href="http://zhidao.baidu.com/link?url=_fJWkzSfMZQdM5mHKwaNqXAMW3fGrUTFA8QdR2COltquhs3UxM7tv7N0GgRc8WqObcgIyOgXBaZGjFVsIjQE5_" target="_blank" rel="external">这个</a>修改用户名和密码等</p>
+<pre><code>sqlplus /nolog
+conn / as sysdba
+<span class="operator"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="keyword">test</span> IDETIFIED <span class="keyword">BY</span> <span class="string">"test"</span>;</span>
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjv56vxfd001vq8vl3tartbi0" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android笔记-BroadcastReceiver" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/16/Android笔记-BroadcastReceiver/" class="article-date">
+  <time datetime="2016-03-16T13:34:20.000Z" itemprop="datePublished">2016-03-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/16/Android笔记-BroadcastReceiver/">Android笔记-BroadcastReceiver</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Broadcast Receiver 是四大组件之一，非常值得学习</p>
+</blockquote>
+<h2 id="笔记">笔记</h2><p>1.广播分为系统广播和有序广播。也可分为系统广播和自定义广播</p>
+<p>2.广播的左右实际上就是在系统和app，app和app，甚至app内传播信息。系统自身也会在各种情况下发出广播，比如，开机，网络状态变化时等等</p>
+<p>3.接收器可分为动态和静态。<br>动态比较灵活，注册了就可以用，比如BroadcastReceiver里的检测网络变化得例子。但是必须要应用在启动后才能实现<br>静态要在Manifest里注册receiver后才能用，可以无视应用是否启动。比如开机检测那个例子。</p>
+<p>4.最后那个强制下线的例子，有很多东西可以说。<br>建立一个所有Activity的父类可以实现对所有类操作<br>TableLayout的使用，同一个应用里的广播发送和接收<br>AlertDialog的使用：先用AlertDialog.builder配置细节<br>权限的申请<br>在广播接收器启动活动要在Intent加入FLAG_ACTIVITY_NEW_TAST标志<br>对话框类型设置</p>
+<h2 id="问题：context,和最后intent">问题：context,和最后intent</h2>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/16/Android笔记-BroadcastReceiver/" data-id="cjv56vxfx002hq8vl8qp5iads" class="article-share-link" data-share="baidu" data-title="Android笔记-BroadcastReceiver">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Git命令速查" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/10/Git命令速查/" class="article-date">
+  <time datetime="2016-03-10T14:44:36.000Z" itemprop="datePublished">2016-03-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/10/Git命令速查/">Git命令速查</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>在<a href="http://www.liaoxuefeng.com/" target="_blank" rel="external">http://www.liaoxuefeng.com/</a>学习了一些Git的具体用法</p>
+</blockquote>
+<h2 id="1-_Git">1. Git</h2><h4 id="创建版本库_$_git_init">创建版本库 <code>$ git init</code></h4><h4 id="把文件加入版本库">把文件加入版本库</h4><p>第一步，把文件添加到仓库 <code>$ git add ***</code><br> 把所有文件提交到仓库 <code>$ git add -A</code><br> 添加所有改动到仓库（包括删除文件） <code>$ git add -u</code><br>第二步，把文件提交到仓库 <code>$ git commit -m &quot;说明&quot;</code></p>
+<h4 id="查看仓库当前状态_git_status">查看仓库当前状态 <code>git status</code></h4><h2 id="2-_Github">2. Github</h2><p>添加远程库  <code>$ git remote add origin git@github.com:用户名/仓库名.git</code><br>第一次推送master分支的所有内容；<code>$git push -u origin master</code><br>推送最新修改 <code>$git push origin master</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/10/Git命令速查/" data-id="cjv56vxfl0023q8vlgb71flj5" class="article-share-link" data-share="baidu" data-title="Git命令速查">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-opencv-for-Android" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/02/opencv-for-Android/" class="article-date">
+  <time datetime="2016-03-02T08:15:59.000Z" itemprop="datePublished">2016-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/02/opencv-for-Android/">opencv for Android</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 为了做创新项目，研究了一段时间opencv4Android，做了一个小demo。实现读取手机上的图片文件，然后做成灰度图.</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
+    <span class="keyword">private</span> Button button;
+    <span class="keyword">private</span> ImageView imageView;
+    <span class="keyword">private</span> <span class="keyword">int</span> SELECT_FILE = <span class="number">1</span>;
+    <span class="keyword">private</span> String TAG = <span class="string">"Tag"</span>;
+
+    <span class="keyword">private</span> String selectPath = <span class="keyword">null</span>;
+
+    <span class="keyword">private</span> Bitmap srcBitmap;
+    <span class="keyword">private</span> Bitmap greyBitmap;
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+    <span class="keyword">super</span>.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    button = (Button) findViewById(R.id.button);
+    imageView = (ImageView)findViewById(R.id.imageView);
+
+    button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
+        <span class="annotation">@Override</span>
+        <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+            selectPic();
+        }
+    });
+}
+
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>{
+    <span class="keyword">super</span>.onResume();
+    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_10, getApplicationContext(), mLoaderCallback);
+    <span class="comment">//System.out.println("onResume sucess load OpenCV...");</span>
+    Log.i(TAG,<span class="string">"onResume sucess load OpenCV..."</span>);
+
+}
+
+<span class="keyword">private</span> BaseLoaderCallback mLoaderCallback = <span class="keyword">new</span> BaseLoaderCallback(<span class="keyword">this</span>) {
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onManagerConnected</span><span class="params">(<span class="keyword">int</span> status)</span> </span>{
+
+        <span class="keyword">switch</span> (status){
+            <span class="keyword">case</span> BaseLoaderCallback.SUCCESS:
+                //System.out.println(<span class="string">"成功加载"</span>);
+                Log.i(TAG, <span class="string">"成功加载"</span>);
+                <span class="keyword">break</span>;
+            <span class="keyword">default</span>:
+                <span class="keyword">super</span>.onManagerConnected(status);
+                <span class="comment">//System.out.println("加载失败加载失败");</span>
+                Log.i(TAG,<span class="string">"加载失败"</span>);
+        }
+    }
+};
+<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">procSrc2Gray</span><span class="params">()</span></span>{
+    Mat rgbMat = <span class="keyword">new</span> Mat();
+    Mat greyMat = <span class="keyword">new</span> Mat();
+    BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();
+    srcBitmap = BitmapFactory.decodeFile(selectPath,options);
+    greyBitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
+    Utils.bitmapToMat(srcBitmap, rgbMat);
+    Imgproc.cvtColor(rgbMat, greyMat, Imgproc.COLOR_RGB2GRAY);
+    Utils.matToBitmap(greyMat, greyBitmap);
+    System.out.println(<span class="string">"procSrc2Gray sucess"</span>);
+    imageView.setImageBitmap(greyBitmap);
+    <span class="comment">//Log.i(TAG,"procSrc2Gray sucess");</span>
+
+}
+
+
+
+<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">selectPic</span><span class="params">()</span></span>{
+    Intent intent1 = <span class="keyword">new</span> Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    intent1.setType(<span class="string">"image/*"</span>);
+    startActivityForResult(Intent.createChooser(intent1, <span class="string">"选择开启图库"</span>),SELECT_FILE);
+
+}
+
+
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>{
+    <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);
+    <span class="keyword">if</span>(resultCode == Activity.RESULT_OK){
+        <span class="keyword">if</span>(requestCode == SELECT_FILE)
+            onSeclectFromGalleryResult(data);
+    }
+
+}
+<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">onSeclectFromGalleryResult</span><span class="params">(Intent data)</span></span>{
+    Uri selectedImageUri = data.getData();
+    String[] projection = {MediaStore.MediaColumns.DATA};
+    Cursor cursor = managedQuery(selectedImageUri,projection,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="keyword">null</span>);
+    <span class="keyword">int</span> column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+    cursor.moveToFirst();
+
+    selectPath = cursor.getString(column_index);
+    procSrc2Gray();
+
+
+}
+
+
+
+<span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">onCreateOptionsMenu</span><span class="params">(Menu menu)</span> </span>{
+    <span class="comment">// Inflate the menu; this adds items to the action bar if it is present.</span>
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+
+<span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">onOptionsItemSelected</span><span class="params">(MenuItem item)</span> </span>{
+    <span class="comment">// Handle action bar item clicks here. The action bar will</span>
+    <span class="comment">// automatically handle clicks on the Home/Up button, so long</span>
+    <span class="comment">// as you specify a parent activity in AndroidManifest.xml.</span>
+    <span class="keyword">int</span> id = item.getItemId();
+
+    <span class="comment">//noinspection SimplifiableIfStatement</span>
+    <span class="keyword">if</span> (id == R.id.action_settings) {
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+
+    <span class="function"><span class="keyword">return</span> <span class="keyword">super</span>.<span class="title">onOptionsItemSelected</span><span class="params">(item)</span></span>;
+}
+</code></pre><p>}</p>
+<p>配图</p>
+<p> 参考：<br> 1.<a href="http://www.mobile-open.com/2015/86176.html" target="_blank" rel="external">http://www.mobile-open.com/2015/86176.html</a><br> 2.<a href="http://terryyamg.blogspot.jp/2015/04/android-load-image-from-camera-or.html" target="_blank" rel="external">http://terryyamg.blogspot.jp/2015/04/android-load-image-from-camera-or.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/02/opencv-for-Android/" data-id="cjv56vxes0017q8vlbjx5va6u" class="article-share-link" data-share="baidu" data-title="opencv for Android">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android笔记-界面" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/11/Android笔记-界面/" class="article-date">
+  <time datetime="2015-12-11T15:28:36.000Z" itemprop="datePublished">2015-12-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/11/Android笔记-界面/">Android笔记-界面</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.Veiw</p>
+<p>所有关于布局的类都是Veiw的子类。包括文本、按钮、多选、布局等。<br>根据需要在布局文件和代码中设置属性。<br>监听器<br>监控对象控件发生的变化，一个控件有多个监听器，监听不同的动作。<br>步骤：获取代表控件对象-&gt;定义一个类实现监听器接口-&gt;生成监听器对象-&gt;绑定监听器对象。</p>
+<p>响应点击操作是一个实现了OnClickListener接口的类,在里面实现一个onClick方法方法</p>
+<p>2.控件布局<br>在布局文件完成布局<br>在Java代码中完成控件布局，灵活</p>
+<p>布局方法分类<br>LinearLayout<br>RelativeLayout（多）<br>ListView<br>GridView</p>
+<p>3.长度单位与内外边距</p>
+<p> dpi = dots per inch = sqrt(heght^2+width^2) </p>
+<p> dp = dip(Device independent pixels)<br> px = dp * (dpi/160)</p>
+<p> sp : scaled pixels<br> 用于指定字体的大小，随系统字体大小改变</p>
+<p> 内边距和外边距<br> 外边距margin<br> 内边距padding</p>
+<p> 4.CheckBox</p>
+<p>ClickListener通过View.getId()获取点击的控件种类</p>
+<p>因为View是所有控件的父类，所以所有控件都可以传进来</p>
+<p>OnCheckedChangeListener可以判断Checkbox是否被选上<br>    class CheckBoxListener implements CompoundButton.OnCheckedChangeListener{</p>
+<pre><code>    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCheckedChanged</span><span class="params">(CompoundButton buttonView, <span class="keyword">boolean</span> isChecked)</span> </span>{
+        <span class="keyword">if</span>(isChecked){
+            System.out.println(<span class="string">"checked"</span>);
+            Toast.makeText(MainActivity.<span class="keyword">this</span>,<span class="string">"checked"</span>,Toast.LENGTH_SHORT).show();
+        }
+        <span class="keyword">else</span> {
+            System.out.println(<span class="string">"unchecked"</span>);
+        }
+    }
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/12/11/Android笔记-界面/" data-id="cjv56vxfr0028q8vldwcfi0lb" class="article-share-link" data-share="baidu" data-title="Android笔记-界面">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android笔记-Service" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/27/Android笔记-Service/" class="article-date">
+  <time datetime="2015-11-27T13:46:45.000Z" itemprop="datePublished">2015-11-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/27/Android笔记-Service/">Android笔记-Service</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>service的一些基本操作</p>
+</blockquote>
+<p>service是系统四大组件之一，其作用是在后台静默的执行一些操作而不被使用者感知。</p>
+<p>1.service的组成<br>onCreate(), onStartCommand, onDestroy. 其中，onCreate只在第一次创建时才会调用。<br>同时需要在manifest文件注册service。</p>
+<p>2.如何启动一个service<br>与启动Activity类似，service的启动也是用intent，调用方法startservice(intent)即可。<br>也可以用putExtra()传递数据。</p>
+<p>2.在service中实现功能<br>需要在service的onCreate或者onStartCommand()方法里创建一个Thread</p>
+<p>4 .绑定service，实现活动和服务之间的通信<br>把Activity与Service绑定在一起，那就是Service要随着程序的退出而终止。在Activity中根据具体的场景来调用MyBinder中的任何public方法，即实现了Activity指挥Service干什么Service就去干什么的功能（调用class MyBinder extends Binder）</p>
+<p>首先创建了一个ServiceConnection的匿名类，在里面重写了onServiceConnected()方法和onServiceDisconnected()方法，这两个方法分别会在Activity与Service建立关联和解除关联的时候调用。在onServiceConnected()方法中，我们又通过向下转型得到了MyBinder的实例，有了这个实例，Activity和Service之间的关系就变得非常紧密了<br>　　　　<br>首先通过使用Activity的bindService(Intent service,ServiceConnection conn,int flags)</p>
+<pre><code>bindService(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,MyService.<span class="keyword">class</span>),<span class="keyword">this</span>,     Context.BIND_AUTO_CREATE);
+</code></pre><p>然后编写类实现ServiceConnection 接口</p>
+<pre><code>   <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onServiceConnected</span><span class="params">(ComponentName name, IBinder service)</span> </span>{
+    <span class="comment">//System.out.println("Service connected");</span>
+
+}
+
+<span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onServiceDisconnected</span><span class="params">(ComponentName name)</span> </span>{
+    <span class="comment">//System.out.println("ServiceDisconnected");</span>
+}
+</code></pre><p>同时重写service的onBind(Intent intent)方法</p>
+<pre><code><span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function">IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>{
+    <span class="keyword">return</span> <span class="keyword">new</span> Binder();
+}
+</code></pre><p>5.IntentService<br> 一般的服务启动后会一直运行，除非有stopSelf方法，和stopService方法才会停止，IntentService却可以自动结束。 但只需调用onHandleIntent() 方法即可实现服务自动结束。</p>
+<p>6.service 和 Thread 的关系<br>没有任何关系。<br>service 用于Activity被销毁后，在后台继续执行动作。也就是说，如果在服务里执行耗时长的动作，还是会ANR。 而子线程就用于避免这种状况。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/11/27/Android笔记-Service/" data-id="cjv56vxfv002eq8vlhcmqiex5" class="article-share-link" data-share="baidu" data-title="Android笔记-Service">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+    </nav>
+  
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/05/01/new-start-1/">new start</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/25/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/08/测试/">测试</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/人人2017/">人人2017</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://xiguabaobao.com" target="_blank">主题作者</a>
+          </li>
+        
+          <li>
+            <a href="http://reqianduan.com" target="_blank">热前端</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 wwy<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>
+  function SetShareData(cmd, config) {
+    if (shareDataTitle && shareDataUrl) {
+      config.bdText = shareDataTitle;
+      config.bdUrl = shareDataUrl;
+    }
+    return config;
+  }
+  window._bd_share_config={
+    "common":{onBeforeClick: SetShareData},
+    "share":{"bdCustomStyle":"/css/bdshare.css"}
+  };
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+</div>
+</body>
+</html>

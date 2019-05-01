@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>进程相关实验 | 第一个番茄</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Cygwin简介及基础命令
+
+
+Cygwin是一个在windows平台上运行的类UNIX模拟环境，是cygnus solutions公司开发的自由软件它对于学习UNIX/Linux操作环境，或者从UNIX到Windows的应用程序移植，或者进行某些特殊的开发工作，尤其是使用GNU工具集在Windows上进行嵌入式系统开发，非常有用。随着嵌入式系统开发在国内日渐流行，越来越多的开发者对Cygwin产">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程相关实验">
+<meta property="og:url" content="http://yoursite.com/2016/05/26/进程相关实验/index.html">
+<meta property="og:site_name" content="第一个番茄">
+<meta property="og:description" content="Cygwin简介及基础命令
+
+
+Cygwin是一个在windows平台上运行的类UNIX模拟环境，是cygnus solutions公司开发的自由软件它对于学习UNIX/Linux操作环境，或者从UNIX到Windows的应用程序移植，或者进行某些特殊的开发工作，尤其是使用GNU工具集在Windows上进行嵌入式系统开发，非常有用。随着嵌入式系统开发在国内日渐流行，越来越多的开发者对Cygwin产">
+<meta property="og:updated_time" content="2016-06-13T13:49:51.995Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程相关实验">
+<meta name="twitter:description" content="Cygwin简介及基础命令
+
+
+Cygwin是一个在windows平台上运行的类UNIX模拟环境，是cygnus solutions公司开发的自由软件它对于学习UNIX/Linux操作环境，或者从UNIX到Windows的应用程序移植，或者进行某些特殊的开发工作，尤其是使用GNU工具集在Windows上进行嵌入式系统开发，非常有用。随着嵌入式系统开发在国内日渐流行，越来越多的开发者对Cygwin产">
+  
+    <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">第一个番茄</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">starting now....</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="yoursite.com">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-进程相关实验" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/26/进程相关实验/" class="article-date">
+  <time datetime="2016-05-26T14:54:22.000Z" itemprop="datePublished">2016-05-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      进程相关实验
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>Cygwin简介及基础命令</li>
+</ol>
+<blockquote>
+<p>Cygwin是一个在windows平台上运行的类UNIX模拟环境，是cygnus solutions公司开发的自由软件它对于学习UNIX/Linux操作环境，或者从UNIX到Windows的应用程序移植，或者进行某些特殊的开发工作，尤其是使用GNU工具集在Windows上进行嵌入式系统开发，非常有用。随着嵌入式系统开发在国内日渐流行，越来越多的开发者对Cygwin产生了兴趣。                             —-百度百科</p>
+</blockquote>
+<p>本来就想学些linux,原来以为cygwin比较麻烦，结果。。。</p>
+<p>安装的是老师提供的版本，注意选择gcc 和 vi（如果需要，实际上非常难用），装完后就可以使用了，基本功能和linux差不多</p>
+<p>基本指令有：来自<a href="http://blog.163.com/stm32f103vct6@126/blog/static/166743479201211592813232/" target="_blank" rel="external">这里</a><br>pwd 显示当前的路径<br>cygpath -dm “<code>pwd</code>“ 显示当前的完整路径（即windows格式的路径）<br>cd 改变当前路径，无参数时进入对应用户的home目录<br>ls 列出当前目录下的文件。此命令有N多参数，比如ls -al<br>ps 列出当前系统进程<br>kill 杀死某个进程<br>mkdir 建立目录<br>rmdir 删除目录<br>rm 删除文件<br>mv 文件改名或目录改名<br>man 联机帮助<br>less 显示文件的最末几行</p>
+<p>———————————————————————<br>ls #以默认方式显示当前目录文件列表<br>ls –a #显示所有文件包括隐藏文件<br>ls –l #显示文件属性，包括大小，日期，符号连接，是否可读写及是否可执行<br>ls –color=never *.so &gt; obj #不显示文字颜色,将所有so文件记录到obj文件中</p>
+<p>———————————————————————</p>
+<p>cd dir #切换到当前目录下的dir目录<br>cd .. #切换到到上一级目录<br>cd ../.. #切换到上二级目录<br>cd ~ #切换到用户目录，比如是root用户，则切换到/root下</p>
+<p>———————————————————————<br>rm file #删除某一个文件<br>rm -fr dir #删除当前目录下叫dir的整个目录</p>
+<p>———————————————————————<br>cp source target #将文件source 复制为 target<br>cp /root/source . #将/root下的文件source复制到当前目录<br>cp –av soure_dir target_dir #将整个目录复制，两目录完全一样<br>cp –fr source_dir target_dir #将整个目录复制，并且是以非链接方式复制，当source目录带有符号链接时，两个目录不相同</p>
+<ol>
+<li><p>fork()命令<br>fork()命令调用方法是 pid_t fork(void); 需要头文件#include <unistd.h>。<br>调用成功后，会在子进程中返回0，在父进程中返回子进程的pid，所以一次可以判定是在子进程还是在父进程中。<br>比如:</unistd.h></p>
+<pre><code><span class="keyword">if</span>((fork()==<span class="number">0</span>){
+<span class="comment">//此处是子进程</span>
+} <span class="keyword">else</span> {
+<span class="comment">//此处是父进程</span>
+
+}
+</code></pre><p>调用不成功返回-1.</p>
+</li>
+</ol>
+<h4 id="先创建子进程，再创建孙子进程">先创建子进程，再创建孙子进程</h4><pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+    <span class="keyword">int</span> p1,p2;
+    <span class="keyword">while</span>((p1 = fork()) == -<span class="number">1</span>);<span class="comment">//创建子进程</span>
+     <span class="keyword">if</span>(p1 == <span class="number">0</span>){ <span class="comment">//pid等于0表示在子进程中                </span>
+        <span class="keyword">while</span>((p2 = fork()) == -<span class="number">1</span>);<span class="comment">//子进程中创建孙子进程        </span>
+        <span class="keyword">if</span>(p2 == <span class="number">0</span>){
+        <span class="built_in">printf</span>(<span class="string">"This is grandson. pid is %d. \n"</span>, getpid());
+        } <span class="keyword">else</span>{
+            <span class="built_in">printf</span>(<span class="string">"This is son. pid is %d. my son pid is %d"</span>, getpid(),p2);
+        }        
+
+     }  <span class="keyword">else</span> {<span class="comment">//pid 大于0，即此为父进程                 </span>
+            <span class="built_in">printf</span>(<span class="string">"this is father. pid is %d. my son pid is %d.\n"</span>,getpid(),p1);    
+     }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><h4 id="创建两个并列的子进程">创建两个并列的子进程</h4><pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+         <span class="keyword">int</span> p1,p2;
+    <span class="keyword">int</span> i;
+    <span class="keyword">while</span>((p1 = fork()) == -<span class="number">1</span>);
+    <span class="keyword">if</span>(p1 == <span class="number">0</span>){ <span class="comment">//pid等于0表示在子进程中</span>
+        <span class="built_in">printf</span>(<span class="string">"This is son1. pid is %d\n"</span>, getpid());
+   } <span class="keyword">else</span> {<span class="comment">//pid 大于0，即此为父进程</span>
+        <span class="keyword">while</span> ((p2 = fork()) == -<span class="number">1</span>);
+        <span class="keyword">if</span>(p2 == <span class="number">0</span>){
+        <span class="built_in">printf</span>(<span class="string">"This is son2. pid is %d\n"</span>, getpid());
+        } <span class="keyword">else</span> {
+            <span class="built_in">printf</span>(<span class="string">"this is father. pid is %d. my son1 pid is %d. my son2 pid is %d\n"</span>,getpid(),p1,p2);
+        }    
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><ol>
+<li><p>exec函数族<br>执行exec函数族中的函数后，启动一个新程序，替换当前进程，获得当前进程的pid。<br>在exec函数族中,<br>有后缀p时，函数可以利用DOS的PATH变量查找子程序文件。假如你希望执行命令 <code>/bin/cat /etc/passwd /etc/group,</code><br>有后缀l时，希望接收以逗号分隔的参数列表，列表以NULL指针作为结束标志<code>execl(&quot;/bin/cat&quot;,&quot;/etc/passed&quot;,&quot;/etc/group&quot;,NULL);</code><br>有后缀v时，希望接收到一个以NULL结尾的字符串数组的指针<code>char* argv[]={&quot;/bin/cat&quot;,&quot;/etc/passed&quot;,&quot;/etc/group&quot;,NULL}execv( &quot;/bin/cat&quot;, argv );</code><br> 有后缀e时，函数传递指定参数envp，允许改变子进程的环境，无后缀e时，子进程使用当前程序的环境。envp也是一个以NULL结尾的字符串数组指针</p>
+<p>本实验中，用了excel函数<code>execl(&quot;/bin/cat&quot;,argv[0],argv[1],NULL);</code><br>第一个参数表示新程序的路径，后面便是传的参数，分别对应<code>argv[0]</code>,<code>argv[1]</code>……等</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span>
+
+ <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>{
+<span class="keyword">char</span> p1[<span class="number">10</span>];
+<span class="keyword">char</span> p2[<span class="number">10</span>];
+<span class="keyword">char</span> p3[<span class="number">10</span>];
+<span class="keyword">char</span> command[<span class="number">10</span>];
+<span class="built_in">printf</span>(<span class="string">"the progress pid is %d\n"</span>, getpid());
+<span class="built_in">printf</span>(<span class="string">"please choose command(max,min,average):\n"</span>);
+
+<span class="built_in">scanf</span>(<span class="string">"%s"</span>,command);
+<span class="keyword">if</span>(!<span class="built_in">strcmp</span>(command, <span class="string">"min"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input two numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s"</span>, p1, p2);
+
+    <span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./min.exe"</span>,<span class="string">"min"</span>,p1,p2,<span class="literal">NULL</span>);
+}
+
+} <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(command, <span class="string">"max"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input two numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s"</span>,p1,p2);
+
+<span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./max.exe"</span>,<span class="string">"max"</span>,p1,p2,<span class="literal">NULL</span>);
+}
+} <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(command, <span class="string">"average"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input three numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s%s"</span>,p1,p2,p3);
+
+<span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal">NULL</span>);
+}
+} <span class="keyword">else</span> {
+<span class="built_in">printf</span>(<span class="string">"wrong command!\n"</span>);
+}
+<span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjv56vxe1000aq8vld5daqh0e" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/操作系统/">操作系统</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/06/05/大数据集下的内部排序与外部排序/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          大数据集下的内部排序与外部排序
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/19/阿里实习面试/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">阿里实习面试</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/05/01/new-start-1/">new start</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/25/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/08/测试/">测试</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
+          </li>
+        
+          <li>
+            <a href="/2016/09/19/人人2017/">人人2017</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://xiguabaobao.com" target="_blank">主题作者</a>
+          </li>
+        
+          <li>
+            <a href="http://reqianduan.com" target="_blank">热前端</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 wwy<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>
+  function SetShareData(cmd, config) {
+    if (shareDataTitle && shareDataUrl) {
+      config.bdText = shareDataTitle;
+      config.bdUrl = shareDataUrl;
+    }
+    return config;
+  }
+  window._bd_share_config={
+    "common":{onBeforeClick: SetShareData},
+    "share":{"bdCustomStyle":"/css/bdshare.css"}
+  };
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+</div>
+</body>
+</html>

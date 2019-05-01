@@ -73,6 +73,75 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Android笔记-Service" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/27/Android笔记-Service/" class="article-date">
+  <time datetime="2015-11-27T13:46:45.000Z" itemprop="datePublished">2015-11-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/27/Android笔记-Service/">Android笔记-Service</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>service的一些基本操作</p>
+</blockquote>
+<p>service是系统四大组件之一，其作用是在后台静默的执行一些操作而不被使用者感知。</p>
+<p>1.service的组成<br>onCreate(), onStartCommand, onDestroy. 其中，onCreate只在第一次创建时才会调用。<br>同时需要在manifest文件注册service。</p>
+<p>2.如何启动一个service<br>与启动Activity类似，service的启动也是用intent，调用方法startservice(intent)即可。<br>也可以用putExtra()传递数据。</p>
+<p>2.在service中实现功能<br>需要在service的onCreate或者onStartCommand()方法里创建一个Thread</p>
+<p>4 .绑定service，实现活动和服务之间的通信<br>把Activity与Service绑定在一起，那就是Service要随着程序的退出而终止。在Activity中根据具体的场景来调用MyBinder中的任何public方法，即实现了Activity指挥Service干什么Service就去干什么的功能（调用class MyBinder extends Binder）</p>
+<p>首先创建了一个ServiceConnection的匿名类，在里面重写了onServiceConnected()方法和onServiceDisconnected()方法，这两个方法分别会在Activity与Service建立关联和解除关联的时候调用。在onServiceConnected()方法中，我们又通过向下转型得到了MyBinder的实例，有了这个实例，Activity和Service之间的关系就变得非常紧密了<br>　　　　<br>首先通过使用Activity的bindService(Intent service,ServiceConnection conn,int flags)</p>
+<pre><code>bindService(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,MyService.<span class="keyword">class</span>),<span class="keyword">this</span>,     Context.BIND_AUTO_CREATE);
+</code></pre><p>然后编写类实现ServiceConnection 接口</p>
+<pre><code>   <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onServiceConnected</span><span class="params">(ComponentName name, IBinder service)</span> </span>{
+    <span class="comment">//System.out.println("Service connected");</span>
+
+}
+
+<span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onServiceDisconnected</span><span class="params">(ComponentName name)</span> </span>{
+    <span class="comment">//System.out.println("ServiceDisconnected");</span>
+}
+</code></pre><p>同时重写service的onBind(Intent intent)方法</p>
+<pre><code><span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function">IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>{
+    <span class="keyword">return</span> <span class="keyword">new</span> Binder();
+}
+</code></pre><p>5.IntentService<br> 一般的服务启动后会一直运行，除非有stopSelf方法，和stopService方法才会停止，IntentService却可以自动结束。 但只需调用onHandleIntent() 方法即可实现服务自动结束。</p>
+<p>6.service 和 Thread 的关系<br>没有任何关系。<br>service 用于Activity被销毁后，在后台继续执行动作。也就是说，如果在服务里执行耗时长的动作，还是会ANR。 而子线程就用于避免这种状况。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/11/27/Android笔记-Service/" data-id="cjv57xasa002hm8vliswcxl49" class="article-share-link" data-share="baidu" data-title="Android笔记-Service">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android笔记-application" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/11/24/Android笔记-application/" class="article-date">
@@ -131,7 +200,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/24/Android笔记-application/" data-id="cjv56vxfu002cq8vlm0br50zy" class="article-share-link" data-share="baidu" data-title="Android笔记-application">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/24/Android笔记-application/" data-id="cjv57xas2002fm8vlbk3n25xg" class="article-share-link" data-share="baidu" data-title="Android笔记-application">分享到</a>
       
 
       
@@ -201,7 +270,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/23/Android笔记-Intent/" data-id="cjv56vxfw002gq8vljrf77ra4" class="article-share-link" data-share="baidu" data-title="Android笔记-Intent">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/23/Android笔记-Intent/" data-id="cjv57xasd002jm8vlh3qgzsd2" class="article-share-link" data-share="baidu" data-title="Android笔记-Intent">分享到</a>
       
 
       
@@ -246,7 +315,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/20/back/" data-id="cjv56vxf0001fq8vlmh7ewt1p" class="article-share-link" data-share="baidu" data-title="back">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/20/back/" data-id="cjv57xapo001fm8vl0ga15xem" class="article-share-link" data-share="baidu" data-title="back">分享到</a>
       
 
       
@@ -291,7 +360,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/25/SICP-1-2/" data-id="cjv56vxfb001tq8vl78rkxzm1" class="article-share-link" data-share="baidu" data-title="SICP 1.2">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/25/SICP-1-2/" data-id="cjv57xapz001tm8vlapr3zoz2" class="article-share-link" data-share="baidu" data-title="SICP 1.2">分享到</a>
       
 
       
@@ -339,7 +408,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/17/图片测试/" data-id="cjv56vxed000oq8vltqb7zgtn" class="article-share-link" data-share="baidu" data-title="图片测试">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/17/图片测试/" data-id="cjv57xaov000om8vluvw8jijd" class="article-share-link" data-share="baidu" data-title="图片测试">分享到</a>
       
 
       
@@ -401,7 +470,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/13/Android-笔记：activity/" data-id="cjv56vxd60000q8vl8awovym1" class="article-share-link" data-share="baidu" data-title="Android 笔记：activity">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/13/Android-笔记：activity/" data-id="cjv57xans0000m8vlcdxod10s" class="article-share-link" data-share="baidu" data-title="Android 笔记：activity">分享到</a>
       
 
       
@@ -455,7 +524,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/07/SICP笔记1-1/" data-id="cjv56vxf9001qq8vlvzbji6yl" class="article-share-link" data-share="baidu" data-title="SICP笔记1.1">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/07/SICP笔记1-1/" data-id="cjv57xapx001qm8vlqro37lpm" class="article-share-link" data-share="baidu" data-title="SICP笔记1.1">分享到</a>
       
 
       
@@ -564,7 +633,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/07/markdown语法/" data-id="cjv56vxex001cq8vl6fhr2mft" class="article-share-link" data-share="baidu" data-title="markdown语法">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/07/markdown语法/" data-id="cjv57xapk001cm8vlnqowbsgc" class="article-share-link" data-share="baidu" data-title="markdown语法">分享到</a>
       
 
       
@@ -621,72 +690,13 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/05/一个月小记/" data-id="cjv56vxeq0015q8vlgab8n2i0" class="article-share-link" data-share="baidu" data-title="一个月小记">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/05/一个月小记/" data-id="cjv57xapc0015m8vlq49pniuc" class="article-share-link" data-share="baidu" data-title="一个月小记">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/something/">something</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-搭建过程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/27/搭建过程/" class="article-date">
-  <time datetime="2015-09-27T14:22:15.000Z" itemprop="datePublished">2015-09-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/27/搭建过程/">搭建过程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>搭建过程主要参考了 <a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external"><em>hexo你的博客</em></a> 和 <a href="http://www.cnblogs.com/zhcncn/p/4097881.html" target="_blank" rel="external"><em>Hexo搭建Github静态博客</em></a> 两篇文章，    其中有些步骤略有不同。</p>
-</blockquote>
-<hr>
-<h1 id="环境准备">环境准备</h1><h2 id="安装Node">安装Node</h2><p><a href="http://nodejs.org" target="_blank" rel="external">Node.js</a>官网下载相应平台的最新版本，按默认配置安装即可。</p>
-<h2 id="安装Git">安装Git</h2><p><a href="https://git-for-windows.github.io/" target="_blank" rel="external">Git</a>。</p>
-<h2 id="安装GitHub">安装GitHub</h2><p>GitHub官方出品的软件<a href=""></a>。图形的界面用起来很傻瓜。免去了设置SSH密钥的繁琐。</p>
-<hr>
-<h1 id="建立blog">建立blog</h1><p>主要步骤分为配置GitHub和Hexo两个。</p>
-<h2 id="1-配置Hexo">1.配置Hexo</h2><h4 id="1-1_Setup_your_blog">1.1 Setup your blog</h4><p>首先打开Git Bash，执行如下命令<br>    ‘ $ npm install -g hexo ‘<br>建立一个文件夹（比如E:/Hexo)，在此文件夹后右键，选Git Bash Here。<br>执行下面的命令<br>    <code>$ hexo init</code><br>然后执行<br>    <code>$ npm install</code><br>Hexo就配置到Hexo文件夹中了。</p>
-<h4 id="1-2_Start_the_server">1.2 Start the server</h4><p>运行下面的命令（在E:/Hexo下）<br>    <code>$ hexo server</code><br>表明Hexo Server已经启动了，在浏览器中打开 <a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a><br>这时可以看到Hexo已为你生成了一篇blog。<br>你可以按Ctrl+C 停止Server。</p>
-<h4 id="1-3_Create_a_new_post">1.3 Create a new post</h4><p>新打开一个git bash命令行窗口，到Hexo目录下，执行下面的命令<br>    <code>$ Hexo new post &quot;My New Post&quot;</code><br>刷新 <a href="http://localhost:4000/" target="_blank" rel="external">http://localhost:4000/</a><br>可以发现已生成了一篇新文章 “My New Post”。</p>
-<h4 id="4-_Generate_static_files">4. Generate static files</h4><p>执行下面的命令，将markdown文件生成静态网页。<br>    <code>$ Hexo generate</code><br>此时Public目录下会有blog的全部文件，然后开始下一步。</p>
-<h2 id="2-GitHub">2.GitHub</h2><p>首先注册<a href="http://www.github.com" target="_blank" rel="external">GitHub</a>账号。</p>
-<p>打开GitHub软件，点左上角加号，直接在建立一个repository，名为【your_user_name.github.io】。选择一个本地目录。</p>
-<p>把Hexo/public文件下的文件全部复制到repository的本地目录中，然后点GitHub软件右上角的Publish。</p>
-<hr>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/09/27/搭建过程/" data-id="cjv56vxe7000gq8vl0kceh94b" class="article-share-link" data-share="baidu" data-title="搭建过程">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
 
     </footer>
   </div>
@@ -710,7 +720,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -719,7 +729,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -728,7 +738,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -738,6 +748,10 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
+          </li>
         
           <li>
             <a href="/2019/05/01/new-start-1/">new start</a>
@@ -753,10 +767,6 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
         
           <li>
             <a href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
-          </li>
-        
-          <li>
-            <a href="/2016/09/19/人人2017/">人人2017</a>
           </li>
         
       </ul>

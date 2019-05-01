@@ -73,6 +73,62 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-JVM(二)GC机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/09/JVM(二)GC机制/" class="article-date">
+  <time datetime="2016-08-09T14:48:28.000Z" itemprop="datePublished">2016-08-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/09/JVM(二)GC机制/">JVM(二)GC机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java虚拟机垃圾收集机制</p>
+<h2 id="对象引用">对象引用</h2><p>   在JDK1.2之后，Java对引用的概念进行了扩充，将其分为强引用（Strong Reference）、软引用（Soft Reference）、弱引用（Weak Reference）、虚引用（Phantom Reference）四种，引用强度依次减弱。<br>•    强引用：如“Object obj = new Object（）”，这类引用是Java程序中最普遍的。只要强引用还存在，垃圾收集器就永远不会回收掉被引用的对象。<br>•    软引用：它用来描述一些可能还有用，但并非必须的对象。在系统内存不够用时，这类引用关联的对象将被垃圾收集器回收。JDK1.2之后提供了SoftReference类来实现软引用。<br>•    弱引用：它也是用来描述非需对象的，但它的强度比软引用更弱些，被弱引用关联的对象只能生存岛下一次垃圾收集发生之前。当垃圾收集器工作时，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。在JDK1.2之后，提供了WeakReference类来实现弱引用。<br>•    虚引用：最弱的一种引用关系，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的是希望能在这个对象被收集器回收时收到一个系统通知。JDK1.2之后提供了PhantomReference类来实现虚引用。</p>
+<h2 id="垃圾对象的判定">垃圾对象的判定</h2><p>在回收前，要判断对象是否已死。<br><a href="http://www.zhihu.com/question/21539353/answer/18596488" target="_blank" rel="external">http://www.zhihu.com/question/21539353/answer/18596488</a><br><a href="http://www.zhihu.com/question/21663879" target="_blank" rel="external">http://www.zhihu.com/question/21663879</a><br>1）引用计数算法<br>    给对象添加一个引用计数器，每当有一个地方引用它时，计数器值就加1，当引用失效时，计数器值就减1，任何时刻计数器都为0的对象就是不可能再被使用的。<br>    引用计数算法的实现简单，判定效率也很高，在大部分情况下它都是一个不错的选择，当Java语言并没有选择这种算法来进行垃圾回收，主要原因是它很难解决对象之间的相互循环引用问题。<br>2）可达分析算法<br>Java和C#中都是采用根搜索算法来判定对象是否存活的。这种算法的基本思路是通过一系列名为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为引用链，当一个对象到GC Roots没有任何引用链相连时，就证明此对象是不可用的。在Java语言里，可作为GC Roots的兑现包括下面几种：<br>虚拟机栈（栈帧中的本地变量表）中引用的对象。<br>方法区中的类静态属性引用的对象。<br>方法区中的常量引用的对象。<br>本地方法栈中JNI（Native方法）的引用对象。<br>要真正宣告一个对象死亡，至少要经历两次标记过程：如果对象在进行根搜索后发现没有与GC Roots相连接的引用链，那它会被第一次标记并且进行一次筛选，筛选的条件是此对象是否有必要执行finalize（）方法。当对象没有覆盖finalize（）方法，或finalize（）方法已经被虚拟机调用过，虚拟机将这两种情况都视为没有必要执行。如果该对象被判定为有必要执行finalize（）方法，那么这个对象将会被放置在一个名为F-Queue队列中，并在稍后由一条由虚拟机自动建立的、低优先级的Finalizer线程去执行finalize（）方法。finalize（）方法是对象逃脱死亡命运的最后一次机会（因为一个对象的finalize（）方法最多只会被系统自动调用一次），稍后GC将对F-Queue中的对象进行第二次小规模的标记，如果要在finalize（）方法中成功拯救自己，只要在finalize（）方法中让该对象重引用链上的任何一个对象建立关联即可。而如果对象这时还没有关联到任何链上的引用，那它就会被回收掉。</p>
+<p>回收方法区<br>方法区或者被称为永久代主要回收两部分内容：废弃常量和无用的类。<br>回收废弃常量<br>与回收Java堆中的对象非常类似，当没有任何一个对象引用常量池中的常量是，则会被清楚出去<br>回收无用的类<br>无用的类要满足三个条件<br>该类的所有实例已经被回收<br>加载该类的ClassLoader已经被回收<br>该类对应的java.lang.Class对象没有在任何地方被引用，包括反射</p>
+<p>##垃圾回收算法</p>
+<p>标记-清除算法<br>最基础的收集算法，分为标记和清除两个阶段。该算法有如下缺点：<br>标记和清除过程的效率都不高。<br>标记清除后会产生大量不连续的内存碎片，空间碎片太多可能会导致，当程序在以后的运行过程中需要分配较大对象时无法找到足够的连续内存而不得不触发另一次垃圾收集动作。</p>
+<pre><code>标记—整理算法
+复制算法比较适合于新生代，在老年代中，对象存活率比较高，如果执行较多的复制操作，效率将会变低，所以老年代一般会选用其他算法，如标记—整理算法。该算法标记的过程与标记—清除算法中的标记过程一样，但对标记后出的垃圾对象的处理情况有所不同，它不是直接对可回收对象进行清理，而是让所有的对象都向一端移动，然后直接清理掉端边界以外的内存。
+</code></pre><p>复制算法<br>复制算法是针对标记—清除算法的缺点，在其基础上进行改进而得到的，它讲课用内存按容量分为大小相等的两块，每次只使用其中的一块，当这一块的内存用完了，就将还存活着的对象复制到另外一块内存上面，然后再把已使用过的内存空间一次清理掉。复制算法有如下优点：</p>
+<p>每次只对一块内存进行回收，运行高效。<br>只需移动栈顶指针，按顺序分配内存即可，实现简单。<br>内存回收时不用考虑内存碎片的出现。<br>它的缺点是：可一次性分配的最大内存缩小了一半。</p>
+<p>  分代收集<br>    当前商业虚拟机的垃圾收集 都采用分代收集，它根据对象的存活周期的不同将内存划分为几块，一般是把Java堆分为新生代和老年代。在新生代中，每次垃圾收集时都会发现有大量对象死去，只有少量存活，因此可选用复制算法来完成收集，而老年代中因为对象存活率高、没有额外空间对它进行分配担保，就必须使用标记—清除算法或标记—整理算法来进行回收。</p>
+<h2 id="垃圾回收分析">垃圾回收分析</h2><pre><code>在用代码分析之前，我们对内存的分配策略明确以下三点：
+</code></pre><p>对象优先在Eden分配。<br>大对象直接进入老年代。<br>长期存活的对象将进入老年代。<br>    对垃圾回收策略说明以下两点：<br>新生代GC（Minor GC）：发生在新生代的垃圾收集动作，因为Java对象大多都具有朝生夕灭的特性，因此Minor GC非常频繁，一般回收速度也比较快。<br>老年代GC（Major GC/Full GC）：发生在老年代的GC，出现了Major GC，经常会伴随至少一次Minor GC。由于老年代中的对象生命周期比较长，因此Major GC并不频繁，一般都是等待老年代满了后才进行Full GC，而且其速度一般会比Minor GC慢10倍以上。另外，如果分配了Direct Memory，在老年代中进行Full GC时，会顺便清理掉Direct Memory中的废弃对象。</p>
+<p>垃圾收集器<br>Serial收集器  单线程，收集时必须暂停其他所有工作线程。简单而高效<br>ParNew收集器  多线程，其他和Serial类似<br>Parallel Scavenge、CMS、Serial Old、Parallel Old、CMS、G1.<br>G1是一款面向服务端应用的垃圾收集器。HotSpot开发团队赋予它的使命是（在比较长期的）未来可以替换掉JDK 1.5中发布的CMS收集器。与其他GC收集器相比，G1具备如下特点。<br>并行与并发：G1能充分利用多CPU、多核环境下的硬件优势，使用多个CPU（CPU或者CPU核心）来缩短Stop-The-World停顿的时间，部分其他收集器原本需要停顿Java线程执行的GC动作，G1收集器仍然可以通过并发的方式让Java程序继续执行。<br>分代收集：与其他收集器一样，分代概念在G1中依然得以保留。虽然G1可以不需要其他收集器配合就能独立管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果。<br>空间整合：与CMS的“标记—清理”算法不同，G1从整体来看是基于“标记—整理”算法实现的收集器，从局部（两个Region之间）上来看是基于“复制”算法实现的，但无论如何，这两种算法都意味着G1运作期间不会产生内存空间碎片，收集后能提供规整的可用内存。这种特性有利于程序长时间运行，分配大对象时不会因为无法找到连续内存空间而提前触发下一次GC。<br>可预测的停顿：这是G1相对于CMS的另一大优势，降低停顿时间是G1和CMS共同的关注点，但G1除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒，这几乎已经是实时Java（RTSJ）的垃圾收集器的特征了。<br>在G1之前的其他收集器进行收集的范围都是整个新生代或者老年代，而G1不再是这样。使用G1收集器时，Java堆的内存布局就与其他收集器有很大差别，它将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留有新生代和老年代的概念，但新生代和老年代不再是物理隔离的了，它们都是一部分Region（不需要连续）的集合。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/08/09/JVM(二)GC机制/" data-id="cjv57xaq4001ym8vlvpfp36ml" class="article-share-link" data-share="baidu" data-title="JVM(二)GC机制">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Strut2配置" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/02/Strut2配置/" class="article-date">
@@ -179,7 +235,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjv56vxf5001mq8vlpwtxo4u5" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjv57xapu001mm8vlkmbc4ocp" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
       
 
       
@@ -229,7 +285,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjv56vxej000wq8vlp75lvbwk" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjv57xap1000wm8vlasho1o4a" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
       
 
       
@@ -283,7 +339,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjv56vxfh0021q8vlpxuoms16" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjv57xaq80021m8vlq50b4j24" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
       
 
       
@@ -522,7 +578,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjv56vxdw0004q8vlhpj4ez43" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjv57xaoh0004m8vlsm787ek3" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
       
 
       
@@ -800,7 +856,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjv56vxec000lq8vlgmi3a6fb" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjv57xaot000lm8vlsw08mknu" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
       
 
       
@@ -950,7 +1006,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjv56vxe1000aq8vld5daqh0e" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjv57xaol000am8vlcdcfnu8p" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
       
 
       
@@ -998,7 +1054,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjv56vxdz0007q8vlg8lhww95" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjv57xaoj0007m8vlffz8f1js" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
       
 
       
@@ -1050,7 +1106,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjv56vxeg000sq8vloyp3g2on" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjv57xaoy000sm8vlaunqetbv" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
       
 
       
@@ -1103,95 +1159,13 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjv56vxea000jq8vlk1fd6jls" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjv57xaos000jm8vl653lt73n" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-华为实习生笔试题（大连）" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/04/24/华为实习生笔试题（大连）/" class="article-date">
-  <time datetime="2016-04-24T14:17:52.000Z" itemprop="datePublished">2016-04-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/24/华为实习生笔试题（大连）/">华为实习生笔试题（大连）</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>华为笔试题，虽然比较水，然而自己更水= =。</p>
-<p>##　第一题</p>
-</blockquote>
-<p>删除字符串中重复的字符，并按从小到大进行排序<br>描述: 输入一个字符串，删除字符串中重复的字符，并按ASCII码从小到大进行排序。</p>
-<p>运行时间限制: 无限制<br>内存限制: 无限制<br>输入: 输入一个字符串</p>
-<p>输出: 删除字符串中重复的字符，并按ASCII码从小到大进行排序。</p>
-<p>样例输入: 1233AABC4<br>样例输出: 1234ABC </p>
-<p>思路一：空间换时间,桶排序，因为ascII码一共不到300位，越长的字符串用这种方法我觉得是越快的<br>    public static void main(String[] args){<br>        Scanner in = new Scanner(System.in);</p>
-<pre><code><span class="built_in">String</span> origin = <span class="keyword">in</span>.nextLine()<span class="comment">;</span>
-<span class="keyword">in</span>.close()<span class="comment">;</span>
-char[] <span class="keyword">next</span> = origin.toCharArray()<span class="comment">;</span>
-boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="comment">;</span>
-<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span><span class="comment">; i &lt; next.length; i++){</span>
-    asc2[(<span class="built_in">int</span>)<span class="keyword">next</span>[i]] = <span class="literal">true</span><span class="comment">;</span>
-}
-
-<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span><span class="comment">; i &lt; asc2.length; i++){</span>
-    <span class="keyword">if</span>(asc2[i] == <span class="literal">true</span>){
-        System.out.print((char)i)<span class="comment">;</span>
-    }
-}
-</code></pre><h2 id="第二题">第二题</h2><p>洞穴逃生<br>描述: 精灵王子爱好冒险，在一次探险历程中，他进入了一个神秘的山洞。在洞穴深处，精灵王子不小心触动了洞穴内暗藏的机关，整个洞穴将很快塌陷，精灵王子必须尽快逃离洞穴。精灵王子的跑步速度为17m/s，以这样的速度可能是无法逃出洞穴的。庆幸的是精灵王子拥有闪烁法术，可在1s内移动60m，不过每次使用闪烁法术都会消耗魔法值10点。精灵王子的魔法值恢复的速度为4点/s，只有处在原地休息状态时才能恢复。</p>
-<p>现在已知精灵王子的魔法初值M，他所在洞穴中的位置与洞穴出口之间的距离S，距离洞穴塌陷的时间T。你的任务是写一个程序帮助精灵王子计算如何在最短的时间内逃离洞穴。若能逃出，输出”Yes”，并输出逃出所用的最短时间；若不能逃出，则输出”No”，同时输出精灵王子在剩下的时间内能走的最远距离。注意字母大小写。注意:精灵王子跑步、闪烁或休息活动均以秒(s)为单位。且每次活动的持续时间为整数秒。距离的单位为米(m)。</p>
-<p>注：M、S、T均是大于等于0的整数。由输入保证取值合法性，考生不用检查。</p>
-<p>提醒：</p>
-<p>如果输入的S为0，则说明本身已经在出口，输出应为：Yes 0</p>
-<p>如果输入的T为0（且S不为0），则说明已经没有时间了，输出应为：No 0</p>
-<p>运行时间限制: 无限制<br>内存限制: 无限制<br>输入: 输入格式:<br>M<br>S<br>T</p>
-<p>输出: 输出格式：<br>Yes 逃出洞穴所用的最短时间<br>或<br>No 在洞穴塌陷前能逃跑的最远距离</p>
-<p>样例输入: 10</p>
-<p>50</p>
-<p>5<br>样例输出: Yes 1</p>
-<p>解：应该是动态规划，过段时间研究。</p>
-<h2 id="第三题">第三题</h2><p>中文整数读法的拼音转换数字<br>描述: 根据输入的中文整数读法的拼音，输出对应的整数。例如，输入字符串“YiBaiLingYi”（一百零一），则输出整数101 。数字与拼音的对应表如下：</p>
-<p> 一 二 三  四 五  六 七 八 九  十   百  千   万  亿<br> Yi Er San Si Wu Liu Qi Ba Jiu Shi Bai Qian Wan Yii</p>
-<p>注意：为了与“一”区别，亿的拼音改为“Yii”，其余为标准汉语拼音（首字母大写）</p>
-<p>运行时间限制: 无限制<br>内存限制: 无限制<br>输入: 输入为一个字符串（C/C++为以0结尾的ASCII字符串），表示一个小于十亿的整数（不含负值）的中文拼音。<br>例如“YiBaiLingYi”表示“一百零一”。可以假定输入的字符串总是合法的（不存在空值、空串、非法字符、不符合规则的输入等情况）。</p>
-<p>输出: 输出对应的整数。</p>
-<p>样例输入: YiBaiLingYi<br>样例输出: 101 </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjv56vxef000qq8vlpuk3sjar" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/实习/">实习</a></li></ul>
 
     </footer>
   </div>
@@ -1215,7 +1189,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -1224,7 +1198,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -1233,7 +1207,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -1243,6 +1217,10 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
+          </li>
         
           <li>
             <a href="/2019/05/01/new-start-1/">new start</a>
@@ -1258,10 +1236,6 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
         
           <li>
             <a href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
-          </li>
-        
-          <li>
-            <a href="/2016/09/19/人人2017/">人人2017</a>
           </li>
         
       </ul>

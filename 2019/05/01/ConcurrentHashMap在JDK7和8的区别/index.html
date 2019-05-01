@@ -4,17 +4,28 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: SSH | 第一个番茄</title>
+  <title>ConcurrentHashMap在JDK7和8的区别 | 第一个番茄</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="各种学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="第一个番茄">
-<meta property="og:url" content="http://yoursite.com/tags/SSH/index.html">
+  <meta name="description" content="JDK 1.7用了分段锁Segment来保证并发
+set方法
+首先是通过 key 定位到 Segment，之后在对应的 Segment 中进行具体的 put。虽然 HashEntry 中的 value 是用 volatile 关键词修饰的，但是并不能保证并发的原子性，所以 put 操作时仍然需要加锁处理。
+首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ConcurrentHashMap在JDK7和8的区别">
+<meta property="og:url" content="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/index.html">
 <meta property="og:site_name" content="第一个番茄">
-<meta property="og:description" content="各种学">
+<meta property="og:description" content="JDK 1.7用了分段锁Segment来保证并发
+set方法
+首先是通过 key 定位到 Segment，之后在对应的 Segment 中进行具体的 put。虽然 HashEntry 中的 value 是用 volatile 关键词修饰的，但是并不能保证并发的原子性，所以 put 操作时仍然需要加锁处理。
+首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndL">
+<meta property="og:image" content="http://yoursite.com/img/concurrent1.7.jpg">
+<meta property="og:updated_time" content="2019-05-01T12:55:03.842Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一个番茄">
-<meta name="twitter:description" content="各种学">
+<meta name="twitter:title" content="ConcurrentHashMap在JDK7和8的区别">
+<meta name="twitter:description" content="JDK 1.7用了分段锁Segment来保证并发
+set方法
+首先是通过 key 定位到 Segment，之后在对应的 Segment 中进行具体的 put。虽然 HashEntry 中的 value 是用 volatile 关键词修饰的，但是并不能保证并发的原子性，所以 put 操作时仍然需要加锁处理。
+首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndL">
   
     <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
   
@@ -71,77 +82,72 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/08/29/Struts中动态方法调用/" class="archive-article-date">
-  <time datetime="2016-08-29T11:37:57.000Z" itemprop="datePublished">8月 29</time>
+      <section id="main"><article id="post-ConcurrentHashMap在JDK7和8的区别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" class="article-date">
+  <time datetime="2019-05-01T12:45:25.000Z" itemprop="datePublished">2019-05-01</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/08/29/Struts中动态方法调用/">Struts中动态方法调用</a>
+    <h1 class="article-title" itemprop="name">
+      ConcurrentHashMap在JDK7和8的区别
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/08/15/SSH学习-问题-1/" class="archive-article-date">
-  <time datetime="2016-08-15T14:41:14.000Z" itemprop="datePublished">8月 15</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/08/15/SSH学习-问题-1/">SSH学习-问题(1)</a>
-    </h1>
-  
+        <h2 id="JDK_1-7">JDK 1.7</h2><p>用了分段锁Segment来保证并发<br><img src="/img/concurrent1.7.jpg" alt=""></p>
+<h3 id="set方法">set方法</h3><ol>
+<li>首先是通过 key 定位到 Segment，之后在对应的 Segment 中进行具体的 put。<br>虽然 HashEntry 中的 value 是用 volatile 关键词修饰的，但是并不能保证并发的原子性，所以 put 操作时仍然需要加锁处理。</li>
+<li>首先第一步的时候会尝试获取锁，如果获取失败肯定就有其他线程存在竞争，则利用 scanAndLockForPut() 自旋获取锁。<br>如果重试的次数达到了 MAX_SCAN_RETRIES 则改为阻塞锁获取，保证能获取成功。</li>
+<li>然后put<br>将当前 Segment 中的 table 通过 key 的 hashcode 定位到 HashEntry。<br>遍历该 HashEntry，如果不为空则判断传入的 key 和当前遍历的 key 是否相等，相等则覆盖旧的 value。<br>不为空则需要新建一个 HashEntry 并加入到 Segment 中，同时会先判断是否需要扩容。<br>最后会解除在 1 中所获取当前 Segment 的锁。</li>
+</ol>
+<h3 id="get方法">get方法</h3><ol>
+<li>将 Key 通过 Hash 之后定位到具体的 Segment ，</li>
+<li>再通过一次 Hash 定位到具体的元素上。</li>
+</ol>
+<p>由于 HashEntry 中的 value 属性是用 volatile 关键词修饰的，保证了内存可见性，所以每次获取时都是最新值。ConcurrentHashMap 的 get 方法是非常高效的，因为整个过程都不需要加锁。</p>
+<h2 id="JDK_1-8">JDK 1.8</h2><h3 id="set方法-1">set方法</h3><p>根据 key 计算出 hashcode 。<br>判断是否需要进行初始化。<br>f 即为当前 key 定位出的 Node，如果为空表示当前位置可以写入数据，利用 CAS 尝试写入，失败则自旋保证成功。<br>如果当前位置的 hashcode == MOVED == -1,则需要进行扩容。<br>如果都不满足，则利用 synchronized 锁写入数据。<br>如果数量大于 TREEIFY_THRESHOLD 则要转换为红黑树。</p>
+<h3 id="get方法-1">get方法</h3><p>根据计算出来的 hashcode 寻址，如果就在桶上那么直接返回值。<br>如果是红黑树那就按照树的方式获取值。<br>就不满足那就按照链表的方式遍历获取值</p>
+<h2 id="总结">总结</h2><p>JDk8放弃了分段锁的设计，采用了简单的CAS和synchronizd，应该是synchronizd不断优化的结果</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/08/02/Strut2配置/" class="archive-article-date">
-  <time datetime="2016-08-02T14:30:50.000Z" itemprop="datePublished">8月 2</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/08/02/Strut2配置/">Strut2配置</a>
-    </h1>
-  
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" data-id="cjv57xara0026m8vlk613nnjd" class="article-share-link" data-share="baidu" data-title="ConcurrentHashMap在JDK7和8的区别">分享到</a>
+      
 
-    </header>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/01/new-start-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">new start</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
       
       <aside id="sidebar">

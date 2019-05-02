@@ -73,6 +73,57 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-HashMap拾遗" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/02/HashMap拾遗/" class="article-date">
+  <time datetime="2019-05-02T07:40:03.000Z" itemprop="datePublished">2019-05-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HashMap其实都比较熟悉了,主要有一些细节需要注意</p>
+<h2 id="负载因子">负载因子</h2><p>Load factor为负载因子(默认值是0.75)，threshold是HashMap所能容纳的最大数据量的Node(键值对)个数。threshold = length * Load factor</p>
+<h2 id="7和8的区别">7和8的区别</h2><p>节点超过8之后转红黑树<br>JDK8对扩容的优化，下面讲</p>
+<h2 id="JDK8对扩容的优化">JDK8对扩容的优化</h2><p>首先讲下扩容的过程，把原来的Entry[]的length翻倍，然后把Entry[i]上原来的Node，根据重新hash的结果，一部分迁移到Enrty[i+oldLength]上。<br>1.7中。一条链表上处理顺序是从头开始，插入新位置时采用头插法，所以顺序会颠倒</p>
+<p>1.8中，在扩充HashMap的时候，不需要像JDK1.7的实现那样重新计算hash，只需要看看原来的hash值新增的那个bit是1还是0就好了，是0的话索引没变，是1的话索引变成“原索引+oldCap“</p>
+<p>既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，因此resize的过程，均匀的把之前的冲突的节点分散到新的bucket了。</p>
+<h2 id="并发问题">并发问题</h2><p>线程1和2同时进入扩容，<br>线程1对原来的完成扩容后，线程2并不能感知到，重新扩容，产生循环链表</p>
+<h2 id="参考">参考</h2><p>hashmap的并发问题<br><a href="http://www.importnew.com/22011.html" target="_blank" rel="external">http://www.importnew.com/22011.html</a><br><a href="https://www.jianshu.com/p/4930801e23c8" target="_blank" rel="external">https://www.jianshu.com/p/4930801e23c8</a></p>
+<p>jdk8 rehash的优化<br><a href="https://blog.csdn.net/USTC_Zn/article/details/78173217" target="_blank" rel="external">https://blog.csdn.net/USTC_Zn/article/details/78173217</a><br><a href="https://blog.csdn.net/USTC_Zn/article/details/78173217" target="_blank" rel="external">https://blog.csdn.net/USTC_Zn/article/details/78173217</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2019/05/02/HashMap拾遗/" data-id="cjv6wqmru0023egvlgc6vkw5i" class="article-share-link" data-share="baidu" data-title="HashMap拾遗">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-ConcurrentHashMap在JDK7和8的区别" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" class="article-date">
@@ -114,7 +165,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" data-id="cjv57xara0026m8vlk613nnjd" class="article-share-link" data-share="baidu" data-title="ConcurrentHashMap在JDK7和8的区别">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" data-id="cjv6wqmry0029egvla8pol04f" class="article-share-link" data-share="baidu" data-title="ConcurrentHashMap在JDK7和8的区别">分享到</a>
       
 
       
@@ -157,7 +208,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/01/new-start-1/" data-id="cjv57xaph001am8vleska5e6i" class="article-share-link" data-share="baidu" data-title="new start">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/01/new-start-1/" data-id="cjv6wqmr1001aegvl5giob9it" class="article-share-link" data-share="baidu" data-title="new start">分享到</a>
       
 
       
@@ -206,7 +257,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/04/25/hello-world/" data-id="cjv57xapm001em8vlud617wut" class="article-share-link" data-share="baidu" data-title="Hello World">分享到</a>
+        <a data-url="http://yoursite.com/2019/04/25/hello-world/" data-id="cjv6wqmr6001eegvlbvnaw89y" class="article-share-link" data-share="baidu" data-title="Hello World">分享到</a>
       
 
       
@@ -247,7 +298,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/11/08/测试/" data-id="cjv57xaoo000fm8vlur9dtymw" class="article-share-link" data-share="baidu" data-title="测试">分享到</a>
+        <a data-url="http://yoursite.com/2016/11/08/测试/" data-id="cjv6wqmqd000fegvljud0wt1c" class="article-share-link" data-share="baidu" data-title="测试">分享到</a>
       
 
       
@@ -288,7 +339,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/09/19/Vipkid-2017/" data-id="cjv57xapq001hm8vl7ty3zait" class="article-share-link" data-share="baidu" data-title="Vipkid 2017">分享到</a>
+        <a data-url="http://yoursite.com/2016/09/19/Vipkid-2017/" data-id="cjv6wqmra001hegvlovtx93nb" class="article-share-link" data-share="baidu" data-title="Vipkid 2017">分享到</a>
       
 
       
@@ -332,7 +383,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/09/19/人人2017/" data-id="cjv57xap3000ym8vloy4umtb4" class="article-share-link" data-share="baidu" data-title="人人2017">分享到</a>
+        <a data-url="http://yoursite.com/2016/09/19/人人2017/" data-id="cjv6wqmqr000yegvlkdpk930j" class="article-share-link" data-share="baidu" data-title="人人2017">分享到</a>
       
 
       
@@ -375,7 +426,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/09/06/中兴2016面试/" data-id="cjv57xap70010m8vloe11okno" class="article-share-link" data-share="baidu" data-title="post中兴2016面试">分享到</a>
+        <a data-url="http://yoursite.com/2016/09/06/中兴2016面试/" data-id="cjv6wqmqt0010egvlenjmfg4k" class="article-share-link" data-share="baidu" data-title="post中兴2016面试">分享到</a>
       
 
       
@@ -433,7 +484,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/29/Struts中动态方法调用/" data-id="cjv57xaps001jm8vlcdydliul" class="article-share-link" data-share="baidu" data-title="Struts中动态方法调用">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/29/Struts中动态方法调用/" data-id="cjv6wqmrc001jegvltetzkzyi" class="article-share-link" data-share="baidu" data-title="Struts中动态方法调用">分享到</a>
       
 
       
@@ -515,69 +566,13 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/22/剑指offer(二)/" data-id="cjv57xap0000um8vlxuhwcxi1" class="article-share-link" data-share="baidu" data-title="剑指offer(二)">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/22/剑指offer(二)/" data-id="cjv6wqmqo000uegvlv2fjmw8c" class="article-share-link" data-share="baidu" data-title="剑指offer(二)">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-SSH学习-问题-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/08/15/SSH学习-问题-1/" class="article-date">
-  <time datetime="2016-08-15T14:41:14.000Z" itemprop="datePublished">2016-08-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/15/SSH学习-问题-1/">SSH学习-问题(1)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>这几天被这几个问题折磨的</p>
-</blockquote>
-<ol>
-<li>No result defined for action xxxx and result success</li>
-</ol>
-<p>网上搜了一下，很多都说是命名空间的问题。后来把执行的put操作放进重写的execute里，问题解决。</p>
-<ol>
-<li><p>hibernate的延迟加载策略（lazy load ）<br>当装载一个实体时，hibernate并不会立即抓取他的集合属性，而是通过生成一个代理来表示集合属性。这样是出于节省内存的考虑。</p>
-</li>
-<li><p>could not initalize proxy- no Session<br>两个表连接，在获取连接的属性实时<br>当Session关闭后，代理对象初始化异常。<br>解决办法：<br>1 关闭懒加载<br>这样最省事，但为了获取一个表的外键，需要将整个表初始化，性能太差<br>2 用LEFT OUTER JOIN FETCH 额外初始化一个对象</p>
-</li>
-</ol>
-<p>3 OpenSessionInViewFilter</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/08/15/SSH学习-问题-1/" data-id="cjv57xapw001om8vlqlae1h4v" class="article-share-link" data-share="baidu" data-title="SSH学习-问题(1)">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSH/">SSH</a></li></ul>
 
     </footer>
   </div>
@@ -601,7 +596,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -610,7 +605,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 12.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -619,7 +614,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -629,6 +624,10 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
+          </li>
         
           <li>
             <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
@@ -644,10 +643,6 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
         
           <li>
             <a href="/2016/11/08/测试/">测试</a>
-          </li>
-        
-          <li>
-            <a href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
           </li>
         
       </ul>

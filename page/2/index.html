@@ -73,6 +73,62 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-SSH学习-问题-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/15/SSH学习-问题-1/" class="article-date">
+  <time datetime="2016-08-15T14:41:14.000Z" itemprop="datePublished">2016-08-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/15/SSH学习-问题-1/">SSH学习-问题(1)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>这几天被这几个问题折磨的</p>
+</blockquote>
+<ol>
+<li>No result defined for action xxxx and result success</li>
+</ol>
+<p>网上搜了一下，很多都说是命名空间的问题。后来把执行的put操作放进重写的execute里，问题解决。</p>
+<ol>
+<li><p>hibernate的延迟加载策略（lazy load ）<br>当装载一个实体时，hibernate并不会立即抓取他的集合属性，而是通过生成一个代理来表示集合属性。这样是出于节省内存的考虑。</p>
+</li>
+<li><p>could not initalize proxy- no Session<br>两个表连接，在获取连接的属性实时<br>当Session关闭后，代理对象初始化异常。<br>解决办法：<br>1 关闭懒加载<br>这样最省事，但为了获取一个表的外键，需要将整个表初始化，性能太差<br>2 用LEFT OUTER JOIN FETCH 额外初始化一个对象</p>
+</li>
+</ol>
+<p>3 OpenSessionInViewFilter</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/08/15/SSH学习-问题-1/" data-id="cjv6wqmrg001oegvlsbmss9bn" class="article-share-link" data-share="baidu" data-title="SSH学习-问题(1)">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSH/">SSH</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-JVM(二)GC机制" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/09/JVM(二)GC机制/" class="article-date">
@@ -114,7 +170,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/09/JVM(二)GC机制/" data-id="cjv57xaq4001ym8vlvpfp36ml" class="article-share-link" data-share="baidu" data-title="JVM(二)GC机制">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/09/JVM(二)GC机制/" data-id="cjv6wqmro001yegvl0r6k6huo" class="article-share-link" data-share="baidu" data-title="JVM(二)GC机制">分享到</a>
       
 
       
@@ -235,7 +291,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjv57xapu001mm8vlkmbc4ocp" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjv6wqmre001megvlhfn27l7i" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
       
 
       
@@ -285,7 +341,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjv57xap1000wm8vlasho1o4a" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjv6wqmqp000wegvld72l4vi4" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
       
 
       
@@ -339,7 +395,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjv57xaq80021m8vlq50b4j24" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjv6wqmrs0021egvleql2vnrz" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
       
 
       
@@ -578,7 +634,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjv57xaoh0004m8vlsm787ek3" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjv6wqmq50004egvl0we1aqy7" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
       
 
       
@@ -856,7 +912,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjv57xaot000lm8vlsw08mknu" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjv6wqmqh000legvlaxee41sb" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
       
 
       
@@ -1006,7 +1062,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjv57xaol000am8vlcdcfnu8p" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjv6wqmq9000aegvlshlrij2n" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
       
 
       
@@ -1054,7 +1110,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjv57xaoj0007m8vlffz8f1js" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjv6wqmq70007egvlq4hpn5fx" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
       
 
       
@@ -1106,66 +1162,13 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjv57xaoy000sm8vlaunqetbv" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjv6wqmqm000segvltj5aedon" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-天气预报App中的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/05/01/天气预报App中的问题/" class="article-date">
-  <time datetime="2016-05-01T15:09:32.000Z" itemprop="datePublished">2016-05-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/01/天气预报App中的问题/">天气预报App中的问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>graivty 和 layout_gravity</li>
-</ol>
-<p>android:gravity：设置的是控件自身上面的内容位置</p>
-<p>android:layout_gravity：设置控件本身相对于父控件的显示位置。</p>
-<ol>
-<li><p>ADT中显示中文乱码问题<br>在gradle中添加android {compileOptions.encoding = “GBK” }</p>
-</li>
-<li><p>关于天气预报的接口<br>天气</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjv57xaos000jm8vl653lt73n" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
 
     </footer>
   </div>
@@ -1189,7 +1192,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -1198,7 +1201,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 12.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -1207,7 +1210,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -1217,6 +1220,10 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
+          </li>
         
           <li>
             <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
@@ -1232,10 +1239,6 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
         
           <li>
             <a href="/2016/11/08/测试/">测试</a>
-          </li>
-        
-          <li>
-            <a href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
           </li>
         
       </ul>

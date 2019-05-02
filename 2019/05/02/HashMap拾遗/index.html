@@ -4,17 +4,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2016/3 | 第一个番茄</title>
+  <title>HashMap拾遗 | 第一个番茄</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="各种学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="第一个番茄">
-<meta property="og:url" content="http://yoursite.com/archives/2016/03/index.html">
+  <meta name="description" content="HashMap其实都比较熟悉了,主要有一些细节需要注意
+负载因子Load factor为负载因子(默认值是0.75)，threshold是HashMap所能容纳的最大数据量的Node(键值对)个数。threshold = length * Load factor
+7和8的区别节点超过8之后转红黑树JDK8对扩容的优化，下面讲
+JDK8对扩容的优化首先讲下扩容的过程，把原来的Entry[]的leng">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashMap拾遗">
+<meta property="og:url" content="http://yoursite.com/2019/05/02/HashMap拾遗/index.html">
 <meta property="og:site_name" content="第一个番茄">
-<meta property="og:description" content="各种学">
+<meta property="og:description" content="HashMap其实都比较熟悉了,主要有一些细节需要注意
+负载因子Load factor为负载因子(默认值是0.75)，threshold是HashMap所能容纳的最大数据量的Node(键值对)个数。threshold = length * Load factor
+7和8的区别节点超过8之后转红黑树JDK8对扩容的优化，下面讲
+JDK8对扩容的优化首先讲下扩容的过程，把原来的Entry[]的leng">
+<meta property="og:updated_time" content="2019-05-02T17:12:22.483Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一个番茄">
-<meta name="twitter:description" content="各种学">
+<meta name="twitter:title" content="HashMap拾遗">
+<meta name="twitter:description" content="HashMap其实都比较熟悉了,主要有一些细节需要注意
+负载因子Load factor为负载因子(默认值是0.75)，threshold是HashMap所能容纳的最大数据量的Node(键值对)个数。threshold = length * Load factor
+7和8的区别节点超过8之后转红黑树JDK8对扩容的优化，下面讲
+JDK8对扩容的优化首先讲下扩容的过程，把原来的Entry[]的leng">
   
     <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
   
@@ -71,134 +81,67 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/29/Android笔记-网络/" class="archive-article-date">
-  <time datetime="2016-03-29T14:31:12.000Z" itemprop="datePublished">3月 29</time>
+      <section id="main"><article id="post-HashMap拾遗" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/02/HashMap拾遗/" class="article-date">
+  <time datetime="2019-05-02T07:40:03.000Z" itemprop="datePublished">2019-05-02</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/29/Android笔记-网络/">Android笔记-网络</a>
+    <h1 class="article-title" itemprop="name">
+      HashMap拾遗
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/24/Android笔记-异步消息处理机制/" class="archive-article-date">
-  <time datetime="2016-03-24T12:08:10.000Z" itemprop="datePublished">3月 24</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/24/Android笔记-异步消息处理机制/">Android笔记-异步消息处理机制</a>
-    </h1>
-  
+        <p>HashMap其实都比较熟悉了,主要有一些细节需要注意</p>
+<h2 id="负载因子">负载因子</h2><p>Load factor为负载因子(默认值是0.75)，threshold是HashMap所能容纳的最大数据量的Node(键值对)个数。threshold = length * Load factor</p>
+<h2 id="7和8的区别">7和8的区别</h2><p>节点超过8之后转红黑树<br>JDK8对扩容的优化，下面讲</p>
+<h2 id="JDK8对扩容的优化">JDK8对扩容的优化</h2><p>首先讲下扩容的过程，把原来的Entry[]的length翻倍，然后把Entry[i]上原来的Node，根据重新hash的结果，一部分迁移到Enrty[i+oldLength]上。<br>1.7中。一条链表上处理顺序是从头开始，插入新位置时采用头插法，所以顺序会颠倒</p>
+<p>1.8中，在扩充HashMap的时候，不需要像JDK1.7的实现那样重新计算hash，只需要看看原来的hash值新增的那个bit是1还是0就好了，是0的话索引没变，是1的话索引变成“原索引+oldCap“</p>
+<p>既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，因此resize的过程，均匀的把之前的冲突的节点分散到新的bucket了。</p>
+<h2 id="并发问题">并发问题</h2><p>线程1和2同时进入扩容，<br>线程1对原来的完成扩容后，线程2并不能感知到，重新扩容，产生循环链表</p>
+<h2 id="参考">参考</h2><p>hashmap的并发问题<br><a href="http://www.importnew.com/22011.html" target="_blank" rel="external">http://www.importnew.com/22011.html</a><br><a href="https://www.jianshu.com/p/4930801e23c8" target="_blank" rel="external">https://www.jianshu.com/p/4930801e23c8</a></p>
+<p>jdk8 rehash的优化<br><a href="https://blog.csdn.net/USTC_Zn/article/details/78173217" target="_blank" rel="external">https://blog.csdn.net/USTC_Zn/article/details/78173217</a><br><a href="https://blog.csdn.net/USTC_Zn/article/details/78173217" target="_blank" rel="external">https://blog.csdn.net/USTC_Zn/article/details/78173217</a></p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/16/Oracle数据库安装中的坑/" class="archive-article-date">
-  <time datetime="2016-03-16T14:02:53.000Z" itemprop="datePublished">3月 16</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/16/Oracle数据库安装中的坑/">Oracle数据库安装中的坑</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/16/Android笔记-BroadcastReceiver/" class="archive-article-date">
-  <time datetime="2016-03-16T13:34:20.000Z" itemprop="datePublished">3月 16</time>
-</a>
+    </div>
+    <footer class="article-footer">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/16/Android笔记-BroadcastReceiver/">Android笔记-BroadcastReceiver</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/10/Git命令速查/" class="archive-article-date">
-  <time datetime="2016-03-10T14:44:36.000Z" itemprop="datePublished">3月 10</time>
-</a>
+        <a data-url="http://yoursite.com/2019/05/02/HashMap拾遗/" data-id="cjv6wqmru0023egvlgc6vkw5i" class="article-share-link" data-share="baidu" data-title="HashMap拾遗">分享到</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/10/Git命令速查/">Git命令速查</a>
-    </h1>
-  
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/03/02/opencv-for-Android/" class="archive-article-date">
-  <time datetime="2016-03-02T08:15:59.000Z" itemprop="datePublished">3月 2</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/02/opencv-for-Android/">opencv for Android</a>
-    </h1>
-  
 
-    </header>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">ConcurrentHashMap在JDK7和8的区别</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
       
       <aside id="sidebar">

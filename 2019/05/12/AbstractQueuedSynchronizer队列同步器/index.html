@@ -18,9 +18,9 @@ AQS的内部实现了两个队列，一个同步队列和一个条件队列。�
 getState()setState(int newState)compareAndSetState(int expect, int update) 保证原子性
 2、同步队列即FIFO双向队列
 AQS的内部实现了两个队列，一个同步队列和一个条件队列。条件队列是为Lock实现的一个基础同步器，并且一个线程可能会有多个条件">
-<meta property="og:image" content="en-resource://database/10869:1">
-<meta property="og:image" content="en-resource://database/11163:1">
-<meta property="og:updated_time" content="2019-05-12T15:03:16.994Z">
+<meta property="og:image" content="http://yoursite.com/img/aqs1.jpg">
+<meta property="og:image" content="http://yoursite.com/img/aqs2.jpg">
+<meta property="og:updated_time" content="2019-05-12T15:08:59.040Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AbstractQueuedSynchronizer队列同步器">
 <meta name="twitter:description" content="1、同步状态使用了一个int成员变量state表示同步状态。提供了三种操作方法
@@ -109,7 +109,7 @@ AQS的内部实现了两个队列，一个同步队列和一个条件队列。�
 <p>getState()<br>setState(int newState)<br>compareAndSetState(int expect, int update) 保证原子性</p>
 <h2 id="2、同步队列">2、同步队列</h2><p>即FIFO双向队列</p>
 <p>AQS的内部实现了两个队列，一个同步队列和一个条件队列。<br>条件队列是为Lock实现的一个基础同步器，并且一个线程可能会有多个条件队列，只有在使用了Condition才会存在条件队列。</p>
-<p><img src="en-resource://database/10869:1" alt="e534c422d2099de5741c906ecc955142.jpeg"></p>
+<p><img src="/img/aqs1.jpg" alt=""></p>
 <p>同步队列的作用是，</p>
 <ul>
 <li>在线程获取资源失败后，线程安全（compareAndSetTail）进入同步队列队尾保持自旋等待状态</li>
@@ -123,7 +123,7 @@ AQS的内部实现了两个队列，一个同步队列和一个条件队列。�
 <li>调用park()进入waiting状态，等待unpark()或interrupt()唤醒自己；</li>
 <li>被唤醒后，看自己是不是有资格能拿到号。如果拿到，head指向当前结点，并返回从入队到拿到号的整个过程中是否被中断过；如果没拿到，继续流程1</li>
 </ul>
-<p><img src="en-resource://database/11163:1" alt="af5643f7370a49a43ec654ffeeb535ae.png"></p>
+<p><img src="/img/aqs2.jpg" alt=""></p>
 <p>公平模式时只有前驱结点是头结点才尝试获取同步状态，否则进入等待<br>获取当前等待节点的前继节点，如果前继节点为head，说明可以尝试获取锁；<br>调用tryAcquire获取锁，成功后更新head为当前节点；<br>获取资源失败，调用shouldParkAfterFailedAcquire方法检查并更新等待状态。如果前继节点状态为SIGNAL，说明当前节点可以进入waiting状态等待唤醒；被唤醒后，继续自旋重复上述步骤。<br>获取资源成功后返回中断状态。</p>
 <p>tryAcquireNanos<br>在指定时间内获取状态，否则立刻返回</p>
 <h3 id="释放">释放</h3><p>tryRelease(int)<br>直接减掉相应量的资源即可(state-=arg)<br>unparkSuccessor(Node)<br>唤醒下一个节点</p>
@@ -153,7 +153,7 @@ AQS的内部实现了两个队列，一个同步队列和一个条件队列。�
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/12/AbstractQueuedSynchronizer队列同步器/" data-id="cjvl2j0pq0000p8vl35thz7d9" class="article-share-link" data-share="baidu" data-title="AbstractQueuedSynchronizer队列同步器">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/12/AbstractQueuedSynchronizer队列同步器/" data-id="cjvl2qb7n0000scvl72wfpsrl" class="article-share-link" data-share="baidu" data-title="AbstractQueuedSynchronizer队列同步器">分享到</a>
       
 
       

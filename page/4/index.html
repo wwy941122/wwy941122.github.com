@@ -73,6 +73,172 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-opencv-for-Android" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/02/opencv-for-Android/" class="article-date">
+  <time datetime="2016-03-02T08:15:59.000Z" itemprop="datePublished">2016-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/02/opencv-for-Android/">opencv for Android</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 为了做创新项目，研究了一段时间opencv4Android，做了一个小demo。实现读取手机上的图片文件，然后做成灰度图.</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
+    <span class="keyword">private</span> Button button;
+    <span class="keyword">private</span> ImageView imageView;
+    <span class="keyword">private</span> <span class="keyword">int</span> SELECT_FILE = <span class="number">1</span>;
+    <span class="keyword">private</span> String TAG = <span class="string">"Tag"</span>;
+
+    <span class="keyword">private</span> String selectPath = <span class="keyword">null</span>;
+
+    <span class="keyword">private</span> Bitmap srcBitmap;
+    <span class="keyword">private</span> Bitmap greyBitmap;
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+    <span class="keyword">super</span>.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    button = (Button) findViewById(R.id.button);
+    imageView = (ImageView)findViewById(R.id.imageView);
+
+    button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
+        <span class="annotation">@Override</span>
+        <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+            selectPic();
+        }
+    });
+}
+
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>{
+    <span class="keyword">super</span>.onResume();
+    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_10, getApplicationContext(), mLoaderCallback);
+    <span class="comment">//System.out.println("onResume sucess load OpenCV...");</span>
+    Log.i(TAG,<span class="string">"onResume sucess load OpenCV..."</span>);
+
+}
+
+<span class="keyword">private</span> BaseLoaderCallback mLoaderCallback = <span class="keyword">new</span> BaseLoaderCallback(<span class="keyword">this</span>) {
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onManagerConnected</span><span class="params">(<span class="keyword">int</span> status)</span> </span>{
+
+        <span class="keyword">switch</span> (status){
+            <span class="keyword">case</span> BaseLoaderCallback.SUCCESS:
+                //System.out.println(<span class="string">"成功加载"</span>);
+                Log.i(TAG, <span class="string">"成功加载"</span>);
+                <span class="keyword">break</span>;
+            <span class="keyword">default</span>:
+                <span class="keyword">super</span>.onManagerConnected(status);
+                <span class="comment">//System.out.println("加载失败加载失败");</span>
+                Log.i(TAG,<span class="string">"加载失败"</span>);
+        }
+    }
+};
+<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">procSrc2Gray</span><span class="params">()</span></span>{
+    Mat rgbMat = <span class="keyword">new</span> Mat();
+    Mat greyMat = <span class="keyword">new</span> Mat();
+    BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();
+    srcBitmap = BitmapFactory.decodeFile(selectPath,options);
+    greyBitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
+    Utils.bitmapToMat(srcBitmap, rgbMat);
+    Imgproc.cvtColor(rgbMat, greyMat, Imgproc.COLOR_RGB2GRAY);
+    Utils.matToBitmap(greyMat, greyBitmap);
+    System.out.println(<span class="string">"procSrc2Gray sucess"</span>);
+    imageView.setImageBitmap(greyBitmap);
+    <span class="comment">//Log.i(TAG,"procSrc2Gray sucess");</span>
+
+}
+
+
+
+<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">selectPic</span><span class="params">()</span></span>{
+    Intent intent1 = <span class="keyword">new</span> Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    intent1.setType(<span class="string">"image/*"</span>);
+    startActivityForResult(Intent.createChooser(intent1, <span class="string">"选择开启图库"</span>),SELECT_FILE);
+
+}
+
+
+<span class="annotation">@Override</span>
+<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>{
+    <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);
+    <span class="keyword">if</span>(resultCode == Activity.RESULT_OK){
+        <span class="keyword">if</span>(requestCode == SELECT_FILE)
+            onSeclectFromGalleryResult(data);
+    }
+
+}
+<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">onSeclectFromGalleryResult</span><span class="params">(Intent data)</span></span>{
+    Uri selectedImageUri = data.getData();
+    String[] projection = {MediaStore.MediaColumns.DATA};
+    Cursor cursor = managedQuery(selectedImageUri,projection,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="keyword">null</span>);
+    <span class="keyword">int</span> column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+    cursor.moveToFirst();
+
+    selectPath = cursor.getString(column_index);
+    procSrc2Gray();
+
+
+}
+
+
+
+<span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">onCreateOptionsMenu</span><span class="params">(Menu menu)</span> </span>{
+    <span class="comment">// Inflate the menu; this adds items to the action bar if it is present.</span>
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+
+<span class="annotation">@Override</span>
+<span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">onOptionsItemSelected</span><span class="params">(MenuItem item)</span> </span>{
+    <span class="comment">// Handle action bar item clicks here. The action bar will</span>
+    <span class="comment">// automatically handle clicks on the Home/Up button, so long</span>
+    <span class="comment">// as you specify a parent activity in AndroidManifest.xml.</span>
+    <span class="keyword">int</span> id = item.getItemId();
+
+    <span class="comment">//noinspection SimplifiableIfStatement</span>
+    <span class="keyword">if</span> (id == R.id.action_settings) {
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+
+    <span class="function"><span class="keyword">return</span> <span class="keyword">super</span>.<span class="title">onOptionsItemSelected</span><span class="params">(item)</span></span>;
+}
+</code></pre><p>}</p>
+<p>配图</p>
+<p> 参考：<br> 1.<a href="http://www.mobile-open.com/2015/86176.html" target="_blank" rel="external">http://www.mobile-open.com/2015/86176.html</a><br> 2.<a href="http://terryyamg.blogspot.jp/2015/04/android-load-image-from-camera-or.html" target="_blank" rel="external">http://terryyamg.blogspot.jp/2015/04/android-load-image-from-camera-or.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/02/opencv-for-Android/" data-id="cjvl2j0rk0018p8vl4wl7mps7" class="article-share-link" data-share="baidu" data-title="opencv for Android">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android笔记-界面" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/12/11/Android笔记-界面/" class="article-date">
@@ -125,7 +291,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/12/11/Android笔记-界面/" data-id="cjv6wqms2002degvl27k9t24f" class="article-share-link" data-share="baidu" data-title="Android笔记-界面">分享到</a>
+        <a data-url="http://yoursite.com/2015/12/11/Android笔记-界面/" data-id="cjvl2j0sp002dp8vld9jfu32i" class="article-share-link" data-share="baidu" data-title="Android笔记-界面">分享到</a>
       
 
       
@@ -194,7 +360,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/27/Android笔记-Service/" data-id="cjv6wqms7002jegvl7mibgyar" class="article-share-link" data-share="baidu" data-title="Android笔记-Service">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/27/Android笔记-Service/" data-id="cjvl2j0sv002jp8vlnyuzuo9d" class="article-share-link" data-share="baidu" data-title="Android笔记-Service">分享到</a>
       
 
       
@@ -267,7 +433,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/24/Android笔记-application/" data-id="cjv6wqms6002hegvl7ayww34m" class="article-share-link" data-share="baidu" data-title="Android笔记-application">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/24/Android笔记-application/" data-id="cjvl2j0st002hp8vlabwvbwiy" class="article-share-link" data-share="baidu" data-title="Android笔记-application">分享到</a>
       
 
       
@@ -337,7 +503,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/23/Android笔记-Intent/" data-id="cjv6wqmsa002legvldi074l10" class="article-share-link" data-share="baidu" data-title="Android笔记-Intent">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/23/Android笔记-Intent/" data-id="cjvl2j0sx002lp8vl746vgjwj" class="article-share-link" data-share="baidu" data-title="Android笔记-Intent">分享到</a>
       
 
       
@@ -382,7 +548,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/20/back/" data-id="cjv6wqmr8001fegvlbiy8v6vz" class="article-share-link" data-share="baidu" data-title="back">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/20/back/" data-id="cjvl2j0rs001gp8vlknmpw00t" class="article-share-link" data-share="baidu" data-title="back">分享到</a>
       
 
       
@@ -427,7 +593,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/25/SICP-1-2/" data-id="cjv6wqmrk001tegvlzaj7415b" class="article-share-link" data-share="baidu" data-title="SICP 1.2">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/25/SICP-1-2/" data-id="cjvl2j0s5001up8vl9dfhkquz" class="article-share-link" data-share="baidu" data-title="SICP 1.2">分享到</a>
       
 
       
@@ -475,7 +641,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/17/图片测试/" data-id="cjv6wqmqj000oegvl8kn3wsgv" class="article-share-link" data-share="baidu" data-title="图片测试">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/17/图片测试/" data-id="cjvl2j0r4000pp8vlgy4zo259" class="article-share-link" data-share="baidu" data-title="图片测试">分享到</a>
       
 
       
@@ -537,7 +703,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/13/Android-笔记：activity/" data-id="cjv6wqmpa0000egvlmxj5kl3z" class="article-share-link" data-share="baidu" data-title="Android 笔记：activity">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/13/Android-笔记：activity/" data-id="cjvl2j0t1002op8vl3nd87jh4" class="article-share-link" data-share="baidu" data-title="Android 笔记：activity">分享到</a>
       
 
       
@@ -591,122 +757,13 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/07/SICP笔记1-1/" data-id="cjv6wqmri001qegvlnvskxaux" class="article-share-link" data-share="baidu" data-title="SICP笔记1.1">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/07/SICP笔记1-1/" data-id="cjvl2j0s3001rp8vli5dsn9wx" class="article-share-link" data-share="baidu" data-title="SICP笔记1.1">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SICP/">SICP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-markdown语法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/07/markdown语法/" class="article-date">
-  <time datetime="2015-10-07T15:12:57.000Z" itemprop="datePublished">2015-10-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/07/markdown语法/">markdown语法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>一些常用markdown语法，以便查阅</p>
-</blockquote>
-<h1 id="注意">注意</h1><h1 id="标题冒号后有空格！！！！！">标题冒号后有空格！！！！！</h1><p><a href="http://wowubuntu.com/markdown/#p" target="_blank" rel="external">Markdown 文档</a></p>
-<blockquote>
-<h2 id="标题">标题</h2></blockquote>
-<h4 id="1-在标题下发加===或—">1.在标题下发加===或—</h4><p><code>第一种标题</code><br><code>====</code></p>
-<p><code>第二种标题</code><br><code>---</code></p>
-<h4 id="2-标题前加#号">2.标题前加#号</h4><p><code># 标题1</code><br><code>## 标题2</code><br><code>### 标题3</code><br><code>#### 标题4</code><br><code>##### 标题5</code></p>
-<blockquote>
-<h2 id="引用">引用</h2></blockquote>
-<p>在文字前加&gt; ，注意有空格。</p>
-<p><code>&gt; 引用</code></p>
-<p>可以嵌套引用</p>
-<p><code>&gt; 引用</code><br><code>&gt;&gt; 引用2</code></p>
-<blockquote>
-<h2 id="列表">列表</h2><p>分为无序列表和有序列表</p>
-</blockquote>
-<p>无序列表用+、*、-<br><code>- 1111</code><br><code>- 2222</code><br><code>- 3333</code><br>列表也可以嵌套</p>
-<pre><code>+ 1
--<span class="ruby"> <span class="number">111</span>
-</span>-<span class="ruby"> <span class="number">222</span>
-</span>+ 2
--<span class="ruby"> <span class="number">333</span>
-</span>-<span class="ruby"> <span class="number">444</span></span>
-</code></pre><blockquote>
-<h2 id="代码">代码</h2><p>发现两种方法, 风格有所不同</p>
-</blockquote>
-<p>一种是`符号，注意这个不是引号而是~键的那个。<br>一种是在代码前加4个空格，markdown会自动转换</p>
-<p><code>+ this is the first method</code></p>
-<pre><code>+ this is <span class="operator">the</span> <span class="keyword">second</span> <span class="constant">one</span>
-</code></pre><p>还有一种这种<br>可指定编程语言，『』代表左右大括号<br>    <figure class="highlight"><figcaption><span>[title] [] [url] [link text]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code snippet</span><br></pre></td></tr></table></figure></p>
-<p>『% codeblock [title] [lang:language] [url] [link text] %』<br>  code snippet<br>『% endcodeblock %』</p>
-<blockquote>
-<p>斜体和粗体</p>
-</blockquote>
-<p>斜体<br>将需要设置为斜体的文字两端使用1个“*”或者“_”夹起来。</p>
-<p>粗体<br>将需要设置为斜体的文字两端使用2个“<em>”或者“_”夹起来。<br> <em>*good</em></em></p>
-<blockquote>
-<h2 id="超链">超链</h2></blockquote>
-<ol>
-<li>文字超链<br><a href="http://www.github.io" title="测试GitHub" target="_blank" rel="external">Github</a></li>
-<li>自动链接<br>尖括号&lt;&gt;<br><a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a></li>
-</ol>
-<blockquote>
-<h2 id="表格">表格</h2><table>
-<thead>
-<tr>
-<th>dog</th>
-<th>bird</th>
-<th>cat</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>foo</td>
-<td>foo</td>
-<td>foo</td>
-</tr>
-<tr>
-<td>111</td>
-<td>111</td>
-<td>111</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/10/07/markdown语法/" data-id="cjv6wqmr4001cegvlxu0swacp" class="article-share-link" data-share="baidu" data-title="markdown语法">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
 
     </footer>
   </div>
@@ -730,7 +787,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -739,7 +796,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 12.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -748,7 +805,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -758,6 +815,10 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
+          </li>
         
           <li>
             <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
@@ -773,10 +834,6 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
         
           <li>
             <a href="/2019/04/25/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/08/测试/">测试</a>
           </li>
         
       </ul>

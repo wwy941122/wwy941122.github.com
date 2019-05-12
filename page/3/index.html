@@ -73,6 +73,58 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-动态规划" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/16/动态规划/" class="article-date">
+  <time datetime="2016-05-16T12:15:28.000Z" itemprop="datePublished">2016-05-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/16/动态规划/">动态规划</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>感觉老是不能理解动态规划，放上来整理一下思路</p>
+</blockquote>
+<h1 id="1-01背包问题">1.01背包问题</h1><blockquote>
+<p>网上最好的解答是<a href="http://blog.csdn.net/mu399/article/details/7722810" target="_blank" rel="external">http://blog.csdn.net/mu399/article/details/7722810</a></p>
+</blockquote>
+<p>01背包的状态转换方程 f[i,j] = Max{ f[i-1,j-Wi]+Pi( j &gt;= Wi ),  f[i-1,j] }</p>
+<p>f[i,j]表示在前i件物品中选择若干件放在承重为j的背包中，可以取得的最大价值。</p>
+<p> f[i-1,j-Wi]+Pi可以理解为加入第i个物品<br> f[i-1,j]则表示不加入此物品，保持原样</p>
+<p> 代码<br>         public class question1 {<br>            public static void main(String[] args){<br>                int[][] f = new int[6][11];<br>                int[] v = {0,6,3,5,4,6};<br>                int[] w = {0,2,2,6,5,4};<br>                for(int i = 1; i &lt; 6; i++){<br>                    for (int j = 1; j &lt; 11; j++){<br>                        if(w[i] &gt; j){<br>                            f[i][j] = f[i-1][j];<br>                        } else<br>                            f[i][j] = Math.max(f[i-1][j], f[i-1][j - w[i]] + v[i]);<br>                    }<br>                }<br>                for(int i = 1; i &lt; 6; i++){<br>                for (int j = 1; j &lt; 11; j++){<br>                        System.out.print(f[i][j]);<br>                        }<br>                    System.out.print(‘\n’);<br>                    }<br>            }</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjvl2j0r7000tp8vl0diqkhc4" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-天气预报App中的问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/05/01/天气预报App中的问题/" class="article-date">
@@ -111,7 +163,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjv6wqmqg000jegvlbkvtmdhi" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjvl2j0r0000jp8vlh8wwqt6q" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
       
 
       
@@ -193,7 +245,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjv6wqmqk000qegvlsyy2uejx" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjvl2j0r5000rp8vlrz1qn3js" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
       
 
       
@@ -237,7 +289,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/10/一个月总结/" data-id="cjv6wqmqv0012egvlw7qba8fn" class="article-share-link" data-share="baidu" data-title="一个月总结">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/10/一个月总结/" data-id="cjvl2j0rg0013p8vlwmml6mlb" class="article-share-link" data-share="baidu" data-title="一个月总结">分享到</a>
       
 
       
@@ -337,7 +389,7 @@ Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scann
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/04/腾讯实习笔试/" data-id="cjv6wqmqb000cegvlpe7cudlb" class="article-share-link" data-share="baidu" data-title="腾讯实习笔试">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/04/腾讯实习笔试/" data-id="cjvl2j0qt000cp8vlec0596hi" class="article-share-link" data-share="baidu" data-title="腾讯实习笔试">分享到</a>
       
 
       
@@ -449,7 +501,7 @@ public void run(){
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/29/Android笔记-网络/" data-id="cjv6wqms1002begvlktmco7lq" class="article-share-link" data-share="baidu" data-title="Android笔记-网络">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/29/Android笔记-网络/" data-id="cjvl2j0sn002bp8vl594ja66o" class="article-share-link" data-share="baidu" data-title="Android笔记-网络">分享到</a>
       
 
       
@@ -564,7 +616,7 @@ handleMessage(msg);
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/24/Android笔记-异步消息处理机制/" data-id="cjv6wqms4002fegvl5n1wl2kb" class="article-share-link" data-share="baidu" data-title="Android笔记-异步消息处理机制">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/24/Android笔记-异步消息处理机制/" data-id="cjvl2j0sq002fp8vlj2xu74n9" class="article-share-link" data-share="baidu" data-title="Android笔记-异步消息处理机制">分享到</a>
       
 
       
@@ -618,7 +670,7 @@ conn / as sysdba
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjv6wqmrm001vegvlit8qh65u" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjvl2j0s8001wp8vlg9xd1zbr" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
       
 
       
@@ -667,7 +719,7 @@ conn / as sysdba
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/16/Android笔记-BroadcastReceiver/" data-id="cjv6wqmsc002megvlm6a6pr1e" class="article-share-link" data-share="baidu" data-title="Android笔记-BroadcastReceiver">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/16/Android笔记-BroadcastReceiver/" data-id="cjvl2j0sz002mp8vlnknabomf" class="article-share-link" data-share="baidu" data-title="Android笔记-BroadcastReceiver">分享到</a>
       
 
       
@@ -714,179 +766,13 @@ conn / as sysdba
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/10/Git命令速查/" data-id="cjv6wqmrw0026egvl8s4q8iuj" class="article-share-link" data-share="baidu" data-title="Git命令速查">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/10/Git命令速查/" data-id="cjvl2j0si0026p8vl0m3pd1md" class="article-share-link" data-share="baidu" data-title="Git命令速查">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-opencv-for-Android" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/02/opencv-for-Android/" class="article-date">
-  <time datetime="2016-03-02T08:15:59.000Z" itemprop="datePublished">2016-03-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/02/opencv-for-Android/">opencv for Android</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p> 为了做创新项目，研究了一段时间opencv4Android，做了一个小demo。实现读取手机上的图片文件，然后做成灰度图.</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
-    <span class="keyword">private</span> Button button;
-    <span class="keyword">private</span> ImageView imageView;
-    <span class="keyword">private</span> <span class="keyword">int</span> SELECT_FILE = <span class="number">1</span>;
-    <span class="keyword">private</span> String TAG = <span class="string">"Tag"</span>;
-
-    <span class="keyword">private</span> String selectPath = <span class="keyword">null</span>;
-
-    <span class="keyword">private</span> Bitmap srcBitmap;
-    <span class="keyword">private</span> Bitmap greyBitmap;
-<span class="annotation">@Override</span>
-<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
-    <span class="keyword">super</span>.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    button = (Button) findViewById(R.id.button);
-    imageView = (ImageView)findViewById(R.id.imageView);
-
-    button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
-        <span class="annotation">@Override</span>
-        <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
-            selectPic();
-        }
-    });
-}
-
-<span class="annotation">@Override</span>
-<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>{
-    <span class="keyword">super</span>.onResume();
-    OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_10, getApplicationContext(), mLoaderCallback);
-    <span class="comment">//System.out.println("onResume sucess load OpenCV...");</span>
-    Log.i(TAG,<span class="string">"onResume sucess load OpenCV..."</span>);
-
-}
-
-<span class="keyword">private</span> BaseLoaderCallback mLoaderCallback = <span class="keyword">new</span> BaseLoaderCallback(<span class="keyword">this</span>) {
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onManagerConnected</span><span class="params">(<span class="keyword">int</span> status)</span> </span>{
-
-        <span class="keyword">switch</span> (status){
-            <span class="keyword">case</span> BaseLoaderCallback.SUCCESS:
-                //System.out.println(<span class="string">"成功加载"</span>);
-                Log.i(TAG, <span class="string">"成功加载"</span>);
-                <span class="keyword">break</span>;
-            <span class="keyword">default</span>:
-                <span class="keyword">super</span>.onManagerConnected(status);
-                <span class="comment">//System.out.println("加载失败加载失败");</span>
-                Log.i(TAG,<span class="string">"加载失败"</span>);
-        }
-    }
-};
-<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">procSrc2Gray</span><span class="params">()</span></span>{
-    Mat rgbMat = <span class="keyword">new</span> Mat();
-    Mat greyMat = <span class="keyword">new</span> Mat();
-    BitmapFactory.Options options = <span class="keyword">new</span> BitmapFactory.Options();
-    srcBitmap = BitmapFactory.decodeFile(selectPath,options);
-    greyBitmap = Bitmap.createBitmap(srcBitmap.getWidth(), srcBitmap.getHeight(), Bitmap.Config.RGB_565);
-    Utils.bitmapToMat(srcBitmap, rgbMat);
-    Imgproc.cvtColor(rgbMat, greyMat, Imgproc.COLOR_RGB2GRAY);
-    Utils.matToBitmap(greyMat, greyBitmap);
-    System.out.println(<span class="string">"procSrc2Gray sucess"</span>);
-    imageView.setImageBitmap(greyBitmap);
-    <span class="comment">//Log.i(TAG,"procSrc2Gray sucess");</span>
-
-}
-
-
-
-<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">selectPic</span><span class="params">()</span></span>{
-    Intent intent1 = <span class="keyword">new</span> Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-    intent1.setType(<span class="string">"image/*"</span>);
-    startActivityForResult(Intent.createChooser(intent1, <span class="string">"选择开启图库"</span>),SELECT_FILE);
-
-}
-
-
-<span class="annotation">@Override</span>
-<span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>{
-    <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);
-    <span class="keyword">if</span>(resultCode == Activity.RESULT_OK){
-        <span class="keyword">if</span>(requestCode == SELECT_FILE)
-            onSeclectFromGalleryResult(data);
-    }
-
-}
-<span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">onSeclectFromGalleryResult</span><span class="params">(Intent data)</span></span>{
-    Uri selectedImageUri = data.getData();
-    String[] projection = {MediaStore.MediaColumns.DATA};
-    Cursor cursor = managedQuery(selectedImageUri,projection,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="keyword">null</span>);
-    <span class="keyword">int</span> column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-    cursor.moveToFirst();
-
-    selectPath = cursor.getString(column_index);
-    procSrc2Gray();
-
-
-}
-
-
-
-<span class="annotation">@Override</span>
-<span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">onCreateOptionsMenu</span><span class="params">(Menu menu)</span> </span>{
-    <span class="comment">// Inflate the menu; this adds items to the action bar if it is present.</span>
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    <span class="keyword">return</span> <span class="keyword">true</span>;
-}
-
-<span class="annotation">@Override</span>
-<span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">onOptionsItemSelected</span><span class="params">(MenuItem item)</span> </span>{
-    <span class="comment">// Handle action bar item clicks here. The action bar will</span>
-    <span class="comment">// automatically handle clicks on the Home/Up button, so long</span>
-    <span class="comment">// as you specify a parent activity in AndroidManifest.xml.</span>
-    <span class="keyword">int</span> id = item.getItemId();
-
-    <span class="comment">//noinspection SimplifiableIfStatement</span>
-    <span class="keyword">if</span> (id == R.id.action_settings) {
-        <span class="keyword">return</span> <span class="keyword">true</span>;
-    }
-
-    <span class="function"><span class="keyword">return</span> <span class="keyword">super</span>.<span class="title">onOptionsItemSelected</span><span class="params">(item)</span></span>;
-}
-</code></pre><p>}</p>
-<p>配图</p>
-<p> 参考：<br> 1.<a href="http://www.mobile-open.com/2015/86176.html" target="_blank" rel="external">http://www.mobile-open.com/2015/86176.html</a><br> 2.<a href="http://terryyamg.blogspot.jp/2015/04/android-load-image-from-camera-or.html" target="_blank" rel="external">http://terryyamg.blogspot.jp/2015/04/android-load-image-from-camera-or.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/03/02/opencv-for-Android/" data-id="cjv6wqmqy0017egvlmfnr5xu7" class="article-share-link" data-share="baidu" data-title="opencv for Android">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
 
     </footer>
   </div>
@@ -910,7 +796,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -919,7 +805,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 12.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -928,7 +814,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -938,6 +824,10 @@ conn / as sysdba
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
+          </li>
         
           <li>
             <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
@@ -953,10 +843,6 @@ conn / as sysdba
         
           <li>
             <a href="/2019/04/25/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/08/测试/">测试</a>
           </li>
         
       </ul>

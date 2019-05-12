@@ -73,6 +73,88 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-剑指offer(二)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/22/剑指offer(二)/" class="article-date">
+  <time datetime="2016-08-22T11:31:06.000Z" itemprop="datePublished">2016-08-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/22/剑指offer(二)/">剑指offer(二)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>调整数组顺序使奇数位于偶数前面<br>输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。<br>思路：实际上是排序，要求是稳定，所以快排思路不能用，可用插入，归并。当然也可以空间换时间，但如果在数组中移动可能效果不会太好。</p>
+<p>链表中倒数第k个结点<br>输入一个链表，输出该链表中倒数第k个结点。<br>思路：两个指针，先让第一个指针和第二个指针都指向头结点，然后再让第一个指正走(k-1)步，到达第k个节点。然后两个指针同时往后移动，当第一个结点到达末尾的时候，第二个结点所在位置就是倒数第k个节点了。</p>
+<p>反转链表<br>输入一个链表，反转链表后，输出链表的所有元素。</p>
+<p>树的子结构<br>输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）</p>
+<p>解题思路：递归</p>
+<pre><code>    public class <span class="type">Solution</span> {
+        public boolean <span class="type">HasSubtree</span>(<span class="type">TreeNode</span> root1,<span class="type">TreeNode</span> root2) {
+        boolean <span class="literal">result</span> = <span class="literal">false</span>;
+        <span class="keyword">if</span>(root1 != null &amp;&amp;root2 != null){
+            <span class="keyword">if</span>(root1.val == root2.val){
+                <span class="literal">result</span> = areTheySame(root1, root2);
+            }
+            <span class="keyword">if</span>(!<span class="literal">result</span>){
+                <span class="literal">result</span> = <span class="type">HasSubtree</span>(root1.left, root2);
+            }
+            <span class="keyword">if</span>(!<span class="literal">result</span>){
+                <span class="literal">result</span> = <span class="type">HasSubtree</span>(root1.right, root2);
+            }
+        }
+        <span class="keyword">return</span> <span class="literal">result</span>;       
+    }
+
+public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class="type">TreeNode</span> root2){
+    <span class="keyword">if</span>(root2 == null){
+        <span class="keyword">return</span> <span class="literal">true</span>;
+    }
+    <span class="keyword">if</span>(root1 == null &amp;&amp; root2 != null){
+          <span class="keyword">return</span> <span class="literal">false</span>;  
+    } 
+    <span class="keyword">if</span>(root1.val != root2.val){
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    }
+    <span class="keyword">return</span> areTheySame(root1.left, root2.left)&amp;&amp;areTheySame(root1.right, root2.right);
+}
+</code></pre><p>栈的压入、弹出序列<br>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4，5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）<br>解答：借用一个辅助的栈，遍历压栈顺序，先讲第一个放入栈中，这里是1，然后判断栈顶元素是不是出栈顺序的第一个元素，这里是4，很显然1≠4，所以我们继续压栈，直到相等以后开始出栈，出栈一个元素，则将出栈顺序向后移动一位，直到不相等，这样循环等压栈顺序遍历完成，如果辅助栈还不为空，说明弹出序列不是该栈的弹出顺序。</p>
+<p>二叉搜索树的后序遍历序列<br>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。<br>解答：因为是二叉搜索树，左子树比根结点小，右子数比根节点大。且序列最后一位是根节点</p>
+<p>二叉树中和为某一值的路径<br>输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。<br>解答：其实和DFS类似</p>
+<p>数组中出现次数超过一半的数字<br>数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。<br>解答：采用阵地攻守的思想：<br>第一个数字作为第一个士兵，守阵地；count = 1；<br>遇到相同元素，count++;<br>遇到不相同元素，即为敌人，同归于尽,count–；当遇到count为0的情况，又以新的i值作为守阵地的士兵，继续下去，到最后还留在阵地上的士兵，有可能是主元素。<br>再加一次循环，记录这个士兵的个数看是否大于数组一般即可。复杂度是o(n).</p>
+<p>把数组排成最小的数<br>求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数。<br>解答：一种是遍历的解法，遍历所有位数<br>另一种通过规律分析，分别找个十百千为上的数字</p>
+<p>tips：判断奇偶性用a&amp;1 == 1效率比较高<br>queue是接口，不能实例化<br>Queue<integer> q = new LinkedList&lt;&gt;();offer;poll;isEmpty;</integer></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/08/22/剑指offer(二)/" data-id="cjvl2j0r9000vp8vl52jarggz" class="article-share-link" data-share="baidu" data-title="剑指offer(二)">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-SSH学习-问题-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/15/SSH学习-问题-1/" class="article-date">
@@ -114,7 +196,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/15/SSH学习-问题-1/" data-id="cjv6wqmrg001oegvlsbmss9bn" class="article-share-link" data-share="baidu" data-title="SSH学习-问题(1)">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/15/SSH学习-问题-1/" data-id="cjvl2j0s1001pp8vl5ob5ya02" class="article-share-link" data-share="baidu" data-title="SSH学习-问题(1)">分享到</a>
       
 
       
@@ -170,7 +252,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/09/JVM(二)GC机制/" data-id="cjv6wqmro001yegvl0r6k6huo" class="article-share-link" data-share="baidu" data-title="JVM(二)GC机制">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/09/JVM(二)GC机制/" data-id="cjvl2j0sa001zp8vlknqrqenl" class="article-share-link" data-share="baidu" data-title="JVM(二)GC机制">分享到</a>
       
 
       
@@ -291,7 +373,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjv6wqmre001megvlhfn27l7i" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjvl2j0rz001np8vl5fu44spe" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
       
 
       
@@ -341,7 +423,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjv6wqmqp000wegvld72l4vi4" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjvl2j0ra000xp8vlx9frrj8m" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
       
 
       
@@ -395,7 +477,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjv6wqmrs0021egvleql2vnrz" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjvl2j0sf0022p8vlzfmdfx1n" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
       
 
       
@@ -634,7 +716,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjv6wqmq50004egvl0we1aqy7" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjvl2j0qn0004p8vlhs8erdfp" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
       
 
       
@@ -912,7 +994,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjv6wqmqh000legvlaxee41sb" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjvl2j0r2000mp8vl6wt5ch9s" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
       
 
       
@@ -1062,7 +1144,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjv6wqmq9000aegvlshlrij2n" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjvl2j0qs000ap8vlw3nfbpyy" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
       
 
       
@@ -1110,65 +1192,13 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjv6wqmq70007egvlq4hpn5fx" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjvl2j0qq0007p8vla7tq4zsr" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-动态规划" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/05/16/动态规划/" class="article-date">
-  <time datetime="2016-05-16T12:15:28.000Z" itemprop="datePublished">2016-05-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/16/动态规划/">动态规划</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>感觉老是不能理解动态规划，放上来整理一下思路</p>
-</blockquote>
-<h1 id="1-01背包问题">1.01背包问题</h1><blockquote>
-<p>网上最好的解答是<a href="http://blog.csdn.net/mu399/article/details/7722810" target="_blank" rel="external">http://blog.csdn.net/mu399/article/details/7722810</a></p>
-</blockquote>
-<p>01背包的状态转换方程 f[i,j] = Max{ f[i-1,j-Wi]+Pi( j &gt;= Wi ),  f[i-1,j] }</p>
-<p>f[i,j]表示在前i件物品中选择若干件放在承重为j的背包中，可以取得的最大价值。</p>
-<p> f[i-1,j-Wi]+Pi可以理解为加入第i个物品<br> f[i-1,j]则表示不加入此物品，保持原样</p>
-<p> 代码<br>         public class question1 {<br>            public static void main(String[] args){<br>                int[][] f = new int[6][11];<br>                int[] v = {0,6,3,5,4,6};<br>                int[] w = {0,2,2,6,5,4};<br>                for(int i = 1; i &lt; 6; i++){<br>                    for (int j = 1; j &lt; 11; j++){<br>                        if(w[i] &gt; j){<br>                            f[i][j] = f[i-1][j];<br>                        } else<br>                            f[i][j] = Math.max(f[i-1][j], f[i-1][j - w[i]] + v[i]);<br>                    }<br>                }<br>                for(int i = 1; i &lt; 6; i++){<br>                for (int j = 1; j &lt; 11; j++){<br>                        System.out.print(f[i][j]);<br>                        }<br>                    System.out.print(‘\n’);<br>                    }<br>            }</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjv6wqmqm000segvltj5aedon" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
 
     </footer>
   </div>
@@ -1192,7 +1222,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -1201,7 +1231,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 12.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -1210,7 +1240,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -1220,6 +1250,10 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
+          </li>
         
           <li>
             <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
@@ -1235,10 +1269,6 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
         
           <li>
             <a href="/2019/04/25/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/08/测试/">测试</a>
           </li>
         
       </ul>

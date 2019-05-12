@@ -73,6 +73,91 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-AbstractQueuedSynchronizer队列同步器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/" class="article-date">
+  <time datetime="2019-05-12T15:02:41.000Z" itemprop="datePublished">2019-05-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1、同步状态">1、同步状态</h2><p>使用了一个int成员变量state表示同步状态。提供了三种操作方法</p>
+<p>getState()<br>setState(int newState)<br>compareAndSetState(int expect, int update) 保证原子性</p>
+<h2 id="2、同步队列">2、同步队列</h2><p>即FIFO双向队列</p>
+<p>AQS的内部实现了两个队列，一个同步队列和一个条件队列。<br>条件队列是为Lock实现的一个基础同步器，并且一个线程可能会有多个条件队列，只有在使用了Condition才会存在条件队列。</p>
+<p><img src="en-resource://database/10869:1" alt="e534c422d2099de5741c906ecc955142.jpeg"></p>
+<p>同步队列的作用是，</p>
+<ul>
+<li>在线程获取资源失败后，线程安全（compareAndSetTail）进入同步队列队尾保持自旋等待状态</li>
+<li>在同步队列中的线程在自旋时会判断其前节点是否为head节点，如果为head节点则不断尝试获取资源/锁，获取成功则退出同步队列。</li>
+<li>当线程执行完逻辑后，会释放资源/锁，释放后唤醒其后继节点，将会唤醒后继节点。而后继节点将会在获取锁成功时将自己设置为首节点。</li>
+</ul>
+<h3 id="获取">获取</h3><p>acquire(int)<br>尝试直接获取资源，如果成功则直接返回，失败进入第二步；<br>addWaiter()<br>获取资源失败后，将当前线程加入等待队列的尾部，并标记为独占模式；<br>acquireQueued()<br>使线程在等待队列中自旋等待获取资源，一直获取到资源后才返回。如果在等待过程中被中断过，则返回true，否则返回false。<br>如果线程在等待过程中被中断(interrupt)是不响应的，在获取资源成功之后根据返回的中断状态调用selfInterrupt()方法再把中断状态补上。</p>
+<p>acquireQueued(Node,int)</p>
+<ul>
+<li>结点进入队尾后，检查状态，找到安全休息点；</li>
+<li>调用park()进入waiting状态，等待unpark()或interrupt()唤醒自己；</li>
+<li>被唤醒后，看自己是不是有资格能拿到号。如果拿到，head指向当前结点，并返回从入队到拿到号的整个过程中是否被中断过；如果没拿到，继续流程1</li>
+</ul>
+<p><img src="en-resource://database/11163:1" alt="af5643f7370a49a43ec654ffeeb535ae.png"></p>
+<p>公平模式时只有前驱结点是头结点才尝试获取同步状态，否则进入等待<br>获取当前等待节点的前继节点，如果前继节点为head，说明可以尝试获取锁；<br>调用tryAcquire获取锁，成功后更新head为当前节点；<br>获取资源失败，调用shouldParkAfterFailedAcquire方法检查并更新等待状态。如果前继节点状态为SIGNAL，说明当前节点可以进入waiting状态等待唤醒；被唤醒后，继续自旋重复上述步骤。<br>获取资源成功后返回中断状态。</p>
+<p>tryAcquireNanos<br>在指定时间内获取状态，否则立刻返回</p>
+<h3 id="释放">释放</h3><p>tryRelease(int)<br>直接减掉相应量的资源即可(state-=arg)<br>unparkSuccessor(Node)<br>唤醒下一个节点</p>
+<h2 id="3、独占式/共享式锁">3、独占式/共享式锁</h2><h3 id="独占式：">独占式：</h3><p>有且只有一个线程能获取到锁，如：ReentrantLock；</p>
+<p>独占式每个节点自旋观察自己的前一节点是不是Header节点，如果是，就去尝试获取锁。</p>
+<p>AQS 独占模式获取锁的过程：</p>
+<ul>
+<li>调用自定义同步器的tryAcquire()尝试直接去获取资源，如果成功则直接返回</li>
+<li>没成功，则addWaiter()将该线程封装成 Node 对象并加入等待队列的尾部，并标记为独占模式</li>
+<li>acquireQueued()使线程在等待队列中休息，有机会时（轮到自己，会被unpark()）会去尝试获取资源。获取到资源后才返回。</li>
+<li>如果在整个等待过程中被中断过，则返回true，否则返回false如果线程在等待过程中被中断过，它是不响应的。只是获取资源后才再进行自我中断selfInterrupt()，将中断补上</li>
+</ul>
+<p>AQS 独占模式释放锁的过程：</p>
+<ul>
+<li>release() 根据 tryRelease() 的返回值来判断该线程是否已经完成释放掉资源了，如果已经彻底释放资源(state=0)，要返回true，否则返回false。</li>
+<li>如果已经彻底释放资源，则调用 unparkSuccessor 方法，唤醒等待队列里的下一个线程。</li>
+</ul>
+<h3 id="共享式：">共享式：</h3><p>可以多个线程同时获取到锁，如：CountDownLatch<br>ReadWriteLock的读锁</p>
+<p>AQS 共享模式获取锁的过程：</p>
+<ul>
+<li>调用子类实现的 tryAcquireShared() 方法尝试获取资源，当前线程获取资源成功后，如果还有剩余资源，那么还会唤醒后面的线程来尝试获取资源。</li>
+<li>失败则通过doAcquireShared()进入等待队列park()，直到被unpark()/interrupt()并成功获取到资源才返回。整个等待过程也是忽略中断的。</li>
+</ul>
+<p>AQS 共享模式释放锁的过程：<br>调用子类实现的 tryReleaseShared() 方法释放资源，如果成功释放资源，那么就调用 doReleaseShared() 方法唤醒后面的线程。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2019/05/12/AbstractQueuedSynchronizer队列同步器/" data-id="cjvl2j0pq0000p8vl35thz7d9" class="article-share-link" data-share="baidu" data-title="AbstractQueuedSynchronizer队列同步器">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-HashMap拾遗" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/02/HashMap拾遗/" class="article-date">
@@ -109,7 +194,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/02/HashMap拾遗/" data-id="cjv6wqmru0023egvlgc6vkw5i" class="article-share-link" data-share="baidu" data-title="HashMap拾遗">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/02/HashMap拾遗/" data-id="cjvl2j0sh0024p8vlzqqrr8bb" class="article-share-link" data-share="baidu" data-title="HashMap拾遗">分享到</a>
       
 
       
@@ -165,7 +250,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" data-id="cjv6wqmry0029egvla8pol04f" class="article-share-link" data-share="baidu" data-title="ConcurrentHashMap在JDK7和8的区别">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" data-id="cjvl2j0sk0029p8vl2mvyqno5" class="article-share-link" data-share="baidu" data-title="ConcurrentHashMap在JDK7和8的区别">分享到</a>
       
 
       
@@ -208,7 +293,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/01/new-start-1/" data-id="cjv6wqmr1001aegvl5giob9it" class="article-share-link" data-share="baidu" data-title="new start">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/01/new-start-1/" data-id="cjvl2j0rn001bp8vlhmu30gqp" class="article-share-link" data-share="baidu" data-title="new start">分享到</a>
       
 
       
@@ -257,7 +342,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/04/25/hello-world/" data-id="cjv6wqmr6001eegvlbvnaw89y" class="article-share-link" data-share="baidu" data-title="Hello World">分享到</a>
+        <a data-url="http://yoursite.com/2019/04/25/hello-world/" data-id="cjvl2j0rr001fp8vlf6g25vht" class="article-share-link" data-share="baidu" data-title="Hello World">分享到</a>
       
 
       
@@ -298,7 +383,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/11/08/测试/" data-id="cjv6wqmqd000fegvljud0wt1c" class="article-share-link" data-share="baidu" data-title="测试">分享到</a>
+        <a data-url="http://yoursite.com/2016/11/08/测试/" data-id="cjvl2j0qv000fp8vlta2ayqrk" class="article-share-link" data-share="baidu" data-title="测试">分享到</a>
       
 
       
@@ -339,7 +424,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/09/19/Vipkid-2017/" data-id="cjv6wqmra001hegvlovtx93nb" class="article-share-link" data-share="baidu" data-title="Vipkid 2017">分享到</a>
+        <a data-url="http://yoursite.com/2016/09/19/Vipkid-2017/" data-id="cjvl2j0ru001ip8vlat9u9kzm" class="article-share-link" data-share="baidu" data-title="Vipkid 2017">分享到</a>
       
 
       
@@ -383,7 +468,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/09/19/人人2017/" data-id="cjv6wqmqr000yegvlkdpk930j" class="article-share-link" data-share="baidu" data-title="人人2017">分享到</a>
+        <a data-url="http://yoursite.com/2016/09/19/人人2017/" data-id="cjvl2j0rc000zp8vl83c39vyy" class="article-share-link" data-share="baidu" data-title="人人2017">分享到</a>
       
 
       
@@ -426,7 +511,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/09/06/中兴2016面试/" data-id="cjv6wqmqt0010egvlenjmfg4k" class="article-share-link" data-share="baidu" data-title="post中兴2016面试">分享到</a>
+        <a data-url="http://yoursite.com/2016/09/06/中兴2016面试/" data-id="cjvl2j0rd0011p8vl2zm29avh" class="article-share-link" data-share="baidu" data-title="post中兴2016面试">分享到</a>
       
 
       
@@ -484,95 +569,13 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/29/Struts中动态方法调用/" data-id="cjv6wqmrc001jegvltetzkzyi" class="article-share-link" data-share="baidu" data-title="Struts中动态方法调用">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/29/Struts中动态方法调用/" data-id="cjvl2j0rw001kp8vl0cwec4uc" class="article-share-link" data-share="baidu" data-title="Struts中动态方法调用">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSH/">SSH</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-剑指offer(二)" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/08/22/剑指offer(二)/" class="article-date">
-  <time datetime="2016-08-22T11:31:06.000Z" itemprop="datePublished">2016-08-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/22/剑指offer(二)/">剑指offer(二)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>调整数组顺序使奇数位于偶数前面<br>输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。<br>思路：实际上是排序，要求是稳定，所以快排思路不能用，可用插入，归并。当然也可以空间换时间，但如果在数组中移动可能效果不会太好。</p>
-<p>链表中倒数第k个结点<br>输入一个链表，输出该链表中倒数第k个结点。<br>思路：两个指针，先让第一个指针和第二个指针都指向头结点，然后再让第一个指正走(k-1)步，到达第k个节点。然后两个指针同时往后移动，当第一个结点到达末尾的时候，第二个结点所在位置就是倒数第k个节点了。</p>
-<p>反转链表<br>输入一个链表，反转链表后，输出链表的所有元素。</p>
-<p>树的子结构<br>输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）</p>
-<p>解题思路：递归</p>
-<pre><code>    public class <span class="type">Solution</span> {
-        public boolean <span class="type">HasSubtree</span>(<span class="type">TreeNode</span> root1,<span class="type">TreeNode</span> root2) {
-        boolean <span class="literal">result</span> = <span class="literal">false</span>;
-        <span class="keyword">if</span>(root1 != null &amp;&amp;root2 != null){
-            <span class="keyword">if</span>(root1.val == root2.val){
-                <span class="literal">result</span> = areTheySame(root1, root2);
-            }
-            <span class="keyword">if</span>(!<span class="literal">result</span>){
-                <span class="literal">result</span> = <span class="type">HasSubtree</span>(root1.left, root2);
-            }
-            <span class="keyword">if</span>(!<span class="literal">result</span>){
-                <span class="literal">result</span> = <span class="type">HasSubtree</span>(root1.right, root2);
-            }
-        }
-        <span class="keyword">return</span> <span class="literal">result</span>;       
-    }
-
-public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class="type">TreeNode</span> root2){
-    <span class="keyword">if</span>(root2 == null){
-        <span class="keyword">return</span> <span class="literal">true</span>;
-    }
-    <span class="keyword">if</span>(root1 == null &amp;&amp; root2 != null){
-          <span class="keyword">return</span> <span class="literal">false</span>;  
-    } 
-    <span class="keyword">if</span>(root1.val != root2.val){
-        <span class="keyword">return</span> <span class="literal">false</span>;
-    }
-    <span class="keyword">return</span> areTheySame(root1.left, root2.left)&amp;&amp;areTheySame(root1.right, root2.right);
-}
-</code></pre><p>栈的压入、弹出序列<br>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如序列1,2,3,4,5是某栈的压入顺序，序列4，5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。（注意：这两个序列的长度是相等的）<br>解答：借用一个辅助的栈，遍历压栈顺序，先讲第一个放入栈中，这里是1，然后判断栈顶元素是不是出栈顺序的第一个元素，这里是4，很显然1≠4，所以我们继续压栈，直到相等以后开始出栈，出栈一个元素，则将出栈顺序向后移动一位，直到不相等，这样循环等压栈顺序遍历完成，如果辅助栈还不为空，说明弹出序列不是该栈的弹出顺序。</p>
-<p>二叉搜索树的后序遍历序列<br>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。<br>解答：因为是二叉搜索树，左子树比根结点小，右子数比根节点大。且序列最后一位是根节点</p>
-<p>二叉树中和为某一值的路径<br>输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。<br>解答：其实和DFS类似</p>
-<p>数组中出现次数超过一半的数字<br>数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。如果不存在则输出0。<br>解答：采用阵地攻守的思想：<br>第一个数字作为第一个士兵，守阵地；count = 1；<br>遇到相同元素，count++;<br>遇到不相同元素，即为敌人，同归于尽,count–；当遇到count为0的情况，又以新的i值作为守阵地的士兵，继续下去，到最后还留在阵地上的士兵，有可能是主元素。<br>再加一次循环，记录这个士兵的个数看是否大于数组一般即可。复杂度是o(n).</p>
-<p>把数组排成最小的数<br>求出1~13的整数中1出现的次数,并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、12、13因此共出现6次,但是对于后面问题他就没辙了。ACMer希望你们帮帮他,并把问题更加普遍化,可以很快的求出任意非负整数区间中1出现的次数。<br>解答：一种是遍历的解法，遍历所有位数<br>另一种通过规律分析，分别找个十百千为上的数字</p>
-<p>tips：判断奇偶性用a&amp;1 == 1效率比较高<br>queue是接口，不能实例化<br>Queue<integer> q = new LinkedList&lt;&gt;();offer;poll;isEmpty;</integer></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/08/22/剑指offer(二)/" data-id="cjv6wqmqo000uegvlv2fjmw8c" class="article-share-link" data-share="baidu" data-title="剑指offer(二)">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
 
     </footer>
   </div>
@@ -596,7 +599,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -605,7 +608,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 12.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -614,7 +617,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -624,6 +627,10 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
+          </li>
         
           <li>
             <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
@@ -639,10 +646,6 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
         
           <li>
             <a href="/2019/04/25/hello-world/">Hello World</a>
-          </li>
-        
-          <li>
-            <a href="/2016/11/08/测试/">测试</a>
           </li>
         
       </ul>

@@ -1,22 +1,32 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   
-  <title>test | 第一个番茄</title>
+  <title>AbstractQueuedSynchronizer队列同步器 | 第一个番茄</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="各种学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="test">
-<meta property="og:url" content="http://yoursite.com/test/index.html">
+  <meta name="description" content="1、同步状态使用了一个int成员变量state表示同步状态。提供了三种操作方法
+getState()setState(int newState)compareAndSetState(int expect, int update) 保证原子性
+2、同步队列即FIFO双向队列
+AQS的内部实现了两个队列，一个同步队列和一个条件队列。条件队列是为Lock实现的一个基础同步器，并且一个线程可能会有多个条件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AbstractQueuedSynchronizer队列同步器">
+<meta property="og:url" content="http://yoursite.com/2019/05/12/AbstractQueuedSynchronizer队列同步器/index.html">
 <meta property="og:site_name" content="第一个番茄">
-<meta property="og:description" content="各种学">
-<meta property="og:updated_time" content="2015-09-27T14:15:48.389Z">
+<meta property="og:description" content="1、同步状态使用了一个int成员变量state表示同步状态。提供了三种操作方法
+getState()setState(int newState)compareAndSetState(int expect, int update) 保证原子性
+2、同步队列即FIFO双向队列
+AQS的内部实现了两个队列，一个同步队列和一个条件队列。条件队列是为Lock实现的一个基础同步器，并且一个线程可能会有多个条件">
+<meta property="og:image" content="en-resource://database/10869:1">
+<meta property="og:image" content="en-resource://database/11163:1">
+<meta property="og:updated_time" content="2019-05-12T15:03:16.994Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="test">
-<meta name="twitter:description" content="各种学">
+<meta name="twitter:title" content="AbstractQueuedSynchronizer队列同步器">
+<meta name="twitter:description" content="1、同步状态使用了一个int成员变量state表示同步状态。提供了三种操作方法
+getState()setState(int newState)compareAndSetState(int expect, int update) 保证原子性
+2、同步队列即FIFO双向队列
+AQS的内部实现了两个队列，一个同步队列和一个条件队列。条件队列是为Lock实现的一个基础同步器，并且一个线程可能会有多个条件">
   
     <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
   
@@ -73,10 +83,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-AbstractQueuedSynchronizer队列同步器" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/test/index.html" class="article-date">
-  <time datetime="2015-09-27T14:15:48.000Z" itemprop="datePublished">2015-09-27</time>
+    <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/" class="article-date">
+  <time datetime="2019-05-12T15:02:41.000Z" itemprop="datePublished">2019-05-12</time>
 </a>
     
   </div>
@@ -87,7 +97,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      test
+      AbstractQueuedSynchronizer队列同步器
     </h1>
   
 
@@ -95,21 +105,76 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="1、同步状态">1、同步状态</h2><p>使用了一个int成员变量state表示同步状态。提供了三种操作方法</p>
+<p>getState()<br>setState(int newState)<br>compareAndSetState(int expect, int update) 保证原子性</p>
+<h2 id="2、同步队列">2、同步队列</h2><p>即FIFO双向队列</p>
+<p>AQS的内部实现了两个队列，一个同步队列和一个条件队列。<br>条件队列是为Lock实现的一个基础同步器，并且一个线程可能会有多个条件队列，只有在使用了Condition才会存在条件队列。</p>
+<p><img src="en-resource://database/10869:1" alt="e534c422d2099de5741c906ecc955142.jpeg"></p>
+<p>同步队列的作用是，</p>
+<ul>
+<li>在线程获取资源失败后，线程安全（compareAndSetTail）进入同步队列队尾保持自旋等待状态</li>
+<li>在同步队列中的线程在自旋时会判断其前节点是否为head节点，如果为head节点则不断尝试获取资源/锁，获取成功则退出同步队列。</li>
+<li>当线程执行完逻辑后，会释放资源/锁，释放后唤醒其后继节点，将会唤醒后继节点。而后继节点将会在获取锁成功时将自己设置为首节点。</li>
+</ul>
+<h3 id="获取">获取</h3><p>acquire(int)<br>尝试直接获取资源，如果成功则直接返回，失败进入第二步；<br>addWaiter()<br>获取资源失败后，将当前线程加入等待队列的尾部，并标记为独占模式；<br>acquireQueued()<br>使线程在等待队列中自旋等待获取资源，一直获取到资源后才返回。如果在等待过程中被中断过，则返回true，否则返回false。<br>如果线程在等待过程中被中断(interrupt)是不响应的，在获取资源成功之后根据返回的中断状态调用selfInterrupt()方法再把中断状态补上。</p>
+<p>acquireQueued(Node,int)</p>
+<ul>
+<li>结点进入队尾后，检查状态，找到安全休息点；</li>
+<li>调用park()进入waiting状态，等待unpark()或interrupt()唤醒自己；</li>
+<li>被唤醒后，看自己是不是有资格能拿到号。如果拿到，head指向当前结点，并返回从入队到拿到号的整个过程中是否被中断过；如果没拿到，继续流程1</li>
+</ul>
+<p><img src="en-resource://database/11163:1" alt="af5643f7370a49a43ec654ffeeb535ae.png"></p>
+<p>公平模式时只有前驱结点是头结点才尝试获取同步状态，否则进入等待<br>获取当前等待节点的前继节点，如果前继节点为head，说明可以尝试获取锁；<br>调用tryAcquire获取锁，成功后更新head为当前节点；<br>获取资源失败，调用shouldParkAfterFailedAcquire方法检查并更新等待状态。如果前继节点状态为SIGNAL，说明当前节点可以进入waiting状态等待唤醒；被唤醒后，继续自旋重复上述步骤。<br>获取资源成功后返回中断状态。</p>
+<p>tryAcquireNanos<br>在指定时间内获取状态，否则立刻返回</p>
+<h3 id="释放">释放</h3><p>tryRelease(int)<br>直接减掉相应量的资源即可(state-=arg)<br>unparkSuccessor(Node)<br>唤醒下一个节点</p>
+<h2 id="3、独占式/共享式锁">3、独占式/共享式锁</h2><h3 id="独占式：">独占式：</h3><p>有且只有一个线程能获取到锁，如：ReentrantLock；</p>
+<p>独占式每个节点自旋观察自己的前一节点是不是Header节点，如果是，就去尝试获取锁。</p>
+<p>AQS 独占模式获取锁的过程：</p>
+<ul>
+<li>调用自定义同步器的tryAcquire()尝试直接去获取资源，如果成功则直接返回</li>
+<li>没成功，则addWaiter()将该线程封装成 Node 对象并加入等待队列的尾部，并标记为独占模式</li>
+<li>acquireQueued()使线程在等待队列中休息，有机会时（轮到自己，会被unpark()）会去尝试获取资源。获取到资源后才返回。</li>
+<li>如果在整个等待过程中被中断过，则返回true，否则返回false如果线程在等待过程中被中断过，它是不响应的。只是获取资源后才再进行自我中断selfInterrupt()，将中断补上</li>
+</ul>
+<p>AQS 独占模式释放锁的过程：</p>
+<ul>
+<li>release() 根据 tryRelease() 的返回值来判断该线程是否已经完成释放掉资源了，如果已经彻底释放资源(state=0)，要返回true，否则返回false。</li>
+<li>如果已经彻底释放资源，则调用 unparkSuccessor 方法，唤醒等待队列里的下一个线程。</li>
+</ul>
+<h3 id="共享式：">共享式：</h3><p>可以多个线程同时获取到锁，如：CountDownLatch<br>ReadWriteLock的读锁</p>
+<p>AQS 共享模式获取锁的过程：</p>
+<ul>
+<li>调用子类实现的 tryAcquireShared() 方法尝试获取资源，当前线程获取资源成功后，如果还有剩余资源，那么还会唤醒后面的线程来尝试获取资源。</li>
+<li>失败则通过doAcquireShared()进入等待队列park()，直到被unpark()/interrupt()并成功获取到资源才返回。整个等待过程也是忽略中断的。</li>
+</ul>
+<p>AQS 共享模式释放锁的过程：<br>调用子类实现的 tryReleaseShared() 方法释放资源，如果成功释放资源，那么就调用 doReleaseShared() 方法唤醒后面的线程。</p>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/test/index.html" data-id="cjvl2j0qe0003p8vlhk97t3fs" class="article-share-link" data-share="baidu" data-title="test">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/12/AbstractQueuedSynchronizer队列同步器/" data-id="cjvl2j0pq0000p8vl35thz7d9" class="article-share-link" data-share="baidu" data-title="AbstractQueuedSynchronizer队列同步器">分享到</a>
       
 
       
 
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
     </footer>
   </div>
   
     
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/02/HashMap拾遗/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">HashMap拾遗</div>
+    </a>
+  
+</nav>
+
   
 </article>
 
@@ -264,4 +329,3 @@
 </div>
 </body>
 </html>
-

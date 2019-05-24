@@ -73,6 +73,64 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Struts中动态方法调用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/29/Struts中动态方法调用/" class="article-date">
+  <time datetime="2016-08-29T11:37:57.000Z" itemprop="datePublished">2016-08-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/29/Struts中动态方法调用/">Struts中动态方法调用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>（一）问题有答案了，原来是Struts2的动态方法调用<br>转自<a href="http://blog.csdn.net/javaalpha/article/details/8855368" target="_blank" rel="external">http://blog.csdn.net/javaalpha/article/details/8855368</a><br>动态方法调用就是为了解决一个Action对应多个请求的处理,以免Action太多<br>第一种方式:指定method属性</p>
+<action name="chainAction" class="chapter2.action.Chapter2Action" method="chainAction"><br><result name="chainAction" type="chain">redirect</result><br></action><br><action name="plainText" class="chapter2.action.Chapter2Action" method="plainText"><br><result name="plainText" type="plainText">/WEB-INF/JspPage/chapter2/plaintext.jsp</result><br></action>
+
+<p>第二种<br>第二种方式:感叹号方式(需要开启),官网不推荐使用这种方式,建议大家不要使用.<br>用这种方式需要先开启一个开关</p>
+<p><constant name="struts.enable.DynamicMethodInvocation" value="true"><br>将此常量设置为true,这种方式才能使用,使用见示例<br>Action<br>package chapter3.action;</constant></p>
+<p>public class Chapter3Action {<br>public String result1(){<br>   return “result1”;<br>}</p>
+<p>public String result2(){<br>   return “result2”;<br>}<br>} </p>
+<p>Jsp中访问方式</p>
+<p><body><br>    <a href="${basePath}/chapter3/chapter3Action!result1">result1</a><br><br>    <a href="${basePath}/chapter3/chapter3Action!result2">result2</a><br><br></body><br>如果配置了后缀,必须这样写:<br>/chapter4/chapter4Action!create.action<br>XML中配置方式</p>
+<package name="chapter3" namespace="/chapter3" extends="struts-default"><br>   <action name="chapter3Action" class="chapter3.action.Chapter3Action"><br>    <result name="result1">/WEB-INF/JspPage/chapter3/result1.jsp</result><br>    <result name="result2">/WEB-INF/JspPage/chapter3/result2.jsp</result><br>    <result name="chapter3">/WEB-INF/JspPage/chapter3/chapter3.jsp</result><br>   </action><br></package> 
+
+<p>第三种方式:通配符方式(官网推荐使用)<br>首先得关闭开关</p>
+<p><constant name="struts.enable.DynamicMethodInvocation" value="false"><br>这一种方式是由第一种转变过来的,我们可以看到,第一种方式有很多重复的代码,那么我们可以进行变形,看下面的代码</constant></p>
+<action name="chapter3_*" class="chapter3.action.Chapter3Action" method="{1}"><br><result name="test">/…/test.jsp</result><br></action><br>chapter3_<em>这里的</em>就是你呆会要匹配的字符串,即你在后面的请求中得这样写<br><a href="http://...../" target="_blank" rel="external">http://...../</a> chapter3_create 或 <a href="http://...../" target="_blank" rel="external">http://...../</a> chapter3<em>update<br>注意,这时你action中必须有create和update方法与之匹配,甚至还可以这样匹配<br>&lt;action name=”chapter3</em><em>“ class=”chapter3.action.Chapter3Action”<br>method=”{1}”&gt;<br><result name="test">/…/{1}.jsp</result><br><br>但是这时一定要有对应的JSP页面存在,并且相应的路径不能错,这就对我们的命名进行了强制性的规定,一定要规范.<br>Action方法的顺序一定不能错<br><br>课堂示例:<br>Action<br>public class Chapter4Action extends ActionSupport {<br>public String list(){<br>   return “list”;<br>}<br><br>public String create(){<br>   return “create”;<br>}<br><br>public String index(){<br>   return “index”;<br>}<br>}<br>XML:<br>&lt;action name=”chapter4_</em>“ class=”chapter4.action.Chapter4Action” method=”{1}”&gt;<br>    <result name="{1}">/WEB-INF/JspPage/chapter4/chapter4_{1}.jsp</result><br>
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/08/29/Struts中动态方法调用/" data-id="cjw262g1j001ks8vlz5f4r31i" class="article-share-link" data-share="baidu" data-title="Struts中动态方法调用">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSH/">SSH</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-剑指offer(二)" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/08/22/剑指offer(二)/" class="article-date">
@@ -140,7 +198,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/22/剑指offer(二)/" data-id="cjvl2tjkl000v1cvl3cfxvmc2" class="article-share-link" data-share="baidu" data-title="剑指offer(二)">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/22/剑指offer(二)/" data-id="cjw262g0y000vs8vldorp0s2y" class="article-share-link" data-share="baidu" data-title="剑指offer(二)">分享到</a>
       
 
       
@@ -196,7 +254,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/15/SSH学习-问题-1/" data-id="cjvl2tjlb001p1cvluxhpq5z8" class="article-share-link" data-share="baidu" data-title="SSH学习-问题(1)">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/15/SSH学习-问题-1/" data-id="cjw262g1q001ss8vl03xx0wtz" class="article-share-link" data-share="baidu" data-title="SSH学习-问题(1)">分享到</a>
       
 
       
@@ -252,7 +310,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/09/JVM(二)GC机制/" data-id="cjvl2tjlk001z1cvl0owgt76g" class="article-share-link" data-share="baidu" data-title="JVM(二)GC机制">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/09/JVM(二)GC机制/" data-id="cjw262g1y0022s8vlcvf4kv8b" class="article-share-link" data-share="baidu" data-title="JVM(二)GC机制">分享到</a>
       
 
       
@@ -373,7 +431,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjvl2tjla001n1cvljpy7unjd" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
+        <a data-url="http://yoursite.com/2016/08/02/Strut2配置/" data-id="cjw262g1l001ns8vlkrb34tl4" class="article-share-link" data-share="baidu" data-title="Strut2配置">分享到</a>
       
 
       
@@ -423,7 +481,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjvl2tjkm000x1cvl0pdthxvn" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/15/剑指offer(一)/" data-id="cjw262g0z000xs8vlkvb391cb" class="article-share-link" data-share="baidu" data-title="剑指offer(一)">分享到</a>
       
 
       
@@ -477,7 +535,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjvl2tjlm00221cvllhtd7kdy" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
+        <a data-url="http://yoursite.com/2016/07/01/JVM(一)Java内存区域/" data-id="cjw262g210025s8vle3zi7mpe" class="article-share-link" data-share="baidu" data-title="JVM(一)Java内存区域">分享到</a>
       
 
       
@@ -716,7 +774,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjvl2tjk200041cvl1ih4gq0a" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjw262g0e0004s8vldl6dc4xk" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
       
 
       
@@ -994,7 +1052,7 @@ public boolean areTheySame(<span class="type">TreeNode</span> root1, <span class
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjvl2tjke000m1cvlaj1i098o" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
+        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjw262g0r000ms8vlqngas5l8" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
       
 
       
@@ -1144,61 +1202,13 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjvl2tjk6000a1cvl4gxx7pvi" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjw262g0h000as8vl2q85bdm9" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/操作系统/">操作系统</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-阿里实习面试" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/05/19/阿里实习面试/" class="article-date">
-  <time datetime="2016-05-19T13:39:30.000Z" itemprop="datePublished">2016-05-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/19/阿里实习面试/">阿里实习面试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>阿里的面试不出意料的挂了，确实还有很大差距。HR人很好，聊了聊学习的各方面问题，感觉受益匪浅。</p>
-</blockquote>
-<p>先自我介绍，然后问Java的学习方法和路线。我说我是自学的Java，时间也不长，又做了一段时间Android，本意是表示这方面很弱。结果他就疯狂的问Java的底层实现，算法什么的一点都没问。。。郁闷。。。<br>接下来是技术问题：<br>1.容器的分类；HashMap的底层数据结构是怎样的；如何扩容；存储过程是怎样的；并发下选哪个容器；都是线程安全的HashTable和CurrentHashMap的区别；CurrentHashMap如何实现并发安全；<br>2.数据库索引的数据结构。B+树<br>3.反射的概念，除了new以外如何获得一个对象</p>
-<p>面到这已经面不下去了，然后就随便聊了聊。<br>1.国内很多高校研究生课程是与现实脱节的，去一二线互联网公司得到的的历练是比读研要多的。这点我比较认同，这个行业的变化非常大，一两年就已经翻天覆地了。<br>2.基础很重要。因为很多一线互联网公司包括阿里的工作都是没有先例的，所有框架、工具都是自己做的。只会用各种框架是不够的，必须要知道基础原理，才能把学到的东西迁移到工作上。这一点做的不够。<br>3.语言都是相通的。追逐热点之前先把基础学好，可以事半功倍。还提到面试的岗位和以后实际工作可能有很大不同。<br>4.广度和深度同时兼顾。</p>
-<p>推荐的学习方法：看源码，看GitHub上的源码。<br>找实习基本上就结束了，秋招再来过。继续努力吧少年。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjvl2tjk400071cvlejavo75r" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
 
     </footer>
   </div>
@@ -1222,7 +1232,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -1231,7 +1241,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -1240,7 +1250,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -1250,6 +1260,10 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/24/Spring异步方法-Async注解/">Spring异步方法@Async注解</a>
+          </li>
         
           <li>
             <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
@@ -1265,10 +1279,6 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
         
           <li>
             <a href="/2019/05/01/new-start-1/">new start</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/25/hello-world/">Hello World</a>
           </li>
         
       </ul>

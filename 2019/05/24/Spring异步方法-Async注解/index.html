@@ -4,17 +4,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: 算法 | 第一个番茄</title>
+  <title>Spring异步方法@Async注解 | 第一个番茄</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="各种学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="第一个番茄">
-<meta property="og:url" content="http://yoursite.com/tags/算法/index.html">
+  <meta name="description" content="用法首先要在@Configuration配置@EnableAsync打开异步然后在方法上加上@Async即可，可以加上参数表示指定使用的线程池，否则会采用这些方法将在执行的时候，将会在独立的线程中被执行，调用者无需等待它的完成，即可继续其他的操作。可以无返回值
+@Async  
+public void asyncMethodWithVoidReturnType() {  
+     System.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring异步方法@Async注解">
+<meta property="og:url" content="http://yoursite.com/2019/05/24/Spring异步方法-Async注解/index.html">
 <meta property="og:site_name" content="第一个番茄">
-<meta property="og:description" content="各种学">
+<meta property="og:description" content="用法首先要在@Configuration配置@EnableAsync打开异步然后在方法上加上@Async即可，可以加上参数表示指定使用的线程池，否则会采用这些方法将在执行的时候，将会在独立的线程中被执行，调用者无需等待它的完成，即可继续其他的操作。可以无返回值
+@Async  
+public void asyncMethodWithVoidReturnType() {  
+     System.">
+<meta property="og:updated_time" content="2019-05-24T14:18:32.272Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一个番茄">
-<meta name="twitter:description" content="各种学">
+<meta name="twitter:title" content="Spring异步方法@Async注解">
+<meta name="twitter:description" content="用法首先要在@Configuration配置@EnableAsync打开异步然后在方法上加上@Async即可，可以加上参数表示指定使用的线程池，否则会采用这些方法将在执行的时候，将会在独立的线程中被执行，调用者无需等待它的完成，即可继续其他的操作。可以无返回值
+@Async  
+public void asyncMethodWithVoidReturnType() {  
+     System.">
   
     <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
   
@@ -71,96 +81,91 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/08/22/剑指offer(二)/" class="archive-article-date">
-  <time datetime="2016-08-22T11:31:06.000Z" itemprop="datePublished">8月 22</time>
+      <section id="main"><article id="post-Spring异步方法-Async注解" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/24/Spring异步方法-Async注解/" class="article-date">
+  <time datetime="2019-05-24T14:12:55.000Z" itemprop="datePublished">2019-05-24</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/08/22/剑指offer(二)/">剑指offer(二)</a>
+    <h1 class="article-title" itemprop="name">
+      Spring异步方法@Async注解
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/07/15/剑指offer(一)/" class="archive-article-date">
-  <time datetime="2016-07-15T15:30:43.000Z" itemprop="datePublished">7月 15</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/07/15/剑指offer(一)/">剑指offer(一)</a>
-    </h1>
-  
+        <h2 id="用法">用法</h2><p>首先要在@Configuration配置@EnableAsync打开异步<br>然后在方法上加上@Async即可，可以加上参数表示指定使用的线程池，否则会采用<br>这些方法将在执行的时候，将会在独立的线程中被执行，调用者无需等待它的完成，即可继续其他的操作。<br>可以无返回值</p>
+<pre><code><span class="at_rule">@<span class="keyword">Async</span>  
+public void <span class="function">asyncMethodWithVoidReturnType</span>() </span>{  
+     <span class="tag">System</span><span class="class">.out</span><span class="class">.println</span>("<span class="tag">hello</span>);  
+ }  
+</code></pre><p>可以返回一个Future的子类<br>new AsyncResult<t>();  </t></p>
+<pre><code>@Async  
+ <span class="keyword">public</span> Future&lt;<span class="keyword">String</span>&gt; asyncMethodWithReturnType() {  
+     System.out.<span class="built_in">println</span>(<span class="string">"hello"</span>);  
+     <span class="keyword">try</span> {  
+         Thread.sleep(<span class="number">5000</span>);  
+         <span class="keyword">return</span> <span class="keyword">new</span> AsyncResult&lt;<span class="keyword">String</span>&gt;(<span class="string">"hello world !!!!"</span>);  
+     } <span class="keyword">catch</span> (InterruptedException e) {  
+         <span class="comment">//  </span>
+     }  
+     <span class="keyword">return</span> <span class="keyword">null</span>;  
+ }  
+</code></pre><p> 异常处理</p>
+<ol>
+<li>对于方法返回值是Futrue的异步方法: a) 一种是在调用future的get时捕获异常; b) 在异常方法中直接捕获异常</li>
+<li><ol>
+<li>对于返回值是void的异步方法：通过AsyncUncaughtExceptionHandler处理异常</li>
+</ol>
+</li>
+</ol>
+<p>注意：<br>不能在同一个类里调用@Async方法，因为spring通过AOP来实现异步调用，是面向接口的，后面会讲。这个@Transactional的原因一样</p>
+<h2 id="原理">原理</h2><p>实现原理主要是AOP<br>@Async只是标记要给方法，没有具体逻辑</p>
+<p>整体流程大体可梳理为两条线：<br>1.从注解开始：@EnableAsync–》ProxyAsyncConfiguration类构造一个bean（类型：AsyncAnnotationBeanPostProcessor）<br>2.从AsyncAnnotationBeanPostProcessor这个类的bean的生命周期走：AOP-Advisor切面初始化（setBeanFactory()）–》AOP-生成代理类AopProxy（postProcessAfterInitialization()）–》AOP-切点执行（InvocationHandler.invoke）</p>
+<p>@EnableAsync -&gt;@Import(AsyncConfigurationSelector.class) -&gt; ProxyAsyncConfiguration#asyncAdvisor</p>
+<p>-&gt;创建ProxyAsyncConfiguration#new AsyncAnnotationBeanPostProcessor()<br>(AsyncAnnotationBeanPostProcessor extends AbstractBeanFactoryAwareAdvisingPostProcessor extends AbstractAdvisingBeanPostProcessor)</p>
+<p>-&gt;AsyncAnnotationBeanPostProcessor -&gt; setBeanFactory()）-&gt; new AsyncAnnotationAdvisor<br>(AOP-Advisor切面初始化)</p>
+<p>(AbstractBeanFactoryAwareAdvisingPostProcessor extends AbstractAdvisingBeanPostProcessor)<br>-&gt;AbstractAdvisingBeanPostProcessor -&gt;postProcessAfterInitialization()<br>(AOP-生成代理类AopProxy,最终生成JdkDynamicAopProxy)</p>
+<p>-&gt;JdkDynamicAopProxy#invoke()<br>(构造ReflectiveMethodInvocation)<br>-&gt;invocation = new ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);<br>-&gt;invocation.proceed()<br>-&gt;ReflectiveMethodInvocation#proceed()<br>-&gt;InterceptorAndDynamicMethodMatcher.interceptor.invoke(this)<br>-&gt;AsyncExecutionInterceptor#invoke()<br>-&gt;doSubmit(task, executor, invocation.getMethod().getReturnType())<br>(构建任务，然后submit到线程池 )</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/06/05/大数据集下的内部排序与外部排序/" class="archive-article-date">
-  <time datetime="2016-06-05T14:44:45.000Z" itemprop="datePublished">6月 5</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/06/05/大数据集下的内部排序与外部排序/">大数据集下的内部排序与外部排序</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/05/16/动态规划/" class="archive-article-date">
-  <time datetime="2016-05-16T12:15:28.000Z" itemprop="datePublished">5月 16</time>
-</a>
+    </div>
+    <footer class="article-footer">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/05/16/动态规划/">动态规划</a>
-    </h1>
-  
+        <a data-url="http://yoursite.com/2019/05/24/Spring异步方法-Async注解/" data-id="cjw262g1o001ps8vlbpc8vqab" class="article-share-link" data-share="baidu" data-title="Spring异步方法@Async注解">分享到</a>
+      
 
-    </header>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">AbstractQueuedSynchronizer队列同步器</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
       
       <aside id="sidebar">

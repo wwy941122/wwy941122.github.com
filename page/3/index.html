@@ -73,6 +73,156 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-进程相关实验" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/05/26/进程相关实验/" class="article-date">
+  <time datetime="2016-05-26T14:54:22.000Z" itemprop="datePublished">2016-05-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/26/进程相关实验/">进程相关实验</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li>Cygwin简介及基础命令</li>
+</ol>
+<blockquote>
+<p>Cygwin是一个在windows平台上运行的类UNIX模拟环境，是cygnus solutions公司开发的自由软件它对于学习UNIX/Linux操作环境，或者从UNIX到Windows的应用程序移植，或者进行某些特殊的开发工作，尤其是使用GNU工具集在Windows上进行嵌入式系统开发，非常有用。随着嵌入式系统开发在国内日渐流行，越来越多的开发者对Cygwin产生了兴趣。                             —-百度百科</p>
+</blockquote>
+<p>本来就想学些linux,原来以为cygwin比较麻烦，结果。。。</p>
+<p>安装的是老师提供的版本，注意选择gcc 和 vi（如果需要，实际上非常难用），装完后就可以使用了，基本功能和linux差不多</p>
+<p>基本指令有：来自<a href="http://blog.163.com/stm32f103vct6@126/blog/static/166743479201211592813232/" target="_blank" rel="external">这里</a><br>pwd 显示当前的路径<br>cygpath -dm “<code>pwd</code>“ 显示当前的完整路径（即windows格式的路径）<br>cd 改变当前路径，无参数时进入对应用户的home目录<br>ls 列出当前目录下的文件。此命令有N多参数，比如ls -al<br>ps 列出当前系统进程<br>kill 杀死某个进程<br>mkdir 建立目录<br>rmdir 删除目录<br>rm 删除文件<br>mv 文件改名或目录改名<br>man 联机帮助<br>less 显示文件的最末几行</p>
+<p>———————————————————————<br>ls #以默认方式显示当前目录文件列表<br>ls –a #显示所有文件包括隐藏文件<br>ls –l #显示文件属性，包括大小，日期，符号连接，是否可读写及是否可执行<br>ls –color=never *.so &gt; obj #不显示文字颜色,将所有so文件记录到obj文件中</p>
+<p>———————————————————————</p>
+<p>cd dir #切换到当前目录下的dir目录<br>cd .. #切换到到上一级目录<br>cd ../.. #切换到上二级目录<br>cd ~ #切换到用户目录，比如是root用户，则切换到/root下</p>
+<p>———————————————————————<br>rm file #删除某一个文件<br>rm -fr dir #删除当前目录下叫dir的整个目录</p>
+<p>———————————————————————<br>cp source target #将文件source 复制为 target<br>cp /root/source . #将/root下的文件source复制到当前目录<br>cp –av soure_dir target_dir #将整个目录复制，两目录完全一样<br>cp –fr source_dir target_dir #将整个目录复制，并且是以非链接方式复制，当source目录带有符号链接时，两个目录不相同</p>
+<ol>
+<li><p>fork()命令<br>fork()命令调用方法是 pid_t fork(void); 需要头文件#include <unistd.h>。<br>调用成功后，会在子进程中返回0，在父进程中返回子进程的pid，所以一次可以判定是在子进程还是在父进程中。<br>比如:</unistd.h></p>
+<pre><code><span class="keyword">if</span>((fork()==<span class="number">0</span>){
+<span class="comment">//此处是子进程</span>
+} <span class="keyword">else</span> {
+<span class="comment">//此处是父进程</span>
+
+}
+</code></pre><p>调用不成功返回-1.</p>
+</li>
+</ol>
+<h4 id="先创建子进程，再创建孙子进程">先创建子进程，再创建孙子进程</h4><pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+    <span class="keyword">int</span> p1,p2;
+    <span class="keyword">while</span>((p1 = fork()) == -<span class="number">1</span>);<span class="comment">//创建子进程</span>
+     <span class="keyword">if</span>(p1 == <span class="number">0</span>){ <span class="comment">//pid等于0表示在子进程中                </span>
+        <span class="keyword">while</span>((p2 = fork()) == -<span class="number">1</span>);<span class="comment">//子进程中创建孙子进程        </span>
+        <span class="keyword">if</span>(p2 == <span class="number">0</span>){
+        <span class="built_in">printf</span>(<span class="string">"This is grandson. pid is %d. \n"</span>, getpid());
+        } <span class="keyword">else</span>{
+            <span class="built_in">printf</span>(<span class="string">"This is son. pid is %d. my son pid is %d"</span>, getpid(),p2);
+        }        
+
+     }  <span class="keyword">else</span> {<span class="comment">//pid 大于0，即此为父进程                 </span>
+            <span class="built_in">printf</span>(<span class="string">"this is father. pid is %d. my son pid is %d.\n"</span>,getpid(),p1);    
+     }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><h4 id="创建两个并列的子进程">创建两个并列的子进程</h4><pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+         <span class="keyword">int</span> p1,p2;
+    <span class="keyword">int</span> i;
+    <span class="keyword">while</span>((p1 = fork()) == -<span class="number">1</span>);
+    <span class="keyword">if</span>(p1 == <span class="number">0</span>){ <span class="comment">//pid等于0表示在子进程中</span>
+        <span class="built_in">printf</span>(<span class="string">"This is son1. pid is %d\n"</span>, getpid());
+   } <span class="keyword">else</span> {<span class="comment">//pid 大于0，即此为父进程</span>
+        <span class="keyword">while</span> ((p2 = fork()) == -<span class="number">1</span>);
+        <span class="keyword">if</span>(p2 == <span class="number">0</span>){
+        <span class="built_in">printf</span>(<span class="string">"This is son2. pid is %d\n"</span>, getpid());
+        } <span class="keyword">else</span> {
+            <span class="built_in">printf</span>(<span class="string">"this is father. pid is %d. my son1 pid is %d. my son2 pid is %d\n"</span>,getpid(),p1,p2);
+        }    
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><ol>
+<li><p>exec函数族<br>执行exec函数族中的函数后，启动一个新程序，替换当前进程，获得当前进程的pid。<br>在exec函数族中,<br>有后缀p时，函数可以利用DOS的PATH变量查找子程序文件。假如你希望执行命令 <code>/bin/cat /etc/passwd /etc/group,</code><br>有后缀l时，希望接收以逗号分隔的参数列表，列表以NULL指针作为结束标志<code>execl(&quot;/bin/cat&quot;,&quot;/etc/passed&quot;,&quot;/etc/group&quot;,NULL);</code><br>有后缀v时，希望接收到一个以NULL结尾的字符串数组的指针<code>char* argv[]={&quot;/bin/cat&quot;,&quot;/etc/passed&quot;,&quot;/etc/group&quot;,NULL}execv( &quot;/bin/cat&quot;, argv );</code><br> 有后缀e时，函数传递指定参数envp，允许改变子进程的环境，无后缀e时，子进程使用当前程序的环境。envp也是一个以NULL结尾的字符串数组指针</p>
+<p>本实验中，用了excel函数<code>execl(&quot;/bin/cat&quot;,argv[0],argv[1],NULL);</code><br>第一个参数表示新程序的路径，后面便是传的参数，分别对应<code>argv[0]</code>,<code>argv[1]</code>……等</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span>
+<span class="preprocessor">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span>
+
+ <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span>{
+<span class="keyword">char</span> p1[<span class="number">10</span>];
+<span class="keyword">char</span> p2[<span class="number">10</span>];
+<span class="keyword">char</span> p3[<span class="number">10</span>];
+<span class="keyword">char</span> command[<span class="number">10</span>];
+<span class="built_in">printf</span>(<span class="string">"the progress pid is %d\n"</span>, getpid());
+<span class="built_in">printf</span>(<span class="string">"please choose command(max,min,average):\n"</span>);
+
+<span class="built_in">scanf</span>(<span class="string">"%s"</span>,command);
+<span class="keyword">if</span>(!<span class="built_in">strcmp</span>(command, <span class="string">"min"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input two numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s"</span>, p1, p2);
+
+    <span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./min.exe"</span>,<span class="string">"min"</span>,p1,p2,<span class="literal">NULL</span>);
+}
+
+} <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(command, <span class="string">"max"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input two numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s"</span>,p1,p2);
+
+<span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./max.exe"</span>,<span class="string">"max"</span>,p1,p2,<span class="literal">NULL</span>);
+}
+} <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(command, <span class="string">"average"</span>)){
+<span class="built_in">printf</span>(<span class="string">"please input three numbers:\n"</span>);
+<span class="built_in">scanf</span>(<span class="string">"%s%s%s"</span>,p1,p2,p3);
+
+<span class="keyword">if</span> (fork() == <span class="number">0</span>){
+execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal">NULL</span>);
+}
+} <span class="keyword">else</span> {
+<span class="built_in">printf</span>(<span class="string">"wrong command!\n"</span>);
+}
+<span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjwejhw0o000aykvlylk0ld6d" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/操作系统/">操作系统</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-阿里实习面试" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/05/19/阿里实习面试/" class="article-date">
@@ -106,7 +256,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjwd6azjf0007vcvl38aotuhj" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjwejhw0m0007ykvlybrbll2c" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
       
 
       
@@ -158,7 +308,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjwd6azju000tvcvldf6n0d54" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjwejhw14000wykvlqo1a8btp" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
       
 
       
@@ -211,7 +361,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjwd6azjo000jvcvl50sesmka" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjwejhw0x000mykvlj41x17a7" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
       
 
       
@@ -293,7 +443,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjwd6azjs000rvcvlayhup8q6" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjwejhw12000uykvlrdc9o5du" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
       
 
       
@@ -337,7 +487,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/10/一个月总结/" data-id="cjwd6azk20013vcvlb2rzc8gn" class="article-share-link" data-share="baidu" data-title="一个月总结">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/10/一个月总结/" data-id="cjwejhw1d0016ykvlmeujpktd" class="article-share-link" data-share="baidu" data-title="一个月总结">分享到</a>
       
 
       
@@ -437,7 +587,7 @@ Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scann
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/04/腾讯实习笔试/" data-id="cjwd6azjj000cvcvl4621k6hu" class="article-share-link" data-share="baidu" data-title="腾讯实习笔试">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/04/腾讯实习笔试/" data-id="cjwejhw0p000cykvlymj8iec3" class="article-share-link" data-share="baidu" data-title="腾讯实习笔试">分享到</a>
       
 
       
@@ -549,7 +699,7 @@ public void run(){
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/29/Android笔记-网络/" data-id="cjwd6azl4002fvcvljh11ccha" class="article-share-link" data-share="baidu" data-title="Android笔记-网络">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/29/Android笔记-网络/" data-id="cjwejhw2i002iykvl75800i1q" class="article-share-link" data-share="baidu" data-title="Android笔记-网络">分享到</a>
       
 
       
@@ -664,7 +814,7 @@ handleMessage(msg);
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/24/Android笔记-异步消息处理机制/" data-id="cjwd6azl7002jvcvlbdwuo8lk" class="article-share-link" data-share="baidu" data-title="Android笔记-异步消息处理机制">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/24/Android笔记-异步消息处理机制/" data-id="cjwejhw2l002mykvlscr4f25x" class="article-share-link" data-share="baidu" data-title="Android笔记-异步消息处理机制">分享到</a>
       
 
       
@@ -718,62 +868,13 @@ conn / as sysdba
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjwd6azkq0020vcvl1hmmz2bk" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjwejhw220023ykvlf10ciocd" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android笔记-BroadcastReceiver" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/16/Android笔记-BroadcastReceiver/" class="article-date">
-  <time datetime="2016-03-16T13:34:20.000Z" itemprop="datePublished">2016-03-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/16/Android笔记-BroadcastReceiver/">Android笔记-BroadcastReceiver</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>Broadcast Receiver 是四大组件之一，非常值得学习</p>
-</blockquote>
-<h2 id="笔记">笔记</h2><p>1.广播分为系统广播和有序广播。也可分为系统广播和自定义广播</p>
-<p>2.广播的左右实际上就是在系统和app，app和app，甚至app内传播信息。系统自身也会在各种情况下发出广播，比如，开机，网络状态变化时等等</p>
-<p>3.接收器可分为动态和静态。<br>动态比较灵活，注册了就可以用，比如BroadcastReceiver里的检测网络变化得例子。但是必须要应用在启动后才能实现<br>静态要在Manifest里注册receiver后才能用，可以无视应用是否启动。比如开机检测那个例子。</p>
-<p>4.最后那个强制下线的例子，有很多东西可以说。<br>建立一个所有Activity的父类可以实现对所有类操作<br>TableLayout的使用，同一个应用里的广播发送和接收<br>AlertDialog的使用：先用AlertDialog.builder配置细节<br>权限的申请<br>在广播接收器启动活动要在Intent加入FLAG_ACTIVITY_NEW_TAST标志<br>对话框类型设置</p>
-<h2 id="问题：context,和最后intent">问题：context,和最后intent</h2>
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/03/16/Android笔记-BroadcastReceiver/" data-id="cjwd6azlc002qvcvl52qyy26o" class="article-share-link" data-share="baidu" data-title="Android笔记-BroadcastReceiver">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
 
     </footer>
   </div>
@@ -797,7 +898,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小tips/">小tips</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -806,7 +907,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/小tips/" style="font-size: 10px;">小tips</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
     </div>
   </div>
 
@@ -815,7 +916,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -825,6 +926,10 @@ conn / as sysdba
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/06/01/机器传文件方法/">机器传文件方法</a>
+          </li>
         
           <li>
             <a href="/2019/05/24/Spring异步方法-Async注解/">Spring异步方法@Async注解</a>
@@ -840,10 +945,6 @@ conn / as sysdba
         
           <li>
             <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/01/new-start-1/">new start</a>
           </li>
         
       </ul>

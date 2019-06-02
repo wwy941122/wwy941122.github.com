@@ -4,30 +4,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Oracle数据库安装中的坑 | 第一个番茄</title>
+  <title>机器传文件方法 | 第一个番茄</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="安装中遇到了几个坑，万一被人看到了呢
-
-1.系统的默认共享一定要打开。不然会出现INS-30131错误。可以参考这个打开
-
-先在控制面板的“服务”，看SERVER服务是否启动，如果没有启动，则将设置为自动或者手动，然后再选择启动。开启系统的默认共享的方法1.检查AutoShareServer和AutoShareWks注册表值是否为0。2.找到注册表中的HKEY_LOCAL_MACHINE\Syst">
+  <meta name="description" content="1、rz、sz最简单的传输方法，但不一定在所有环境可用在终端直接运行命令即可接收文件（从本地）1rz
+发送文件（到本地）1sz file
+2、scp这种方法需要密码，因为一般有跳板机，所以基本上用不了1scp root@www.runoob.com:/home/root/others/music /home/space/music/1.mp3
+3、nc在本地和pc之间建立tcp连接1234#接收">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Oracle数据库安装中的坑">
-<meta property="og:url" content="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/index.html">
+<meta property="og:title" content="机器传文件方法">
+<meta property="og:url" content="http://yoursite.com/2019/06/01/机器传文件方法/index.html">
 <meta property="og:site_name" content="第一个番茄">
-<meta property="og:description" content="安装中遇到了几个坑，万一被人看到了呢
-
-1.系统的默认共享一定要打开。不然会出现INS-30131错误。可以参考这个打开
-
-先在控制面板的“服务”，看SERVER服务是否启动，如果没有启动，则将设置为自动或者手动，然后再选择启动。开启系统的默认共享的方法1.检查AutoShareServer和AutoShareWks注册表值是否为0。2.找到注册表中的HKEY_LOCAL_MACHINE\Syst">
-<meta property="og:updated_time" content="2016-03-16T14:20:34.519Z">
+<meta property="og:description" content="1、rz、sz最简单的传输方法，但不一定在所有环境可用在终端直接运行命令即可接收文件（从本地）1rz
+发送文件（到本地）1sz file
+2、scp这种方法需要密码，因为一般有跳板机，所以基本上用不了1scp root@www.runoob.com:/home/root/others/music /home/space/music/1.mp3
+3、nc在本地和pc之间建立tcp连接1234#接收">
+<meta property="og:updated_time" content="2019-06-02T06:02:30.124Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Oracle数据库安装中的坑">
-<meta name="twitter:description" content="安装中遇到了几个坑，万一被人看到了呢
-
-1.系统的默认共享一定要打开。不然会出现INS-30131错误。可以参考这个打开
-
-先在控制面板的“服务”，看SERVER服务是否启动，如果没有启动，则将设置为自动或者手动，然后再选择启动。开启系统的默认共享的方法1.检查AutoShareServer和AutoShareWks注册表值是否为0。2.找到注册表中的HKEY_LOCAL_MACHINE\Syst">
+<meta name="twitter:title" content="机器传文件方法">
+<meta name="twitter:description" content="1、rz、sz最简单的传输方法，但不一定在所有环境可用在终端直接运行命令即可接收文件（从本地）1rz
+发送文件（到本地）1sz file
+2、scp这种方法需要密码，因为一般有跳板机，所以基本上用不了1scp root@www.runoob.com:/home/root/others/music /home/space/music/1.mp3
+3、nc在本地和pc之间建立tcp连接1234#接收">
   
     <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
   
@@ -84,10 +81,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-Oracle数据库安装中的坑" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-机器传文件方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/03/16/Oracle数据库安装中的坑/" class="article-date">
-  <time datetime="2016-03-16T14:02:53.000Z" itemprop="datePublished">2016-03-16</time>
+    <a href="/2019/06/01/机器传文件方法/" class="article-date">
+  <time datetime="2019-06-01T08:16:19.000Z" itemprop="datePublished">2019-06-01</time>
 </a>
     
   </div>
@@ -98,7 +95,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Oracle数据库安装中的坑
+      机器传文件方法
     </h1>
   
 
@@ -106,30 +103,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>安装中遇到了几个坑，万一被人看到了呢</p>
-</blockquote>
-<p>1.系统的默认共享一定要打开。不然会出现INS-30131错误。可以参考<a href="blog.csdn.net/holandstone/article/details/14165377">这个</a>打开</p>
-<blockquote>
-<p>先在控制面板的“服务”，看SERVER服务是否启动，如果没有启动，则将设置为自动或者手动，然后再选择启动。<br>开启系统的默认共享的方法<br>1.检查AutoShareServer和AutoShareWks注册表值是否为0。<br>2.找到注册表中的HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanServer\Parameters。<br>3.将下面子项中的AutoShareServer和AutoShareWks DWORD值改为1。<br>4.重启。通常Win2003、Win2000\XP会在启动时自动创建。<br>5.启动后，可以通过运行CMD命令进入命令行模式，再运行net share，再共享列表中会看到Admin$、C$\IPC$等默认共享。</p>
-</blockquote>
-<p>2.解压文件两个要分开解压。。。不要懒。不然会遇到无法找到文件的错误</p>
-<p>3.安装的最后几步有个用户管理，最好点进去看看默认的账户和密码。不然只能看<a href="http://zhidao.baidu.com/link?url=_fJWkzSfMZQdM5mHKwaNqXAMW3fGrUTFA8QdR2COltquhs3UxM7tv7N0GgRc8WqObcgIyOgXBaZGjFVsIjQE5_" target="_blank" rel="external">这个</a>修改用户名和密码等</p>
-<pre><code>sqlplus /nolog
-conn / as sysdba
-<span class="operator"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="keyword">test</span> IDETIFIED <span class="keyword">BY</span> <span class="string">"test"</span>;</span>
-</code></pre>
+        <p>1、rz、sz<br>最简单的传输方法，但不一定在所有环境可用<br>在终端直接运行命令即可<br>接收文件（从本地）<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rz</span><br></pre></td></tr></table></figure></p>
+<p>发送文件（到本地）<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sz <span class="type">file</span></span><br></pre></td></tr></table></figure></p>
+<p>2、scp<br>这种方法需要密码，因为一般有跳板机，所以基本上用不了<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp root<span class="annotation">@www</span>.runoob.<span class="string">com:</span><span class="regexp">/home/</span>root<span class="regexp">/others/</span>music <span class="regexp">/home/</span>space<span class="regexp">/music/</span><span class="number">1.</span>mp3</span><br></pre></td></tr></table></figure></p>
+<p>3、nc<br>在本地和pc之间建立tcp连接<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#接收 （打开监听端口）</span></span><br><span class="line">nc -l -p  [port]  &gt; <span class="type">file</span> </span><br><span class="line"><span class="comment">#发送  </span></span><br><span class="line">nc [ip] [port] &lt; <span class="type">file</span></span><br></pre></td></tr></table></figure></p>
+<p>4、搭建简单的http服务器<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">python</span> -m SimpleHTTPServer</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjwejhw220023ykvlf10ciocd" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
+        <a data-url="http://yoursite.com/2019/06/01/机器传文件方法/" data-id="cjwejhw0t000gykvltylyt8ev" class="article-share-link" data-share="baidu" data-title="机器传文件方法">分享到</a>
       
 
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小tips/">小tips</a></li></ul>
 
     </footer>
   </div>
@@ -137,19 +127,10 @@ conn / as sysdba
     
 <nav id="article-nav">
   
-    <a href="/2016/03/24/Android笔记-异步消息处理机制/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">
-        
-          Android笔记-异步消息处理机制
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/03/16/Android笔记-BroadcastReceiver/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/05/24/Spring异步方法-Async注解/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">Android笔记-BroadcastReceiver</div>
+      <div class="article-nav-title">Spring异步方法@Async注解</div>
     </a>
   
 </nav>

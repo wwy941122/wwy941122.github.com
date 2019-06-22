@@ -73,6 +73,175 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Android笔记-异步消息处理机制" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/24/Android笔记-异步消息处理机制/" class="article-date">
+  <time datetime="2016-03-24T12:08:10.000Z" itemprop="datePublished">2016-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/24/Android笔记-异步消息处理机制/">Android笔记-异步消息处理机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Android的异步消息处理机制，即handler、looper和messagequeue三者的关系。</p>
+</blockquote>
+<h2 id="1-线程">1.线程</h2><p>关于线程的两种实现方式、生命周期等等，这些java中的知识就不赘述了。<br>Android中的线程分为MainThread（主线程）和WorkerThread（子线程）。只有MainThread可以刷新UI（除progressbar.setProgress），用WorkerThread进行UI操作可能导致程序崩溃。</p>
+<h2 id="2-异步消息处理">2.异步消息处理</h2><p>以上的问题的解决办法，具体来说就是：建立一个子类继承handler，然后在主线创建handler实例。然后在子线程创建Message实例（handler.obtainMessage()），用handler.sendmessage()把message送出到Messagequeue，最后Looper把Message取出，再用handler对象中的handleMessage方法处理消息。<br>图图图</p>
+<h2 id="3-实现原理">3.实现原理</h2><ol>
+<li><p>实现这个机制主要利用了java的ThreadLocal<br><code>static final ThreadLocal&lt;Looper&gt; sThreadLocal = new ThreadLocal&lt;Looper&gt;();</code><br><code>sThreadLocal.set(new Looper(quitAllowed));</code><br>。使一个线程只有一个looper对象与之对应<br>ThreadLocal的set()把线程对象作为键，生成键值对。</p>
+</li>
+<li><p>Handler构造方法中 <code>mLooper = Looper.myLooper();</code>。这样，Looper、Thread、Handler就对应起来。一个Handler，一个loop，一个messagequeue。</p>
+</li>
+<li><p>Loop.loop()<br> public static void loop() {</p>
+<pre><code><span class="keyword">final</span> Looper me = myLooper();
+<span class="keyword">if</span> (me == <span class="keyword">null</span>) {
+    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"No Looper; Looper.prepare() wasn't called on this thread."</span>);
+}
+<span class="keyword">final</span> MessageQueue queue = me.mQueue;
+
+<span class="comment">// Make sure the identity of this thread is that of the local process,</span>
+<span class="comment">// and keep track of what that identity token actually is.</span>
+Binder.clearCallingIdentity();
+<span class="keyword">final</span> <span class="keyword">long</span> ident = Binder.clearCallingIdentity();
+
+<span class="keyword">for</span> (;;) {
+    Message msg = queue.<span class="keyword">next</span>(); <span class="comment">// might block</span>
+    <span class="keyword">if</span> (msg == <span class="keyword">null</span>) {
+        <span class="comment">// No message indicates that the message queue is quitting.</span>
+        <span class="keyword">return</span>;
+    }
+
+    <span class="comment">// This must be in a local variable, in case a UI event sets the logger</span>
+    Printer logging = me.mLogging;
+    <span class="keyword">if</span> (logging != <span class="keyword">null</span>) {
+        logging.<span class="keyword">println</span>(<span class="string">"&gt;&gt;&gt;&gt;&gt; Dispatching to "</span> + msg.target + <span class="string">" "</span> +
+                msg.callback + <span class="string">": "</span> + msg.what);
+    }
+
+    msg.target.dispatchMessage(msg);
+
+    <span class="keyword">if</span> (logging != <span class="keyword">null</span>) {
+        logging.<span class="keyword">println</span>(<span class="string">"&lt;&lt;&lt;&lt;&lt; Finished to "</span> + msg.target + <span class="string">" "</span> + msg.callback);
+    }
+
+    <span class="comment">// Make sure that during the course of dispatching the</span>
+    <span class="comment">// identity of the thread wasn't corrupted.</span>
+    <span class="keyword">final</span> <span class="keyword">long</span> newIdent = Binder.clearCallingIdentity();
+    <span class="keyword">if</span> (ident != newIdent) {
+        Log.wtf(TAG, <span class="string">"Thread identity changed from 0x"</span>
+                + <span class="keyword">Long</span>.toHexString(ident) + <span class="string">" to 0x"</span>
+                + <span class="keyword">Long</span>.toHexString(newIdent) + <span class="string">" while dispatching to "</span>
+                + msg.target.getClass().getName() + <span class="string">" "</span>
+                + msg.callback + <span class="string">" what="</span> + msg.what);
+    }
+
+    msg.recycleUnchecked();
+}
+</code></pre><p> }</p>
+</li>
+</ol>
+<p>不断地调用的MessageQueue的next()方法,它的简单逻辑就是如果当前MessageQueue中存在mMessages(即待处理消息)，就将这个消息出队，然后让下一条消息成为mMessages，否则就进入一个阻塞状态，一直等到有新的消息入队。msg.target指的是Handler，然后用dispatchMessage方法</p>
+<ol>
+<li> public void dispatchMessage(Message msg) {<br> if (msg.callback != null) {  <pre><code>handleCallback<span class="list">(<span class="keyword">msg</span>)</span><span class="comment">;  </span>
+</code></pre> } else {  <pre><code><span class="keyword">if</span> (mCallback != <span class="literal">null</span>) {  
+    <span class="keyword">if</span> (mCallback.handleMessage(msg)) {  
+        <span class="keyword">return</span>;  
+    }  
+}  
+handleMessage(msg);  
+</code></pre> }<br>}  </li>
+</ol>
+<p>最终调用handleMessage来实现功能。</p>
+<h2 id="4-_Handler-post(Runnable_r)方法">4. Handler.post(Runnable r)方法</h2><p>dispatchMessage中，若callback不为null，则handleCallback<br>     private static void handleCallback(Message message) {<br>        message.callback.run();<br>    }</p>
+<p>直接运行这个Runnable。不会新开线程，直接运行在主线程中.实现了把整段代码传进主线程中的功能。</p>
+<h2 id="5-loopPrepare()">5.loopPrepare()</h2><p>在创建实例之前必须要有loopPrepare()方法。主线程里在初始化时已经调用</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/24/Android笔记-异步消息处理机制/" data-id="cjx7a28xq002rngvlqg22lf0w" class="article-share-link" data-share="baidu" data-title="Android笔记-异步消息处理机制">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Oracle数据库安装中的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/16/Oracle数据库安装中的坑/" class="article-date">
+  <time datetime="2016-03-16T14:02:53.000Z" itemprop="datePublished">2016-03-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/16/Oracle数据库安装中的坑/">Oracle数据库安装中的坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>安装中遇到了几个坑，万一被人看到了呢</p>
+</blockquote>
+<p>1.系统的默认共享一定要打开。不然会出现INS-30131错误。可以参考<a href="blog.csdn.net/holandstone/article/details/14165377">这个</a>打开</p>
+<blockquote>
+<p>先在控制面板的“服务”，看SERVER服务是否启动，如果没有启动，则将设置为自动或者手动，然后再选择启动。<br>开启系统的默认共享的方法<br>1.检查AutoShareServer和AutoShareWks注册表值是否为0。<br>2.找到注册表中的HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanServer\Parameters。<br>3.将下面子项中的AutoShareServer和AutoShareWks DWORD值改为1。<br>4.重启。通常Win2003、Win2000\XP会在启动时自动创建。<br>5.启动后，可以通过运行CMD命令进入命令行模式，再运行net share，再共享列表中会看到Admin$、C$\IPC$等默认共享。</p>
+</blockquote>
+<p>2.解压文件两个要分开解压。。。不要懒。不然会遇到无法找到文件的错误</p>
+<p>3.安装的最后几步有个用户管理，最好点进去看看默认的账户和密码。不然只能看<a href="http://zhidao.baidu.com/link?url=_fJWkzSfMZQdM5mHKwaNqXAMW3fGrUTFA8QdR2COltquhs3UxM7tv7N0GgRc8WqObcgIyOgXBaZGjFVsIjQE5_" target="_blank" rel="external">这个</a>修改用户名和密码等</p>
+<pre><code>sqlplus /nolog
+conn / as sysdba
+<span class="operator"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="keyword">test</span> IDETIFIED <span class="keyword">BY</span> <span class="string">"test"</span>;</span>
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjx7a28xd0028ngvldayx6v4f" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Android笔记-BroadcastReceiver" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/03/16/Android笔记-BroadcastReceiver/" class="article-date">
@@ -107,7 +276,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/16/Android笔记-BroadcastReceiver/" data-id="cjwlq1nka002t7kvl6izm6m2g" class="article-share-link" data-share="baidu" data-title="Android笔记-BroadcastReceiver">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/16/Android笔记-BroadcastReceiver/" data-id="cjx7a28xv002yngvl0wtq9sfj" class="article-share-link" data-share="baidu" data-title="Android笔记-BroadcastReceiver">分享到</a>
       
 
       
@@ -154,7 +323,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/10/Git命令速查/" data-id="cjwlq1njx002d7kvltbkjyh5m" class="article-share-link" data-share="baidu" data-title="Git命令速查">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/10/Git命令速查/" data-id="cjx7a28xj002ingvlfz7zb9me" class="article-share-link" data-share="baidu" data-title="Git命令速查">分享到</a>
       
 
       
@@ -320,7 +489,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/02/opencv-for-Android/" data-id="cjwlq1nj3001b7kvlq0mjt777" class="article-share-link" data-share="baidu" data-title="opencv for Android">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/02/opencv-for-Android/" data-id="cjx7a28wo001fngvl2yxt7ps4" class="article-share-link" data-share="baidu" data-title="opencv for Android">分享到</a>
       
 
       
@@ -387,7 +556,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/12/11/Android笔记-界面/" data-id="cjwlq1nk2002k7kvlepth2t24" class="article-share-link" data-share="baidu" data-title="Android笔记-界面">分享到</a>
+        <a data-url="http://yoursite.com/2015/12/11/Android笔记-界面/" data-id="cjx7a28xo002pngvl9o5bxj5o" class="article-share-link" data-share="baidu" data-title="Android笔记-界面">分享到</a>
       
 
       
@@ -456,7 +625,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/27/Android笔记-Service/" data-id="cjwlq1nk7002q7kvlpfjsvhki" class="article-share-link" data-share="baidu" data-title="Android笔记-Service">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/27/Android笔记-Service/" data-id="cjx7a28xt002vngvl1wlaua6r" class="article-share-link" data-share="baidu" data-title="Android笔记-Service">分享到</a>
       
 
       
@@ -529,7 +698,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/24/Android笔记-application/" data-id="cjwlq1nk5002o7kvloc9p43q2" class="article-share-link" data-share="baidu" data-title="Android笔记-application">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/24/Android笔记-application/" data-id="cjx7a28xr002tngvl0b35n03u" class="article-share-link" data-share="baidu" data-title="Android笔记-application">分享到</a>
       
 
       
@@ -599,7 +768,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/23/Android笔记-Intent/" data-id="cjwlq1nk9002s7kvlf2g1qhk0" class="article-share-link" data-share="baidu" data-title="Android笔记-Intent">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/23/Android笔记-Intent/" data-id="cjx7a28xu002xngvl5ro30ham" class="article-share-link" data-share="baidu" data-title="Android笔记-Intent">分享到</a>
       
 
       
@@ -644,106 +813,13 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/11/20/back/" data-id="cjwlq1nja001j7kvl0yazp2wk" class="article-share-link" data-share="baidu" data-title="back">分享到</a>
+        <a data-url="http://yoursite.com/2015/11/20/back/" data-id="cjx7a28ww001nngvl77q1mczz" class="article-share-link" data-share="baidu" data-title="back">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/something/">something</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-SICP-1-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/25/SICP-1-2/" class="article-date">
-  <time datetime="2015-10-25T11:17:21.000Z" itemprop="datePublished">2015-10-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/25/SICP-1-2/">SICP 1.2</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这一节讨论了线性迭代和递归两种过程。</p>
-<p>笼统来看，线性递归的思维方式比较简单（然而我连递归都看得不太懂= =），迭代反之。代价就是对计算机资源耗费较大。视频里用递归求斐波那契数列为例。递归在计算每个数时，都会计算两次。<br>还有就是迭代的每一步都可以单独成为求解的式子。递归的如果过程中如果丢失其中一步，就得不到结果。</p>
-<p>关于递归与迭代的转换，这里有个粗浅的认识：迭代会增加一个计数的参数和一个记录计算结果的参数。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/10/25/SICP-1-2/" data-id="cjwlq1njm00217kvli8033mwx" class="article-share-link" data-share="baidu" data-title="SICP 1.2">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SICP/">SICP</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-图片测试" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/17/图片测试/" class="article-date">
-  <time datetime="2015-10-17T14:53:19.000Z" itemprop="datePublished">2015-10-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/17/图片测试/">图片测试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1.外链图片<br>    <code>&lt;img src=&quot;https://www.baidu.com/img/bdlogo.png&quot;&gt;</code></p>
-<pre><code>![<span class="link_label">img</span>](<span class="link_url">https://www.baidu.com/img/bdlogo.png</span>)
-</code></pre><p><img src="https://www.baidu.com/img/bdlogo.png"><br><img src="https://www.baidu.com/img/bdlogo.png" alt="baidu"></p>
-<p>2.自带图片</p>
-<p><img src="/img/fs.jpg" alt="fs"><br><img src="/img/fs.jpg"><br>3.七牛外链</p>
-<p>太麻烦，再研究一下，待定</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/10/17/图片测试/" data-id="cjwlq1nio000s7kvlwhfoq8yz" class="article-share-link" data-share="baidu" data-title="图片测试">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
 
     </footer>
   </div>
@@ -767,7 +843,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小tips/">小tips</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小tips/">小tips</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -776,7 +852,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/小tips/" style="font-size: 10px;">小tips</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 18px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12px;">SICP</a> <a href="/tags/SSH/" style="font-size: 14px;">SSH</a> <a href="/tags/Spring/" style="font-size: 12px;">Spring</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 14px;">something</a> <a href="/tags/实习/" style="font-size: 12px;">实习</a> <a href="/tags/小tips/" style="font-size: 12px;">小tips</a> <a href="/tags/操作系统/" style="font-size: 12px;">操作系统</a> <a href="/tags/算法/" style="font-size: 16px;">算法</a> <a href="/tags/面试/" style="font-size: 16px;">面试</a>
     </div>
   </div>
 
@@ -785,7 +861,7 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -797,6 +873,14 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
       <ul>
         
           <li>
+            <a href="/2019/06/22/springboot启动过程/">springboot启动过程</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/07/arthas使用/">arthas使用</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/01/机器传文件方法/">机器传文件方法</a>
           </li>
         
@@ -806,14 +890,6 @@ btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() 
         
           <li>
             <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
           </li>
         
       </ul>

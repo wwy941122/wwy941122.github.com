@@ -4,17 +4,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2016/9 | 第一个番茄</title>
+  <title>arthas使用 | 第一个番茄</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="各种学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="第一个番茄">
-<meta property="og:url" content="http://yoursite.com/archives/2016/09/index.html">
+  <meta name="description" content="功能包括：反编译，热更新代码，追踪方法调用路径和执行时间，监测方法的入参、返回值https://alibaba.github.io/arthas/commands.html
+命令thread查看线程信息thread -n 3 查看Top3
+
+trace方法内部调用路径，并输出方法路径上的每个节点上耗时trace com.xiaomi.youpin.kylin.rule.ConfigurationC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="arthas使用">
+<meta property="og:url" content="http://yoursite.com/2019/06/07/arthas使用/index.html">
 <meta property="og:site_name" content="第一个番茄">
-<meta property="og:description" content="各种学">
+<meta property="og:description" content="功能包括：反编译，热更新代码，追踪方法调用路径和执行时间，监测方法的入参、返回值https://alibaba.github.io/arthas/commands.html
+命令thread查看线程信息thread -n 3 查看Top3
+
+trace方法内部调用路径，并输出方法路径上的每个节点上耗时trace com.xiaomi.youpin.kylin.rule.ConfigurationC">
+<meta property="og:updated_time" content="2019-06-22T08:43:24.534Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一个番茄">
-<meta name="twitter:description" content="各种学">
+<meta name="twitter:title" content="arthas使用">
+<meta name="twitter:description" content="功能包括：反编译，热更新代码，追踪方法调用路径和执行时间，监测方法的入参、返回值https://alibaba.github.io/arthas/commands.html
+命令thread查看线程信息thread -n 3 查看Top3
+
+trace方法内部调用路径，并输出方法路径上的每个节点上耗时trace com.xiaomi.youpin.kylin.rule.ConfigurationC">
   
     <link rel="alternative" href="/atom.xml" title="第一个番茄" type="application/atom+xml">
   
@@ -71,77 +81,83 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/09/19/Vipkid-2017/" class="archive-article-date">
-  <time datetime="2016-09-19T14:45:57.000Z" itemprop="datePublished">9月 19</time>
+      <section id="main"><article id="post-arthas使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/07/arthas使用/" class="article-date">
+  <time datetime="2019-06-07T09:19:52.000Z" itemprop="datePublished">2019-06-07</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
+    <h1 class="article-title" itemprop="name">
+      arthas使用
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/09/19/人人2017/" class="archive-article-date">
-  <time datetime="2016-09-19T14:45:21.000Z" itemprop="datePublished">9月 19</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/09/19/人人2017/">人人2017</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/09/06/中兴2016面试/" class="archive-article-date">
-  <time datetime="2016-09-06T11:25:05.000Z" itemprop="datePublished">9月 6</time>
-</a>
+        <blockquote>
+<p>功能包括：反编译，热更新代码，追踪方法调用路径和执行时间，监测方法的入参、返回值<br><a href="https://alibaba.github.io/arthas/commands.html" target="_blank" rel="external">https://alibaba.github.io/arthas/commands.html</a></p>
+<h2 id="命令">命令</h2><h3 id="thread">thread</h3><p>查看线程信息<br>thread -n 3 查看Top3</p>
+</blockquote>
+<h3 id="trace">trace</h3><p>方法内部调用路径，并输出方法路径上的每个节点上耗时<br>trace com.xiaomi.youpin.kylin.rule.ConfigurationConflictRule checkConflict</p>
+<h3 id="watch">watch</h3><p>方法执行数据观测，能观察到的范围为：返回值、抛出异常、入参<br>watch com.xiaomi.youpin.kylin.rule.ConfigurationConflictRule buildResponse “{params[0].size(), params[2].size()}”  -x 2 -b</p>
+<h3 id="monitor">monitor</h3><p>方法执行监控<br>对匹配 class-pattern／method-pattern的类、方法的调用进行监控。<br>monitor 命令是一个非实时返回命令</p>
+<h3 id="反编译">反编译</h3><p>反编译出class文件</p>
+<pre><code>jad --source-only com<span class="class">.example</span><span class="class">.demo</span><span class="class">.arthas</span><span class="class">.user</span><span class="class">.UserController</span> &gt; /tmp/UserController.java
+</code></pre><p>查找加载UserController的ClassLoader</p>
+<pre><code><span class="keyword">sc</span> -<span class="keyword">d</span> *UserController
+</code></pre><p>找到classLoaderHash</p>
+<p>内存编绎代码生成class文件</p>
+<pre><code>mc -c <span class="number">49</span>c2faae <span class="regexp">/home/</span>work<span class="regexp">/wangweiyi/</span>ConfigurationConflictRule.java -d <span class="regexp">/home/</span>work<span class="regexp">/wangweiyi</span>
+</code></pre><p>热更新</p>
+<pre><code>redefine <span class="regexp">/tmp/</span>com<span class="regexp">/example/</span>demo<span class="regexp">/arthas/</span>user/UserController.<span class="keyword">class</span>
+</code></pre>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/09/06/中兴2016面试/">post中兴2016面试</a>
-    </h1>
-  
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2019/06/07/arthas使用/" data-id="cjx7a28wx001pngvlfafb664q" class="article-share-link" data-share="baidu" data-title="arthas使用">分享到</a>
+      
 
-    </header>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小tips/">小tips</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/06/22/springboot启动过程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          springboot启动过程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/06/01/机器传文件方法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">机器传文件方法</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
       
       <aside id="sidebar">

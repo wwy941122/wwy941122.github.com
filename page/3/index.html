@@ -73,6 +73,523 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-页面替换算法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/12/页面替换算法/" class="article-date">
+  <time datetime="2016-06-12T13:57:21.000Z" itemprop="datePublished">2016-06-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/12/页面替换算法/">页面替换算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>FIFO是先进先出算法<br>LRU是最近最久未使用算法<br>算法思想是建立page类来模拟内存，page.id记录页面序号，page.count记录使用情况。<br>FIFO中，countOldPoint用来记录应该被替换的内存位置，每发生替换一次就移动，其实就是循环队列的队首。<br>LRU中，每经过一次动作（搜索、插入、替换），就把所有count刷新一次。每替换一次，就把count置0.</p>
+<pre><code>    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">test</span> {
+
+<span class="keyword">private</span> <span class="keyword">static</span> final <span class="keyword">int</span> PRO_MEMORY = <span class="number">3</span>;<span class="comment">//内存块数</span>
+<span class="keyword">private</span> <span class="keyword">static</span> Page[] pages = <span class="keyword">new</span> Page[PRO_MEMORY];<span class="comment">//</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> capacity;<span class="comment">//当前内存的占用数</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> countOldPoint;<span class="comment">//记录最久的页面</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> lackTime;<span class="comment">//缺页次数</span>
+<span class="keyword">private</span> <span class="keyword">static</span> List&lt;Integer&gt; userPageList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();
+
+<span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">init</span>(<span class="params"></span>)</span>{ <span class="comment">//初始化</span>
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++){
+        pages[i] = <span class="keyword">new</span> Page();
+
+    }
+    System.<span class="keyword">out</span>.println(<span class="string">"init"</span>);
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">input</span>(<span class="params"></span>)</span>{<span class="comment">//输入顺序</span>
+    System.<span class="keyword">out</span>.println(<span class="string">"请输入顺序："</span>);
+    Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scanner(System.<span class="keyword">in</span>);
+    String input  = <span class="keyword">in</span>.nextLine();
+    String[] inputList = input.split(<span class="string">"\\s"</span>);
+    <span class="keyword">for</span>(String num : inputList){
+        userPageList.add(Integer.valueOf(num));
+    }
+    <span class="keyword">in</span>.close();
+
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span>(<span class="params"></span>)</span>{
+    System.<span class="keyword">out</span>.println(<span class="string">"内存中剩下的页面是："</span>);
+    <span class="keyword">for</span>(Page page : pages){
+        System.<span class="keyword">out</span>.println(page.getId() + <span class="string">" "</span>);
+    }
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">FIFO</span>(<span class="params"></span>)</span>{
+    Iterator&lt;Integer&gt; iterator = userPageList.iterator();
+    <span class="keyword">while</span>(iterator.hasNext()){
+        countOldPoint = countOldPoint % PRO_MEMORY;
+        <span class="keyword">int</span> inPageId = iterator.next();
+        <span class="keyword">if</span>(search1(inPageId)){
+            System.<span class="keyword">out</span>.println(<span class="string">"当前页面"</span>+inPageId+<span class="string">"已在内存中，不用替换"</span>);
+        } <span class="keyword">else</span> {
+            <span class="keyword">if</span>(capacity &lt; PRO_MEMORY ){
+                pages[capacity].setId(inPageId);
+                System.<span class="keyword">out</span>.println(inPageId + <span class="string">"正在放入内存"</span>);
+                capacity++;
+                lackTime++;
+            } <span class="keyword">else</span> {
+                replace1(inPageId);
+                lackTime++;
+                countOldPoint++;
+            }
+            display();
+        }
+    }
+    System.<span class="keyword">out</span>.println(<span class="string">"缺页次数为："</span> + lackTime +<span class="string">" , "</span>+ <span class="string">"缺页率为："</span> + (<span class="keyword">float</span>)lackTime/userPageList.size());
+
+}
+
+<span class="function"><span class="keyword">public</span>  boolean <span class="title">search1</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{<span class="comment">//查找页面是否存在</span>
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++){
+        <span class="keyword">if</span>(pages[i].getId() == pageId){
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        } 
+    }
+    <span class="keyword">return</span> <span class="keyword">false</span>;
+
+}
+
+<span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">replace1</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{<span class="comment">//FIFO中使用的替换算法，即用当前页面替换最久的页面</span>
+    <span class="keyword">int</span> outPageId = -<span class="number">1</span>;
+    outPageId = pages[countOldPoint].getId();
+    pages[countOldPoint].setId(pageId);
+    System.<span class="keyword">out</span>.println(<span class="string">"页号"</span> + pageId + <span class="string">"换入，页号"</span> + outPageId +<span class="string">"换出"</span>);
+}
+
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LRU</span>(<span class="params"></span>)</span>{
+    Iterator&lt;Integer&gt; iterator = userPageList.iterator();
+    <span class="keyword">while</span>(iterator.hasNext()){
+        <span class="keyword">int</span> inPageId = iterator.next();
+        <span class="keyword">if</span>(search2(inPageId)){
+            System.<span class="keyword">out</span>.println(inPageId + <span class="string">"已在内存中，不用替换"</span>);
+        } <span class="keyword">else</span>{
+            <span class="keyword">if</span>(capacity &lt; PRO_MEMORY){
+                pages[capacity].setId(inPageId);
+                System.<span class="keyword">out</span>.println(inPageId + <span class="string">"正在放入内存"</span>);
+                reSet(capacity);
+                capacity++;
+                timeRefresh();
+                lackTime++;
+            } <span class="keyword">else</span>{
+                replace2(inPageId);
+                timeRefresh();
+                lackTime++;
+            }
+        }
+        display();
+    }
+    System.<span class="keyword">out</span>.println(<span class="string">"缺页次数为："</span> + lackTime +<span class="string">" , "</span>+ <span class="string">"缺页率为："</span> + (<span class="keyword">float</span>)lackTime/userPageList.size());
+
+}
+
+<span class="function"><span class="keyword">public</span> boolean <span class="title">search2</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++) {
+        <span class="keyword">if</span>(pageId == pages[i].getId()){
+            timeRefresh();
+            reSet(i);
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+
+    }
+    <span class="keyword">return</span> <span class="keyword">false</span>;
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reSet</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{
+    pages[pageId].setCount(<span class="number">0</span>);
+
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">timeRefresh</span>(<span class="params"></span>)</span>{
+    <span class="keyword">for</span>(Page page: pages){
+        page.countInc();
+    }
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">replace2</span>(<span class="params"><span class="keyword">int</span> pageId</span>)</span>{
+    <span class="comment">//换出count最大的页面</span>
+    <span class="keyword">int</span> outPageId = -<span class="number">1</span>;<span class="comment">//换出的页面</span>
+    <span class="keyword">int</span> pId = <span class="number">0</span>;<span class="comment">//记录下标</span>
+    <span class="keyword">int</span> max = <span class="number">0</span>;
+    <span class="keyword">int</span> countOfpage;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pages.length; i++) {
+
+     countOfpage = pages[i].getCount();
+        <span class="keyword">if</span>(max &lt; countOfpage){
+            max = countOfpage;
+            pId = i;
+            outPageId = pages[i].getId();
+        }
+
+    }
+    reSet(pId);
+    pages[pId].setId(pageId);
+    System.<span class="keyword">out</span>.println(<span class="string">"页号"</span> + pageId + <span class="string">"换入，页号"</span> + outPageId +<span class="string">"换出"</span>);
+
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>)</span>{
+    System.<span class="keyword">out</span>.println(<span class="string">"请选择1、FIFO，2、LRU"</span>);
+    Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scanner(System.<span class="keyword">in</span>);
+    <span class="keyword">int</span> choose = <span class="keyword">in</span>.nextInt();
+
+
+    <span class="keyword">if</span>(choose == <span class="number">1</span>){
+        test t = <span class="keyword">new</span> test();
+        t.init();
+        t.input();
+        t.FIFO();
+
+    } <span class="function"><span class="keyword">else</span> <span class="title">if</span>(<span class="params">choose == <span class="number">2</span></span>)</span>{
+        test t = <span class="keyword">new</span> test();
+        t.init();
+        t.input();
+        t.LRU();
+    }
+
+
+}
+
+<span class="keyword">class</span> <span class="title">Page</span>{
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> <span class="keyword">int</span> count;<span class="comment">//模拟用于记录的寄存器</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span>(<span class="params"></span>) </span>{
+        <span class="keyword">return</span> id;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span>(<span class="params"><span class="keyword">int</span> id</span>) </span>{
+        <span class="keyword">this</span>.id = id;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span>(<span class="params"></span>) </span>{
+        <span class="keyword">return</span> count;
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCount</span>(<span class="params"><span class="keyword">int</span> count</span>) </span>{
+        <span class="keyword">this</span>.count = count;
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">countInc</span>(<span class="params"></span>)</span>{
+        count++;
+    }
+
+}
+
+
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/06/12/页面替换算法/" data-id="cjx7a28vr0004ngvl0j65qnnh" class="article-share-link" data-share="baidu" data-title="页面替换算法">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/操作系统/">操作系统</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-大数据集下的内部排序与外部排序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/05/大数据集下的内部排序与外部排序/" class="article-date">
+  <time datetime="2016-06-05T14:44:45.000Z" itemprop="datePublished">2016-06-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/05/大数据集下的内部排序与外部排序/">大数据集下的内部排序与外部排序</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>专业选修作业，大数据集是指100万以上的排序</p>
+</blockquote>
+<h2 id="大数据集生成">大数据集生成</h2><ol>
+<li>Java中生成随机数非常简单，只需要调用java.util.Random就可以了。<br> <code>protected int next(int bits)</code><br>　　生成下一个伪随机数。</li>
+</ol>
+<p>　　<code>boolean nextBoolean()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、均匀分布的 boolean 值。</p>
+<p>　　<code>void nextBytes(byte[] bytes)</code><br>　　生成随机字节并将其置于用户提供的字节数组中。</p>
+<p>　　<code>double nextDouble()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、在 0.0 和 1.0之间均匀分布的 double 值。</p>
+<p>　　<code>float nextFloat()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、在 0.0 和 1.0 之间均匀分布的 float 值。</p>
+<p>　　<code>double nextGaussian()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、呈高斯(“正常地”)分布的 double 值，其平均值是 0.0，标准偏差是 1.0。</p>
+<p>　　<code>int nextInt()</code><br>　　返回下一个伪随机数，它是此随机数生成器的序列中均匀分布的 int 值。</p>
+<p>　　<code>int nextInt(int n)</code><br>　　返回一个伪随机数，它是从此随机数生成器的序列中取出的、在 0(包括)和指定值(不包括)之间均匀分布的 int值。</p>
+<p>　　<code>long nextLong()</code><br>　　返回下一个伪随机数，它是从此随机数生成器的序列中取出的、均匀分布的 long 值。</p>
+<p>　　<code>void setSeed(long seed)</code><br>　　使用单个 long 种子设置此随机数生成器的种子。</p>
+<ol>
+<li>带种子与不带种子的区别<br> Random类使用的根本是策略分带种子和不带种子的Random的实例。<br>　　通俗说，两者的区别是：带种子的，每次运行生成的结果都是一样的。<br>　　不带种子的，每次运行生成的都是随机的，没有规律可言。</li>
+</ol>
+<h2 id="内排">内排</h2><p>这种情况下和普通的排序没有区别，主要注意数据的io就行了。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Test2 {
+    final <span class="keyword">static</span> <span class="keyword">int</span> MAX = <span class="number">100000000</span>;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] theArray = <span class="keyword">new</span> <span class="keyword">int</span>[MAX];
+
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">partition</span><span class="params">(<span class="keyword">int</span>[] S, <span class="keyword">int</span> p, <span class="keyword">int</span> r)</span></span>{
+    <span class="keyword">int</span> i = p-<span class="number">1</span>;
+    <span class="keyword">int</span> j;
+    <span class="keyword">int</span> x = S[r];
+    <span class="keyword">for</span> ( j = p; j &lt; r; j++) {
+        <span class="keyword">if</span>(S[j] &lt;= x){
+            i++;
+            <span class="keyword">int</span> temp;
+            temp = S[j];  <span class="comment">//交换</span>
+            S[j] = S[i];
+            S[i] = temp;
+            }
+    }
+    <span class="keyword">int</span> temp;
+    temp = S[r];
+    S[r] = S[i+<span class="number">1</span>];
+    S[i+<span class="number">1</span>] = temp;
+    <span class="keyword">return</span> i+<span class="number">1</span>;                
+}
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] S, <span class="keyword">int</span> p, <span class="keyword">int</span> r)</span></span>{
+    <span class="keyword">int</span> q;
+    <span class="keyword">if</span>(p &lt; r){
+        q = partition(S, p, r);
+        quickSort(S, p, q-<span class="number">1</span>);
+        quickSort(S, q+<span class="number">1</span>, r); 
+    }
+}
+
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{
+    <span class="keyword">long</span> start = System.currentTimeMillis();
+
+    File file = <span class="keyword">new</span> File(<span class="string">"D:/yiyi.txt"</span>);
+    FileReader fr;
+    <span class="keyword">try</span> {
+        fr = <span class="keyword">new</span> FileReader(file);
+        BufferedReader reader = <span class="keyword">new</span> BufferedReader(fr);
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; theArray.length; i++){
+            theArray[i] = Integer.parseInt(reader.readLine());
+        }
+        System.out.println(<span class="string">"读取成功"</span>);
+        reader.close();
+        fr.close();
+    } <span class="keyword">catch</span> (FileNotFoundException e) {
+        <span class="comment">// TODO Auto-generated catch block</span>
+        e.printStackTrace();
+    } <span class="keyword">catch</span> (NumberFormatException e) {
+        <span class="comment">// TODO Auto-generated catch block</span>
+        e.printStackTrace();
+    } <span class="keyword">catch</span> (IOException e) {
+        <span class="comment">// TODO Auto-generated catch block</span>
+        e.printStackTrace();
+    }
+
+<span class="comment">//        Arrays.sort(theArray);</span>
+
+    quickSort(theArray,<span class="number">0</span>, MAX -<span class="number">1</span>);
+
+<span class="comment">//        for(int i = 0; i &lt; theArray.length; i++){</span>
+<span class="comment">//            System.out.println(theArray[i]);</span>
+<span class="comment">//        }</span>
+
+    <span class="keyword">long</span> end = System.currentTimeMillis();
+    System.out.println(<span class="string">"耗时："</span> + (end - start) + <span class="string">"ms"</span>);
+}
+}
+</code></pre><h2 id="外排">外排</h2><p>如果数据量超过了内存，利用硬盘等外存，可使用外排来排序。理论上，只要时间和空间允许，可以排任意的数量。但受制于外存的读写速度，速度大多都非常慢。<br>外排的思路是把数据分为n份，每份用内排排序后，再两两归并，得到最终的结果。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> Test3 {
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> BUFFER_SIZE = <span class="number">10000000</span>;<span class="comment">//每个内排的排序个数</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) <span class="keyword">throws</span> NumberFormatException, IOException{
+    <span class="keyword">long</span> start = System.currentTimeMillis();
+    <span class="keyword">File</span> original = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="string">"D:/yiyi.txt"</span>);
+    mergeEE(split(original));
+    System.out.<span class="keyword">println</span>(<span class="string">"ok"</span>);
+    <span class="keyword">long</span> end = System.currentTimeMillis();
+    System.out.<span class="keyword">println</span>(<span class="string">"耗时："</span> + (end - start) + <span class="string">"ms"</span>);
+
+}
+<span class="comment">/*
+ * 
+ * 把大文件分为多个小文件
+ * 
+ * */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> ArrayList&lt;<span class="keyword">File</span>&gt; split(<span class="keyword">File</span> <span class="keyword">file</span>) <span class="keyword">throws</span> NumberFormatException, IOException{
+    ArrayList&lt;<span class="keyword">File</span>&gt; files = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">File</span>&gt;();
+    <span class="keyword">int</span>[] buffer = <span class="keyword">new</span> <span class="keyword">int</span>[BUFFER_SIZE];
+    FileReader fr = <span class="keyword">new</span> FileReader(<span class="keyword">file</span>);
+    BufferedReader br = <span class="keyword">new</span> BufferedReader(fr);
+    <span class="keyword">boolean</span> isFinished = <span class="keyword">false</span>;
+    <span class="keyword">while</span>(!isFinished){
+        <span class="keyword">int</span> index = buffer.length;
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; buffer.length; i++){
+            String temp = br.readLine();
+            <span class="keyword">if</span>(temp != <span class="keyword">null</span>){
+                buffer[i] = Integer.parseInt(temp);
+            } <span class="keyword">else</span> {
+                isFinished = <span class="keyword">true</span>;
+                index = i;
+            }
+            }
+            Arrays.<span class="keyword">sort</span>(buffer, <span class="number">0</span>, index);
+            <span class="keyword">File</span> out = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="string">"D:/ttttt/set"</span> + <span class="keyword">new</span> Random().nextInt() + <span class="string">".txt"</span>);
+            FileWriter fw = <span class="keyword">new</span> FileWriter(out);
+            BufferedWriter bw = <span class="keyword">new</span> BufferedWriter(fw);
+            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; index; j++) {
+                bw.<span class="keyword">write</span>(String.valueOf(buffer[j]) + System.getProperty(<span class="string">"line.separator"</span>)); 
+            }
+            bw.close();
+            fw.close();
+            files.add(out);
+
+
+    }
+    br.close();
+    fr.close();
+    <span class="keyword">return</span> files;
+
+}
+<span class="comment">/*
+ * 递归合并所有已排好序的小文件
+ * 
+ * */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">File</span> mergeAll(ArrayList&lt;<span class="keyword">File</span>&gt; list) <span class="keyword">throws</span> IOException{
+    <span class="keyword">if</span>(list.<span class="keyword">size</span>() == <span class="number">1</span>){
+        <span class="keyword">return</span> list.get(<span class="number">0</span>);
+    }
+    ArrayList&lt;<span class="keyword">File</span>&gt; inter = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">File</span>&gt;();
+    <span class="keyword">for</span>(Iterator&lt;<span class="keyword">File</span>&gt; it = list.iterator(); it.hasNext();){
+        <span class="keyword">File</span> one = it.<span class="keyword">next</span>();
+        <span class="keyword">if</span>(it.hasNext()){
+            <span class="keyword">File</span> two =  it.<span class="keyword">next</span>();
+            inter.add(merge(one,two));
+
+        }<span class="keyword">else</span> {
+            <span class="keyword">return</span> one;
+        }
+    }
+    <span class="keyword">return</span> mergeAll(inter);
+}
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> mergeEE(ArrayList&lt;<span class="keyword">File</span>&gt; list) <span class="keyword">throws</span> IOException{
+    <span class="keyword">if</span>(list.<span class="keyword">size</span>() == <span class="number">1</span>){
+        <span class="keyword">return</span>;
+        }
+
+    ArrayList&lt;<span class="keyword">File</span>&gt; inter = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">File</span>&gt;();
+    <span class="keyword">for</span>(Iterator&lt;<span class="keyword">File</span>&gt; it = list.iterator(); it.hasNext();){
+        <span class="keyword">File</span> one = it.<span class="keyword">next</span>();
+        <span class="keyword">if</span>(it.hasNext()){
+            <span class="keyword">File</span> two =  it.<span class="keyword">next</span>();
+            inter.add(merge(one,two));
+
+        } <span class="keyword">else</span> {
+            inter.add(one);
+    }
+    mergeEE(inter);
+    }
+
+}
+
+<span class="comment">/*
+ * 合并两个已排好序的小文件
+ * 
+ * */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">File</span> merge(<span class="keyword">File</span> one, <span class="keyword">File</span> two) <span class="keyword">throws</span> IOException{<span class="comment">//归并两个已排好序的文件</span>
+    FileReader fr1 = <span class="keyword">new</span> FileReader(one);
+    FileReader fr2 = <span class="keyword">new</span> FileReader(two);
+    BufferedReader br1 = <span class="keyword">new</span> BufferedReader(fr1);
+    BufferedReader br2 = <span class="keyword">new</span> BufferedReader(fr2);
+
+    <span class="comment">//File output = new File("D:/ttttt/output.txt");</span>
+    <span class="keyword">File</span> output = <span class="keyword">new</span> <span class="keyword">File</span>(<span class="string">"D:/ttttt/merge"</span> + <span class="keyword">new</span> Random().nextInt() + <span class="string">".txt"</span>);
+    FileWriter fw = <span class="keyword">new</span> FileWriter(output);
+    BufferedWriter bw = <span class="keyword">new</span> BufferedWriter(fw);
+    String s1 = br1.readLine();
+    String s2 = br2.readLine();    
+    <span class="keyword">boolean</span> finish = <span class="keyword">false</span>;
+
+    <span class="keyword">while</span>(!finish){
+
+        <span class="keyword">if</span>((s1 != <span class="keyword">null</span>) &amp;&amp; (s2 != <span class="keyword">null</span>)){ 
+            <span class="keyword">if</span>(Integer.parseInt(s1) &lt; Integer.parseInt(s2)){
+                bw.<span class="keyword">write</span>(s1 + System.getProperty(<span class="string">"line.separator"</span>));
+                s1 = br1.readLine();
+            } <span class="keyword">else</span> {
+                bw.<span class="keyword">write</span>(s2 + System.getProperty(<span class="string">"line.separator"</span>));
+                s2 = br2.readLine();
+            }
+        } <span class="keyword">else</span> <span class="keyword">if</span>((s1 == <span class="keyword">null</span>) &amp;&amp; (s2 != <span class="keyword">null</span>)) {
+            bw.<span class="keyword">write</span>(s2 + System.getProperty(<span class="string">"line.separator"</span>));
+            s2 = br2.readLine();
+        } <span class="keyword">else</span> <span class="keyword">if</span>((s1 != <span class="keyword">null</span>) &amp;&amp; (s2 == <span class="keyword">null</span>)){
+            bw.<span class="keyword">write</span>(s1 + System.getProperty(<span class="string">"line.separator"</span>));
+            s1 = br1.readLine();
+        } <span class="keyword">else</span> {
+            finish = <span class="keyword">true</span>;
+        }
+
+    }
+    bw.close();
+    fw.close();
+    br2.close();
+    br1.close();
+    fr1.close();
+    fr2.close();
+
+
+    <span class="keyword">return</span> output;
+
+}
+
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/06/05/大数据集下的内部排序与外部排序/" data-id="cjx7a28w6000pngvl7gmgirat" class="article-share-link" data-share="baidu" data-title="大数据集下的内部排序与外部排序">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-进程相关实验" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/05/26/进程相关实验/" class="article-date">
@@ -208,7 +725,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjwlq1nic000a7kvlmbfgiuej" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/26/进程相关实验/" data-id="cjx7a28vv000angvl5x8j8tgt" class="article-share-link" data-share="baidu" data-title="进程相关实验">分享到</a>
       
 
       
@@ -256,7 +773,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjwlq1nia00077kvlshsspooi" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/19/阿里实习面试/" data-id="cjx7a28vt0007ngvlgx4o1bh1" class="article-share-link" data-share="baidu" data-title="阿里实习面试">分享到</a>
       
 
       
@@ -308,7 +825,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjwlq1nir000w7kvl9rsr8bko" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/16/动态规划/" data-id="cjx7a28wb000wngvldtu6m18v" class="article-share-link" data-share="baidu" data-title="动态规划">分享到</a>
       
 
       
@@ -361,7 +878,7 @@ execl(<span class="string">"./average.exe"</span>,p3,p1,p2,<span class="literal"
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjwlq1nil000m7kvlgyhzcjuj" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
+        <a data-url="http://yoursite.com/2016/05/01/天气预报App中的问题/" data-id="cjx7a28w4000mngvl5m8ix0hz" class="article-share-link" data-share="baidu" data-title="天气预报App中的问题">分享到</a>
       
 
       
@@ -443,7 +960,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjwlq1niq000u7kvl0lwvaw37" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/24/华为实习生笔试题（大连）/" data-id="cjx7a28w9000ungvloxksgj38" class="article-share-link" data-share="baidu" data-title="华为实习生笔试题（大连）">分享到</a>
       
 
       
@@ -487,7 +1004,7 @@ boolean[] asc2 = new boolean[<span class="number">300</span>]<span class="commen
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/10/一个月总结/" data-id="cjwlq1niz00167kvlhqd6anp5" class="article-share-link" data-share="baidu" data-title="一个月总结">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/10/一个月总结/" data-id="cjx7a28wi0016ngvlwiqwidaj" class="article-share-link" data-share="baidu" data-title="一个月总结">分享到</a>
       
 
       
@@ -587,7 +1104,7 @@ Scanner <span class="keyword">in</span> = <span class="keyword">new</span> Scann
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/04/04/腾讯实习笔试/" data-id="cjwlq1nid000c7kvlwf52vxi3" class="article-share-link" data-share="baidu" data-title="腾讯实习笔试">分享到</a>
+        <a data-url="http://yoursite.com/2016/04/04/腾讯实习笔试/" data-id="cjx7a28vx000cngvlm7hbdqe4" class="article-share-link" data-share="baidu" data-title="腾讯实习笔试">分享到</a>
       
 
       
@@ -699,182 +1216,13 @@ public void run(){
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/03/29/Android笔记-网络/" data-id="cjwlq1nk0002i7kvl5xd2e0qt" class="article-share-link" data-share="baidu" data-title="Android笔记-网络">分享到</a>
+        <a data-url="http://yoursite.com/2016/03/29/Android笔记-网络/" data-id="cjx7a28xn002nngvl47gphvjx" class="article-share-link" data-share="baidu" data-title="Android笔记-网络">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android笔记-异步消息处理机制" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/24/Android笔记-异步消息处理机制/" class="article-date">
-  <time datetime="2016-03-24T12:08:10.000Z" itemprop="datePublished">2016-03-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/24/Android笔记-异步消息处理机制/">Android笔记-异步消息处理机制</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>Android的异步消息处理机制，即handler、looper和messagequeue三者的关系。</p>
-</blockquote>
-<h2 id="1-线程">1.线程</h2><p>关于线程的两种实现方式、生命周期等等，这些java中的知识就不赘述了。<br>Android中的线程分为MainThread（主线程）和WorkerThread（子线程）。只有MainThread可以刷新UI（除progressbar.setProgress），用WorkerThread进行UI操作可能导致程序崩溃。</p>
-<h2 id="2-异步消息处理">2.异步消息处理</h2><p>以上的问题的解决办法，具体来说就是：建立一个子类继承handler，然后在主线创建handler实例。然后在子线程创建Message实例（handler.obtainMessage()），用handler.sendmessage()把message送出到Messagequeue，最后Looper把Message取出，再用handler对象中的handleMessage方法处理消息。<br>图图图</p>
-<h2 id="3-实现原理">3.实现原理</h2><ol>
-<li><p>实现这个机制主要利用了java的ThreadLocal<br><code>static final ThreadLocal&lt;Looper&gt; sThreadLocal = new ThreadLocal&lt;Looper&gt;();</code><br><code>sThreadLocal.set(new Looper(quitAllowed));</code><br>。使一个线程只有一个looper对象与之对应<br>ThreadLocal的set()把线程对象作为键，生成键值对。</p>
-</li>
-<li><p>Handler构造方法中 <code>mLooper = Looper.myLooper();</code>。这样，Looper、Thread、Handler就对应起来。一个Handler，一个loop，一个messagequeue。</p>
-</li>
-<li><p>Loop.loop()<br> public static void loop() {</p>
-<pre><code><span class="keyword">final</span> Looper me = myLooper();
-<span class="keyword">if</span> (me == <span class="keyword">null</span>) {
-    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"No Looper; Looper.prepare() wasn't called on this thread."</span>);
-}
-<span class="keyword">final</span> MessageQueue queue = me.mQueue;
-
-<span class="comment">// Make sure the identity of this thread is that of the local process,</span>
-<span class="comment">// and keep track of what that identity token actually is.</span>
-Binder.clearCallingIdentity();
-<span class="keyword">final</span> <span class="keyword">long</span> ident = Binder.clearCallingIdentity();
-
-<span class="keyword">for</span> (;;) {
-    Message msg = queue.<span class="keyword">next</span>(); <span class="comment">// might block</span>
-    <span class="keyword">if</span> (msg == <span class="keyword">null</span>) {
-        <span class="comment">// No message indicates that the message queue is quitting.</span>
-        <span class="keyword">return</span>;
-    }
-
-    <span class="comment">// This must be in a local variable, in case a UI event sets the logger</span>
-    Printer logging = me.mLogging;
-    <span class="keyword">if</span> (logging != <span class="keyword">null</span>) {
-        logging.<span class="keyword">println</span>(<span class="string">"&gt;&gt;&gt;&gt;&gt; Dispatching to "</span> + msg.target + <span class="string">" "</span> +
-                msg.callback + <span class="string">": "</span> + msg.what);
-    }
-
-    msg.target.dispatchMessage(msg);
-
-    <span class="keyword">if</span> (logging != <span class="keyword">null</span>) {
-        logging.<span class="keyword">println</span>(<span class="string">"&lt;&lt;&lt;&lt;&lt; Finished to "</span> + msg.target + <span class="string">" "</span> + msg.callback);
-    }
-
-    <span class="comment">// Make sure that during the course of dispatching the</span>
-    <span class="comment">// identity of the thread wasn't corrupted.</span>
-    <span class="keyword">final</span> <span class="keyword">long</span> newIdent = Binder.clearCallingIdentity();
-    <span class="keyword">if</span> (ident != newIdent) {
-        Log.wtf(TAG, <span class="string">"Thread identity changed from 0x"</span>
-                + <span class="keyword">Long</span>.toHexString(ident) + <span class="string">" to 0x"</span>
-                + <span class="keyword">Long</span>.toHexString(newIdent) + <span class="string">" while dispatching to "</span>
-                + msg.target.getClass().getName() + <span class="string">" "</span>
-                + msg.callback + <span class="string">" what="</span> + msg.what);
-    }
-
-    msg.recycleUnchecked();
-}
-</code></pre><p> }</p>
-</li>
-</ol>
-<p>不断地调用的MessageQueue的next()方法,它的简单逻辑就是如果当前MessageQueue中存在mMessages(即待处理消息)，就将这个消息出队，然后让下一条消息成为mMessages，否则就进入一个阻塞状态，一直等到有新的消息入队。msg.target指的是Handler，然后用dispatchMessage方法</p>
-<ol>
-<li> public void dispatchMessage(Message msg) {<br> if (msg.callback != null) {  <pre><code>handleCallback<span class="list">(<span class="keyword">msg</span>)</span><span class="comment">;  </span>
-</code></pre> } else {  <pre><code><span class="keyword">if</span> (mCallback != <span class="literal">null</span>) {  
-    <span class="keyword">if</span> (mCallback.handleMessage(msg)) {  
-        <span class="keyword">return</span>;  
-    }  
-}  
-handleMessage(msg);  
-</code></pre> }<br>}  </li>
-</ol>
-<p>最终调用handleMessage来实现功能。</p>
-<h2 id="4-_Handler-post(Runnable_r)方法">4. Handler.post(Runnable r)方法</h2><p>dispatchMessage中，若callback不为null，则handleCallback<br>     private static void handleCallback(Message message) {<br>        message.callback.run();<br>    }</p>
-<p>直接运行这个Runnable。不会新开线程，直接运行在主线程中.实现了把整段代码传进主线程中的功能。</p>
-<h2 id="5-loopPrepare()">5.loopPrepare()</h2><p>在创建实例之前必须要有loopPrepare()方法。主线程里在初始化时已经调用</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/03/24/Android笔记-异步消息处理机制/" data-id="cjwlq1nk3002m7kvlf7ygdad5" class="article-share-link" data-share="baidu" data-title="Android笔记-异步消息处理机制">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Oracle数据库安装中的坑" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/03/16/Oracle数据库安装中的坑/" class="article-date">
-  <time datetime="2016-03-16T14:02:53.000Z" itemprop="datePublished">2016-03-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/16/Oracle数据库安装中的坑/">Oracle数据库安装中的坑</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>安装中遇到了几个坑，万一被人看到了呢</p>
-</blockquote>
-<p>1.系统的默认共享一定要打开。不然会出现INS-30131错误。可以参考<a href="blog.csdn.net/holandstone/article/details/14165377">这个</a>打开</p>
-<blockquote>
-<p>先在控制面板的“服务”，看SERVER服务是否启动，如果没有启动，则将设置为自动或者手动，然后再选择启动。<br>开启系统的默认共享的方法<br>1.检查AutoShareServer和AutoShareWks注册表值是否为0。<br>2.找到注册表中的HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\LanmanServer\Parameters。<br>3.将下面子项中的AutoShareServer和AutoShareWks DWORD值改为1。<br>4.重启。通常Win2003、Win2000\XP会在启动时自动创建。<br>5.启动后，可以通过运行CMD命令进入命令行模式，再运行net share，再共享列表中会看到Admin$、C$\IPC$等默认共享。</p>
-</blockquote>
-<p>2.解压文件两个要分开解压。。。不要懒。不然会遇到无法找到文件的错误</p>
-<p>3.安装的最后几步有个用户管理，最好点进去看看默认的账户和密码。不然只能看<a href="http://zhidao.baidu.com/link?url=_fJWkzSfMZQdM5mHKwaNqXAMW3fGrUTFA8QdR2COltquhs3UxM7tv7N0GgRc8WqObcgIyOgXBaZGjFVsIjQE5_" target="_blank" rel="external">这个</a>修改用户名和密码等</p>
-<pre><code>sqlplus /nolog
-conn / as sysdba
-<span class="operator"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="keyword">test</span> IDETIFIED <span class="keyword">BY</span> <span class="string">"test"</span>;</span>
-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/03/16/Oracle数据库安装中的坑/" data-id="cjwlq1njp00237kvljky5zsru" class="article-share-link" data-share="baidu" data-title="Oracle数据库安装中的坑">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oracle/">oracle</a></li></ul>
 
     </footer>
   </div>
@@ -898,7 +1246,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小tips/">小tips</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小tips/">小tips</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -907,7 +1255,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/小tips/" style="font-size: 10px;">小tips</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 18px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12px;">SICP</a> <a href="/tags/SSH/" style="font-size: 14px;">SSH</a> <a href="/tags/Spring/" style="font-size: 12px;">Spring</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 14px;">something</a> <a href="/tags/实习/" style="font-size: 12px;">实习</a> <a href="/tags/小tips/" style="font-size: 12px;">小tips</a> <a href="/tags/操作系统/" style="font-size: 12px;">操作系统</a> <a href="/tags/算法/" style="font-size: 16px;">算法</a> <a href="/tags/面试/" style="font-size: 16px;">面试</a>
     </div>
   </div>
 
@@ -916,7 +1264,7 @@ conn / as sysdba
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -928,6 +1276,14 @@ conn / as sysdba
       <ul>
         
           <li>
+            <a href="/2019/06/22/springboot启动过程/">springboot启动过程</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/07/arthas使用/">arthas使用</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/01/机器传文件方法/">机器传文件方法</a>
           </li>
         
@@ -937,14 +1293,6 @@ conn / as sysdba
         
           <li>
             <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
           </li>
         
       </ul>

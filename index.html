@@ -73,6 +73,141 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-springboot启动过程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/22/springboot启动过程/" class="article-date">
+  <time datetime="2019-06-22T08:44:02.000Z" itemprop="datePublished">2019-06-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/22/springboot启动过程/">springboot启动过程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 1、创建并启动计时监控类<br> <figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">StopWatch stopWatch = new StopWatch()<span class="comment">;</span></span><br><span class="line">stopWatch.start()<span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
+<p>2、初始化应用上下文和异常报告集合</p>
+<figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ConfigurableApplicationContext <span class="keyword">context</span> = <span class="keyword">null</span>;</span><br><span class="line">FailureAnalyzers analyzers = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<p>3、设置系统属性 <code>java.awt.headless</code> 的值，默认值为：true<br><figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configureHeadlessProperty()<span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
+<p>4、创建所有 Spring 运行监听器并发布应用启动事件</p>
+<pre><code>SpringApplicationRunListeners listeners = getRunListeners(args)<span class="comment">;</span>
+listeners.starting()<span class="comment">;</span>
+</code></pre><p>5、初始化默认应用参数类</p>
+<pre><code>ApplicationArguments applicationArguments = new DefaultApplicationArguments<span class="list">( <span class="keyword">args</span>)</span><span class="comment">;</span>
+</code></pre><p>6、创建并配置环境<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConfigurableEnvironment environment = prepareEnvironment<span class="list">(<span class="keyword">listeners</span>, applicationArguments)</span><span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
+<p>7、创建 Banner 打印类</p>
+<pre><code>Banner printedBanner = printBanner<span class="list">(<span class="keyword">environment</span>)</span><span class="comment">;</span>
+</code></pre><p>8、创建应用上下文</p>
+<pre><code>context = createApplicationContext()<span class="comment">;</span>
+</code></pre><p>根据不同的应用类型webApplicationType，通过反射初始化不同的ApplicationContext类。</p>
+<p>9、准备异常报告器</p>
+<pre><code>analyzers = new FailureAnalyzers<span class="list">(<span class="keyword">context</span>)</span><span class="comment">;</span>
+</code></pre><p>10、准备应用上下文</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">private <span class="keyword">void</span> prepareContext(ConfigurableApplicationContext context,</span><br><span class="line">        ConfigurableEnvironment environment, SpringApplicationRunListeners listeners,</span><br><span class="line">        ApplicationArguments applicationArguments, Banner printedBanner) &#123;</span><br><span class="line">    <span class="comment">// 10.1）绑定环境到上下文</span></span><br><span class="line">    context.setEnvironment(environment);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10.2）配置上下文的 bean 生成器及资源加载器</span></span><br><span class="line">    postProcessApplicationContext(context);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10.3）为上下文应用所有初始化器</span></span><br><span class="line">    applyInitializers(context);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10.4）触发所有 SpringApplicationRunListener 监听器的 contextPrepared 事件方法</span></span><br><span class="line">    listeners.contextPrepared(context);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10.5）记录启动日志</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) &#123;</span><br><span class="line">        logStartupInfo(context.getParent() == <span class="keyword">null</span>);</span><br><span class="line">        logStartupProfileInfo(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10.6）注册两个特殊的单例bean</span></span><br><span class="line">    context.getBeanFactory().registerSingleton(<span class="string">"springApplicationArguments"</span>,</span><br><span class="line">            applicationArguments);</span><br><span class="line">    <span class="keyword">if</span> (printedBanner != <span class="keyword">null</span>) &#123;</span><br><span class="line">        context.getBeanFactory().registerSingleton(<span class="string">"springBootBanner"</span>, printedBanner);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10.7）加载所有资源</span></span><br><span class="line">    <span class="built_in">Set</span>&lt;<span class="built_in">Object</span>&gt; sources = getAllSources();</span><br><span class="line">    Assert.notEmpty(sources, <span class="string">"Sources must not be empty"</span>);</span><br><span class="line">    load(context, sources.toArray(<span class="keyword">new</span> <span class="built_in">Object</span>[<span class="number">0</span>]));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10.8）触发所有 SpringApplicationRunListener 监听器的 contextLoaded 事件方法</span></span><br><span class="line">    listeners.contextLoaded(context);</span><br><span class="line">&#125;</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<p>11、刷新应用上下文</p>
+<pre><code>refreshContext<span class="list">(<span class="keyword">context</span>)</span><span class="comment">;</span>
+</code></pre><p>执行applicationContext.refresh()，实际上是Bean容器真正初始化的地方</p>
+<p>12、应用上下文刷新后置处理</p>
+<pre><code>afterRefresh<span class="list">(<span class="keyword">context</span>, applicationArguments)</span><span class="comment">;</span>
+</code></pre><p>在这里执行callRunners，即ApplicationRunner和CommandRunner<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> callRunners(ApplicationContext context, ApplicationArguments args) &#123;</span><br><span class="line">   List&lt;Object&gt; runners = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">   runners.addAll(context.getBeansOfType(ApplicationRunner.<span class="keyword">class</span>).values());</span><br><span class="line">   runners.addAll(context.getBeansOfType(CommandLineRunner.<span class="keyword">class</span>).values());</span><br><span class="line">   AnnotationAwareOrderComparator.<span class="keyword">sort</span>(runners);</span><br><span class="line">   <span class="keyword">for</span> (Object runner : <span class="keyword">new</span> LinkedHashSet&lt;&gt;(runners)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (runner <span class="keyword">instanceof</span> ApplicationRunner) &#123;</span><br><span class="line">         callRunner((ApplicationRunner) runner, args);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (runner <span class="keyword">instanceof</span> CommandLineRunner) &#123;</span><br><span class="line">         callRunner((CommandLineRunner) runner, args);</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>AnnotationAwareOrderComparator.sort(runners);<br>用于确定执行的顺序，如果有order注解，按注解的顺序，如果没有，则是最小的顺序<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> getOrder(@Nullable Object obj) &#123;</span><br><span class="line">   <span class="keyword">if</span> (obj != <span class="keyword">null</span>) &#123;</span><br><span class="line">      Integer <span class="keyword">order</span> = findOrder(obj);</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">order</span> != <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">order</span>;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> Ordered.LOWEST_PRECEDENCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>13、listeners.finished(context, null);</p>
+<p>14、停止计时监控类</p>
+<pre><code><span class="tag">stopWatch</span><span class="class">.stop</span>();
+</code></pre><p>15、输出日志记录执行主类名、时间信息</p>
+<pre><code><span class="keyword">if</span> (<span class="keyword">this</span>.logStartupInfo) {
+    <span class="keyword">new</span> StartupInfoLogger(<span class="keyword">this</span>.mainApplicationClass)
+            .logStarted(getApplicationLog(), stopWatch);
+}
+</code></pre><p>16、返回context</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2019/06/22/springboot启动过程/" data-id="cjx7a28wm001bngvlm1cdag28" class="article-share-link" data-share="baidu" data-title="springboot启动过程">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-arthas使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/07/arthas使用/" class="article-date">
+  <time datetime="2019-06-07T09:19:52.000Z" itemprop="datePublished">2019-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/07/arthas使用/">arthas使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>功能包括：反编译，热更新代码，追踪方法调用路径和执行时间，监测方法的入参、返回值<br><a href="https://alibaba.github.io/arthas/commands.html" target="_blank" rel="external">https://alibaba.github.io/arthas/commands.html</a></p>
+<h2 id="命令">命令</h2><h3 id="thread">thread</h3><p>查看线程信息<br>thread -n 3 查看Top3</p>
+</blockquote>
+<h3 id="trace">trace</h3><p>方法内部调用路径，并输出方法路径上的每个节点上耗时<br>trace com.xiaomi.youpin.kylin.rule.ConfigurationConflictRule checkConflict</p>
+<h3 id="watch">watch</h3><p>方法执行数据观测，能观察到的范围为：返回值、抛出异常、入参<br>watch com.xiaomi.youpin.kylin.rule.ConfigurationConflictRule buildResponse “{params[0].size(), params[2].size()}”  -x 2 -b</p>
+<h3 id="monitor">monitor</h3><p>方法执行监控<br>对匹配 class-pattern／method-pattern的类、方法的调用进行监控。<br>monitor 命令是一个非实时返回命令</p>
+<h3 id="反编译">反编译</h3><p>反编译出class文件</p>
+<pre><code>jad --source-only com<span class="class">.example</span><span class="class">.demo</span><span class="class">.arthas</span><span class="class">.user</span><span class="class">.UserController</span> &gt; /tmp/UserController.java
+</code></pre><p>查找加载UserController的ClassLoader</p>
+<pre><code><span class="keyword">sc</span> -<span class="keyword">d</span> *UserController
+</code></pre><p>找到classLoaderHash</p>
+<p>内存编绎代码生成class文件</p>
+<pre><code>mc -c <span class="number">49</span>c2faae <span class="regexp">/home/</span>work<span class="regexp">/wangweiyi/</span>ConfigurationConflictRule.java -d <span class="regexp">/home/</span>work<span class="regexp">/wangweiyi</span>
+</code></pre><p>热更新</p>
+<pre><code>redefine <span class="regexp">/tmp/</span>com<span class="regexp">/example/</span>demo<span class="regexp">/arthas/</span>user/UserController.<span class="keyword">class</span>
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2019/06/07/arthas使用/" data-id="cjx7a28wx001pngvlfafb664q" class="article-share-link" data-share="baidu" data-title="arthas使用">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/小tips/">小tips</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-机器传文件方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/06/01/机器传文件方法/" class="article-date">
@@ -105,7 +240,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/06/01/机器传文件方法/" data-id="cjwlq1nig000g7kvl9if22mmo" class="article-share-link" data-share="baidu" data-title="机器传文件方法">分享到</a>
+        <a data-url="http://yoursite.com/2019/06/01/机器传文件方法/" data-id="cjx7a28w0000gngvlv422n6s7" class="article-share-link" data-share="baidu" data-title="机器传文件方法">分享到</a>
       
 
       
@@ -180,7 +315,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/24/Spring异步方法-Async注解/" data-id="cjwlq1njg001s7kvlthmuk0xa" class="article-share-link" data-share="baidu" data-title="Spring异步方法@Async注解">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/24/Spring异步方法-Async注解/" data-id="cjx7a28x4001yngvlrf73nzaq" class="article-share-link" data-share="baidu" data-title="Spring异步方法@Async注解">分享到</a>
       
 
       
@@ -265,7 +400,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/12/AbstractQueuedSynchronizer队列同步器/" data-id="cjwlq1nhv00007kvlzoiev4i0" class="article-share-link" data-share="baidu" data-title="AbstractQueuedSynchronizer队列同步器">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/12/AbstractQueuedSynchronizer队列同步器/" data-id="cjx7a28vc0000ngvlxj2z19lh" class="article-share-link" data-share="baidu" data-title="AbstractQueuedSynchronizer队列同步器">分享到</a>
       
 
       
@@ -316,7 +451,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/02/HashMap拾遗/" data-id="cjwlq1njv002b7kvlcruvg9nl" class="article-share-link" data-share="baidu" data-title="HashMap拾遗">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/02/HashMap拾遗/" data-id="cjx7a28xi002gngvlchuobrxi" class="article-share-link" data-share="baidu" data-title="HashMap拾遗">分享到</a>
       
 
       
@@ -372,7 +507,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" data-id="cjwlq1njy002g7kvle25qudw1" class="article-share-link" data-share="baidu" data-title="ConcurrentHashMap在JDK7和8的区别">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/01/ConcurrentHashMap在JDK7和8的区别/" data-id="cjx7a28xl002lngvl26fepd4e" class="article-share-link" data-share="baidu" data-title="ConcurrentHashMap在JDK7和8的区别">分享到</a>
       
 
       
@@ -415,7 +550,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/05/01/new-start-1/" data-id="cjwlq1nj5001e7kvl2e1efdql" class="article-share-link" data-share="baidu" data-title="new start">分享到</a>
+        <a data-url="http://yoursite.com/2019/05/01/new-start-1/" data-id="cjx7a28wr001ingvl3d5pfgq6" class="article-share-link" data-share="baidu" data-title="new start">分享到</a>
       
 
       
@@ -464,7 +599,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2019/04/25/hello-world/" data-id="cjwlq1nj9001i7kvlz2s7cc5t" class="article-share-link" data-share="baidu" data-title="Hello World">分享到</a>
+        <a data-url="http://yoursite.com/2019/04/25/hello-world/" data-id="cjx7a28wv001mngvl8cgk1cz4" class="article-share-link" data-share="baidu" data-title="Hello World">分享到</a>
       
 
       
@@ -505,99 +640,12 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2016/11/08/测试/" data-id="cjwlq1nif000f7kvl6zyvyxmj" class="article-share-link" data-share="baidu" data-title="测试">分享到</a>
+        <a data-url="http://yoursite.com/2016/11/08/测试/" data-id="cjx7a28vy000fngvlxh491xob" class="article-share-link" data-share="baidu" data-title="测试">分享到</a>
       
 
       
 
       
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Vipkid-2017" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/19/Vipkid-2017/" class="article-date">
-  <time datetime="2016-09-19T14:45:57.000Z" itemprop="datePublished">2016-09-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/19/Vipkid-2017/">Vipkid 2017</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Vipkid<br>封装 继承 多态 底层实现？<br>链表翻转<br>Mysql Myisam不支持事务<br>反射调用方法<br>跳表<br>Socket编程<br>Ping ICMP IGMP</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/09/19/Vipkid-2017/" data-id="cjwlq1njc001l7kvl13vcylc0" class="article-share-link" data-share="baidu" data-title="Vipkid 2017">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-人人2017" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/19/人人2017/" class="article-date">
-  <time datetime="2016-09-19T14:45:21.000Z" itemprop="datePublished">2016-09-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/19/人人2017/">人人2017</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>第一次互联网面试，准备还是有些不足，没想到问那么细。<br>TCP三次握手  问得非常细<br>4次握手 waitclose 的2msl</p>
-<p>链表合并<br>排序复杂度<br>20000个数选前500个 nlog（k）<br>Java 内存 GC</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2016/09/19/人人2017/" data-id="cjwlq1niw00127kvlubz5ad2o" class="article-share-link" data-share="baidu" data-title="人人2017">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
-
     </footer>
   </div>
   
@@ -620,7 +668,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小tips/">小tips</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java虚拟机/">Java虚拟机</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/">SICP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSH/">SSH</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/something/">something</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/实习/">实习</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小tips/">小tips</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -629,7 +677,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 17.5px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12.5px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12.5px;">SICP</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 15px;">something</a> <a href="/tags/实习/" style="font-size: 12.5px;">实习</a> <a href="/tags/小tips/" style="font-size: 10px;">小tips</a> <a href="/tags/操作系统/" style="font-size: 12.5px;">操作系统</a> <a href="/tags/算法/" style="font-size: 17.5px;">算法</a> <a href="/tags/面试/" style="font-size: 17.5px;">面试</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 18px;">Java</a> <a href="/tags/Java虚拟机/" style="font-size: 12px;">Java虚拟机</a> <a href="/tags/SICP/" style="font-size: 12px;">SICP</a> <a href="/tags/SSH/" style="font-size: 14px;">SSH</a> <a href="/tags/Spring/" style="font-size: 12px;">Spring</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/oracle/" style="font-size: 10px;">oracle</a> <a href="/tags/something/" style="font-size: 14px;">something</a> <a href="/tags/实习/" style="font-size: 12px;">实习</a> <a href="/tags/小tips/" style="font-size: 12px;">小tips</a> <a href="/tags/操作系统/" style="font-size: 12px;">操作系统</a> <a href="/tags/算法/" style="font-size: 16px;">算法</a> <a href="/tags/面试/" style="font-size: 16px;">面试</a>
     </div>
   </div>
 
@@ -638,7 +686,7 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">八月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">五月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -650,6 +698,14 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
       <ul>
         
           <li>
+            <a href="/2019/06/22/springboot启动过程/">springboot启动过程</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/07/arthas使用/">arthas使用</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/01/机器传文件方法/">机器传文件方法</a>
           </li>
         
@@ -659,14 +715,6 @@ public void <span class="function">asyncMethodWithVoidReturnType</span>() </span
         
           <li>
             <a href="/2019/05/12/AbstractQueuedSynchronizer队列同步器/">AbstractQueuedSynchronizer队列同步器</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/02/HashMap拾遗/">HashMap拾遗</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/01/ConcurrentHashMap在JDK7和8的区别/">ConcurrentHashMap在JDK7和8的区别</a>
           </li>
         
       </ul>
